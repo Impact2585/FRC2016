@@ -1,7 +1,8 @@
 
 package org.impact2585.frc2016;
 
-import edu.wpi.first.wpilibj.IterativeRobot;
+
+import org.impact2585.lib2585.ExecuterBasedRobot;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -10,7 +11,7 @@ import edu.wpi.first.wpilibj.IterativeRobot;
  * creating this project, you must also update the manifest file in the resource
  * directory.
  */
-public class Robot extends IterativeRobot {
+public class Robot extends ExecuterBasedRobot {
     /**
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
