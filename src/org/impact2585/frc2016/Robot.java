@@ -12,7 +12,10 @@ import org.impact2585.lib2585.ExecuterBasedRobot;
  * directory.
  */
 public class Robot extends ExecuterBasedRobot {
-    /**
+
+	private static final long serialVersionUID = -6071317869900252678L;;
+
+	/**
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
      */
