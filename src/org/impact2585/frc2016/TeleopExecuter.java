@@ -30,7 +30,7 @@ public class TeleopExecuter extends RunnableExecuter implements Initializable {
 	 */
 	@Override
 	public void init(Environment environment) {
-		
+		getRunnables().add(environment.getWheelSystem());
 	}
 
 }
