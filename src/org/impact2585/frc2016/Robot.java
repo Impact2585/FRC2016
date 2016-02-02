@@ -1,8 +1,8 @@
-
 package org.impact2585.frc2016;
 
 
 import org.impact2585.lib2585.ExecuterBasedRobot;
+import org.impact2585.frc2016.Environment;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -13,7 +13,8 @@ import org.impact2585.lib2585.ExecuterBasedRobot;
  */
 public class Robot extends ExecuterBasedRobot {
 
-	private static final long serialVersionUID = -6071317869900252678L;;
+	private static final long serialVersionUID = -6071317869900252678L;
+	private Environment environ;
 
 	/**
      * This function is run when the robot is first started up and should be
@@ -44,4 +45,27 @@ public class Robot extends ExecuterBasedRobot {
     
     }
     
+    /**
+     * @returns the environment
+     */
+    public synchronized Environment getEnvironment() {
+    	return this.environ;
+    }
+    
+    /**Sets environment
+     * @param environment
+     */
+    public synchronized void setEnvironment(Environment environment) {
+    	this.environ = environment;
+    }
+    
+    /* (non-Javadoc)
+     * @see edu.wpi.first.wpilibj.RobotBase#free()
+     */
+    @Override
+    public void free(){
+    	environ.destroy();
+    }
 }
+    
+
