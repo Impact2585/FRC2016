@@ -15,7 +15,7 @@ public class WheelSystem implements RobotSystem, Runnable{
 	private RobotDrive drivetrain;
 	private double currentRampForward;
 	private double rotationValue;
-	private static final double DEADZONE = 0.15;
+	public static final double DEADZONE = 0.15;
 	private InputMethod input;
 
 	/* (non-Javadoc)
@@ -27,11 +27,25 @@ public class WheelSystem implements RobotSystem, Runnable{
 		input = environ.getInput();
 	}
 	
-	/** Drives forward and turns
-	 * @param forwardDistance
-	 * @param rotatos
+	/**Sets new input method
+	 * @param controller the type of input method
 	 */
-	private void drive(double forwardDistance, double rotation) {
+	protected synchronized void setInput(InputMethod controller) {
+		input = controller;
+	}
+	
+	/**
+	 * @returns the input method that this system is using
+	 */
+	public InputMethod getInput() {
+		return input;
+	}
+	
+	/** Drives forward and turns
+	 * @param forwardDistance distance to drive forward
+	 * @param rotation how much the robot will turn
+	 */
+	public void drive(double forwardDistance, double rotation) {
 		drivetrain.arcadeDrive(forwardDistance, rotation);
 	}
 
@@ -42,9 +56,9 @@ public class WheelSystem implements RobotSystem, Runnable{
 	public void run() {
 		currentRampForward = input.forwardMovement();
 		rotationValue = input.rotationValue();
-		if(currentRampForward < DEADZONE && currentRampForward > -DEADZONE);
+		if(currentRampForward < DEADZONE && currentRampForward > -DEADZONE)
 			currentRampForward = 0;
-		if(rotationValue < DEADZONE && rotationValue > -DEADZONE);
+		if(rotationValue < DEADZONE && rotationValue > -DEADZONE)
 			rotationValue = 0;
 		drive(currentRampForward, rotationValue);
 	}

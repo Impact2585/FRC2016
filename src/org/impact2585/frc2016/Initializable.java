@@ -6,7 +6,7 @@ package org.impact2585.frc2016;
 public interface Initializable {
 	
 	/**initializes environment
-	 * @param environ
+	 * @param environ the environment of the robot
 	 */
 	public void init(Environment environ);
 

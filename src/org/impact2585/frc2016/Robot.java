@@ -21,7 +21,7 @@ public class Robot extends ExecuterBasedRobot {
      * used for any initialization code.
      */
     public void robotInit() {
-
+    	environ = new Environment(this);
     }
 
     /**
@@ -53,7 +53,7 @@ public class Robot extends ExecuterBasedRobot {
     }
     
     /**Sets environment
-     * @param environment
+     * @param environment consists of the robot's systems
      */
     public synchronized void setEnvironment(Environment environment) {
     	this.environ = environment;
@@ -64,6 +64,7 @@ public class Robot extends ExecuterBasedRobot {
      */
     @Override
     public void free(){
+    	super.free();
     	environ.destroy();
     }
 }

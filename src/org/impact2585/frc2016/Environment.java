@@ -2,6 +2,7 @@ package org.impact2585.frc2016;
 
 import org.impact2585.lib2585.RobotEnvironment;
 import org.impact2585.frc2016.input.InputMethod;
+import org.impact2585.frc2016.input.XboxInput;
 
 import org.impact2585.frc2016.systems.WheelSystem;
 
@@ -21,11 +22,14 @@ public class Environment extends RobotEnvironment{
 		super();
 	}
 	
-	/**
+	/** Constructor that takes a robot argument
 	 * @param robot controls whether the robot is in auton or teleop mode and sets the environment
 	 */
 	public Environment(Robot robot) {
 		super(robot);
+		this.wheels = new WheelSystem();
+		this.input = new XboxInput();
+		wheels.init(this);
 	}
 	
 	/**
@@ -43,7 +47,7 @@ public class Environment extends RobotEnvironment{
 	}
 	
 	/**Sets wheel system
-	 * @param wheelsystem
+	 * @param wheelsystem the drivetrain
 	 */
 	public void setWheelSystem(WheelSystem wheelsystem) {
 		this.wheels = wheelsystem;
