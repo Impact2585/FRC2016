@@ -17,7 +17,7 @@ public class XboxInput implements InputMethod{
 	}
 	
 	/**Constructor that sets joystick controller to joystick
-	 * @param joystick
+	 * @param joystick the joystick the input is using
 	 */
 	public XboxInput(Joystick joystick) {
 		controller = joystick;
