@@ -2,7 +2,6 @@ package org.impact2585.frc2016;
 
 
 import org.impact2585.lib2585.ExecuterBasedRobot;
-import org.impact2585.frc2016.Environment;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -16,13 +15,22 @@ public class Robot extends ExecuterBasedRobot {
 	private static final long serialVersionUID = -6071317869900252678L;
 	private Environment environ;
 
-	/**
-     * This function is run when the robot is first started up and should be
-     * used for any initialization code.
-     */
-    public void robotInit() {
-    	environ = new Environment(this);
-    }
+	/* (non-Javadoc)
+	 * @see org.impact2585.lib2585.ExecuterBasedRobot#robotInit()
+	 */
+	@Override
+	public void robotInit() {
+		environ = new Environment(this);
+	}
+
+
+	/* (non-Javadoc)
+	 * @see edu.wpi.first.wpilibj.IterativeRobot#teleopInit()
+	 */
+	@Override
+	public void teleopInit() {
+		setExecuter(new TeleopExecuter(environ));
+	}
 
     /**
      * This function is called periodically during autonomous
@@ -35,7 +43,7 @@ public class Robot extends ExecuterBasedRobot {
      * This function is called periodically during operator control
      */
     public void teleopPeriodic() {
-        
+
     }
     
     /**
@@ -46,18 +54,19 @@ public class Robot extends ExecuterBasedRobot {
     }
     
     /**
-     * @returns the environment
-     */
+    * @returns the environment
+    */
     public synchronized Environment getEnvironment() {
-    	return this.environ;
+    return this.environ;
     }
-    
+        
     /**Sets environment
-     * @param environment consists of the robot's systems
-     */
+    * @param environment consists of the robot's systems
+    */
     public synchronized void setEnvironment(Environment environment) {
     	this.environ = environment;
     }
+
     
     /* (non-Javadoc)
      * @see edu.wpi.first.wpilibj.RobotBase#free()
@@ -68,5 +77,4 @@ public class Robot extends ExecuterBasedRobot {
     	environ.destroy();
     }
 }
-    
 

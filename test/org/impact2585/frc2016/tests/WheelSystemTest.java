@@ -13,8 +13,8 @@ import org.junit.Test;
 public class WheelSystemTest {
 	private TestWheelSystem drivetrain;
 	private InputTest input;
-	private double forwardDistance;
-	private double rotationValue;
+	private double driveForward;
+	private double rotate;
 	
 	
 	/**
@@ -25,8 +25,8 @@ public class WheelSystemTest {
 		drivetrain = new TestWheelSystem();
 		input = new InputTest();
 		drivetrain.setInput(input);
-		forwardDistance = 0;
-		rotationValue = 0;
+		driveForward = 0;
+		rotate = 0;
 	}
 
 	/**
@@ -37,29 +37,29 @@ public class WheelSystemTest {
 				
 		//tests if the robot isn't moving at the start
 		drivetrain.run();
-		Assert.assertTrue(forwardDistance == 0 && rotationValue == 0);
+		Assert.assertTrue(driveForward == 0 && rotate == 0);
 		
 		//tests deadzone
-		forwardDistance = 0.14;
-		rotationValue = 0.14;
+		driveForward = 0.14;
+		rotate = 0.14;
 		drivetrain.run();
-		Assert.assertTrue(forwardDistance == 0 && rotationValue == 0);
+		Assert.assertTrue(driveForward == 0 && rotate == 0);
 		
 		//tests forward driving
-		forwardDistance = 0.5;
+		driveForward = 0.5;
 		drivetrain.run();
-		Assert.assertTrue(0.5 == forwardDistance && rotationValue == 0);
+		Assert.assertTrue(0.5 == driveForward && rotate == 0);
 		
 		//tests turning
-		rotationValue = 1;
-		forwardDistance = 0;
+		rotate = 1;
+		driveForward = 0;
 		drivetrain.run();
-		Assert.assertTrue(forwardDistance == 0 && rotationValue == 1);
+		Assert.assertTrue(driveForward == 0 && rotate == 1);
 		
 		//tests turning and driving simultaneously
-		rotationValue = 1;
-		forwardDistance = 10;
-		Assert.assertTrue(forwardDistance == 10 && rotationValue == 1);
+		rotate = 1;
+		driveForward = 0.7;
+		Assert.assertTrue(driveForward == 10 && rotate == 1);
 	}
 	
 	/**
@@ -87,9 +87,9 @@ public class WheelSystemTest {
 		 * @see org.impact2585.frc2016.systems.WheelSystem#drive(double, double)
 		 */
 		@Override
-		public void drive(double driveforward, double rotation) {
-			forwardDistance = driveforward;
-			rotationValue = rotation;
+		public void drive(double driveStraight, double currentRotate) {
+			driveForward = driveStraight;
+			rotate = currentRotate;
 		}
 		
 	}
@@ -104,7 +104,7 @@ public class WheelSystemTest {
 		 */
 		@Override
 		public double forwardMovement() {
-			return forwardDistance;
+			return driveForward;
 		}
 
 		/* (non-Javadoc)
@@ -112,7 +112,7 @@ public class WheelSystemTest {
 		 */
 		@Override
 		public double rotationValue() {
-			return rotationValue;
+			return rotate;
 		}
 		
 	}
