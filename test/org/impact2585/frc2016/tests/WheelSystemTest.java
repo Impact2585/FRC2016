@@ -54,12 +54,14 @@ public class WheelSystemTest {
 		rotate = 1;
 		driveForward = 0;
 		drivetrain.run();
-		Assert.assertTrue(driveForward == 0 && rotate == 1);
+		Assert.assertTrue(driveForward == 0 && rotate == -1);
 		
 		//tests turning and driving simultaneously
 		rotate = 1;
 		driveForward = 0.7;
-		Assert.assertTrue(driveForward == 10 && rotate == 1);
+		drivetrain.run();
+		Assert.assertTrue(driveForward == 0.7 && rotate == -1);
+		
 	}
 	
 	/**
@@ -89,7 +91,7 @@ public class WheelSystemTest {
 		@Override
 		public void drive(double driveStraight, double currentRotate) {
 			driveForward = driveStraight;
-			rotate = currentRotate;
+			rotate = -currentRotate;
 		}
 		
 	}
