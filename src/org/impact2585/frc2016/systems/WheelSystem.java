@@ -41,12 +41,13 @@ public class WheelSystem implements RobotSystem, Runnable{
 		return input;
 	}
 	
+	
 	/** Drives forward and turns
 	 * @param driveForward distance to drive forward
 	 * @param rotate how much the robot will turn
 	 */
 	public void drive(double driveForward, double rotate) {
-		drivetrain.arcadeDrive(driveForward, rotate);
+		drivetrain.arcadeDrive(driveForward, -rotate);
 	}
 
 	/* (non-Javadoc)

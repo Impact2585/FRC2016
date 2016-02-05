@@ -1,6 +1,5 @@
 package org.impact2585.frc2016;
 
-
 import org.impact2585.lib2585.ExecuterBasedRobot;
 
 /**
@@ -15,7 +14,9 @@ public class Robot extends ExecuterBasedRobot {
 	private static final long serialVersionUID = -6071317869900252678L;
 	private Environment environ;
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.impact2585.lib2585.ExecuterBasedRobot#robotInit()
 	 */
 	@Override
@@ -23,8 +24,9 @@ public class Robot extends ExecuterBasedRobot {
 		environ = new Environment(this);
 	}
 
-
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see edu.wpi.first.wpilibj.IterativeRobot#teleopInit()
 	 */
 	@Override
@@ -32,49 +34,31 @@ public class Robot extends ExecuterBasedRobot {
 		setExecuter(new TeleopExecuter(environ));
 	}
 
-    /**
-     * This function is called periodically during autonomous
-     */
-    public void autonomousPeriodic() {
+	/**
+	 * @returns the environment
+	 */
+	public synchronized Environment getEnvironment() {
+		return this.environ;
+	}
 
-    }
+	/**
+	 * Sets environment
+	 * 
+	 * @param environment
+	 *            consists of the robot's systems
+	 */
+	public synchronized void setEnvironment(Environment environment) {
+		this.environ = environment;
+	}
 
-    /**
-     * This function is called periodically during operator control
-     */
-    public void teleopPeriodic() {
-
-    }
-    
-    /**
-     * This function is called periodically during test mode
-     */
-    public void testPeriodic() {
-    
-    }
-    
-    /**
-    * @returns the environment
-    */
-    public synchronized Environment getEnvironment() {
-    return this.environ;
-    }
-        
-    /**Sets environment
-    * @param environment consists of the robot's systems
-    */
-    public synchronized void setEnvironment(Environment environment) {
-    	this.environ = environment;
-    }
-
-    
-    /* (non-Javadoc)
-     * @see edu.wpi.first.wpilibj.RobotBase#free()
-     */
-    @Override
-    public void free(){
-    	super.free();
-    	environ.destroy();
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see edu.wpi.first.wpilibj.RobotBase#free()
+	 */
+	@Override
+	public void free() {
+		super.free();
+		environ.destroy();
+	}
 }
-
