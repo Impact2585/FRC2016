@@ -17,6 +17,7 @@ public class WheelSystem implements RobotSystem, Runnable{
 	private double rotationValue;
 	public static final double DEADZONE = 0.15;
 	private InputMethod input;
+	private boolean inverted;
 
 	/* (non-Javadoc)
 	 * @see org.impact2585.frc2016.Initializable#init(org.impact2585.frc2016.Environment)
@@ -25,6 +26,7 @@ public class WheelSystem implements RobotSystem, Runnable{
 	public void init(Environment environ) {
 		drivetrain = new RobotDrive(new Victor(0), new Victor(1), new Victor(2), new Victor(3));
 		input = environ.getInput();
+		inverted = false;
 	}
 	
 	/**Sets new input method
@@ -55,13 +57,21 @@ public class WheelSystem implements RobotSystem, Runnable{
 	 */
 	@Override
 	public void run() {
+		if(input.invert()) {
+			inverted ^= true;
+		}
 		currentRampForward = input.forwardMovement();
 		rotationValue = input.rotationValue();
 		if(currentRampForward < DEADZONE && currentRampForward > -DEADZONE)
 			currentRampForward = 0;
 		if(rotationValue < DEADZONE && rotationValue > -DEADZONE)
 			rotationValue = 0;
-		drive(currentRampForward, rotationValue);
+		if(inverted) {
+			drive(-currentRampForward, -rotationValue);
+		}
+		else {
+			drive(currentRampForward, rotationValue);
+		}
 	}
 	
 	/* (non-Javadoc)

@@ -2,6 +2,8 @@ package org.impact2585.frc2016.input;
 
 import edu.wpi.first.wpilibj.Joystick;
 
+import org.impact2585.lib2585.XboxConstants;
+
 /**
  * Uses Xbox controller for input
  */
@@ -28,7 +30,7 @@ public class XboxInput implements InputMethod{
 	 */
 	@Override
 	public double forwardMovement() {
-		return controller.getRawAxis(0);
+		return controller.getRawAxis(XboxConstants.LEFT_Y_AXIS);
 	}
 
 	/* (non-Javadoc)
@@ -36,7 +38,17 @@ public class XboxInput implements InputMethod{
 	 */
 	@Override
 	public double rotationValue() {
-		return controller.getRawAxis(1);
+		return controller.getRawAxis(XboxConstants.RIGHT_X_AXIS);
 	}
+
+	/* (non-Javadoc)
+	 * @see org.impact2585.frc2016.input.InputMethod#setInverted()
+	 */
+	@Override
+	public boolean invert() {
+		return controller.getRawButton(XboxConstants.Y_BUTTON);
+	}
+	
+	
 	
 }
