@@ -14,5 +14,10 @@ public interface InputMethod {
 	 * @returns how much the robot should robot
 	 */
 	public abstract double rotationValue();
+	
+	/**
+	 * @returns true if the robot drivetrain should invert
+	 */
+	public abstract boolean invert();
 
 }

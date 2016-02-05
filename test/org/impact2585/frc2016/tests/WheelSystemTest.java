@@ -15,6 +15,7 @@ public class WheelSystemTest {
 	private InputTest input;
 	private double driveForward;
 	private double rotate;
+	private boolean invert;
 	
 	
 	/**
@@ -27,6 +28,7 @@ public class WheelSystemTest {
 		drivetrain.setInput(input);
 		driveForward = 0;
 		rotate = 0;
+		invert = false;
 	}
 
 	/**
@@ -54,14 +56,24 @@ public class WheelSystemTest {
 		rotate = 1;
 		driveForward = 0;
 		drivetrain.run();
-		Assert.assertTrue(driveForward == 0 && rotate == -1);
+		Assert.assertTrue(driveForward == 0 && rotate == 1);
 		
 		//tests turning and driving simultaneously
 		rotate = 1;
 		driveForward = 0.7;
 		drivetrain.run();
-		Assert.assertTrue(driveForward == 0.7 && rotate == -1);
+		Assert.assertTrue(driveForward == 0.7 && rotate == 1);
 		
+		//tests invert
+		invert = true;
+		rotate = -0.5;
+		driveForward = 0.5;
+		drivetrain.run();
+		Assert.assertTrue(driveForward == -0.5 && rotate == 0.5);
+		
+		//tests if invert continues
+		drivetrain.run();
+		Assert.assertTrue(driveForward == -0.5 && rotate == 0.5);
 	}
 	
 	/**
@@ -91,7 +103,7 @@ public class WheelSystemTest {
 		@Override
 		public void drive(double driveStraight, double currentRotate) {
 			driveForward = driveStraight;
-			rotate = -currentRotate;
+			rotate = currentRotate;
 		}
 		
 	}
@@ -107,6 +119,14 @@ public class WheelSystemTest {
 		@Override
 		public double forwardMovement() {
 			return driveForward;
+		}
+
+		/* (non-Javadoc)
+		 * @see org.impact2585.frc2016.input.InputMethod#getInvert()
+		 */
+		@Override
+		public boolean invert() {
+			return invert;
 		}
 
 		/* (non-Javadoc)
