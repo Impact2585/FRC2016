@@ -24,6 +24,14 @@ public class Robot extends ExecuterBasedRobot {
 		environ = new Environment(this);
 	}
 
+	/* (non-Javadoc)
+	 * @see edu.wpi.first.wpilibj.IterativeRobot#autonomousInit()
+	 */
+	@Override
+	public void autonomousInit() {
+		setExecuter(new AutonomousExecuter(environ));
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 

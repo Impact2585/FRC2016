@@ -1,6 +1,7 @@
 package org.impact2585.frc2016.systems;
 
 import org.impact2585.frc2016.Environment;
+import org.impact2585.frc2016.RobotMap;
 import org.impact2585.frc2016.input.InputMethod;
 
 import edu.wpi.first.wpilibj.RobotDrive;
@@ -18,15 +19,17 @@ public class WheelSystem implements RobotSystem, Runnable{
 	public static final double DEADZONE = 0.15;
 	private InputMethod input;
 	private boolean inverted;
+	private boolean prevInvert;
 
 	/* (non-Javadoc)
 	 * @see org.impact2585.frc2016.Initializable#init(org.impact2585.frc2016.Environment)
 	 */
 	@Override
 	public void init(Environment environ) {
-		drivetrain = new RobotDrive(new Victor(0), new Victor(1), new Victor(2), new Victor(3));
+		drivetrain = new RobotDrive(new Victor(RobotMap.FRONT_LEFT_DRIVE), new Victor(RobotMap.REAR_LEFT_DRIVE), new Victor(RobotMap.FRONT_RIGHT_DRIVE), new Victor(RobotMap.REAR_RIGHT_DRIVE));
 		input = environ.getInput();
 		inverted = false;
+		prevInvert = false;
 	}
 	
 	/**Sets new input method
@@ -57,17 +60,22 @@ public class WheelSystem implements RobotSystem, Runnable{
 	 */
 	@Override
 	public void run() {
-		if(input.invert()) {
+		if(input.invert() && !prevInvert) {
 			inverted ^= true;
 		}
+		
+		prevInvert = input.invert();
+		
 		currentRampForward = input.forwardMovement();
 		rotationValue = input.rotationValue();
+		
 		if(currentRampForward < DEADZONE && currentRampForward > -DEADZONE)
 			currentRampForward = 0;
 		if(rotationValue < DEADZONE && rotationValue > -DEADZONE)
 			rotationValue = 0;
+		
 		if(inverted) {
-			drive(-currentRampForward, -rotationValue);
+			drive(-currentRampForward, rotationValue);
 		}
 		else {
 			drive(currentRampForward, rotationValue);

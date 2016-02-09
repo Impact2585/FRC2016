@@ -69,14 +69,22 @@ public class WheelSystemTest {
 		rotate = -0.5;
 		driveForward = 0.5;
 		drivetrain.run();
-		Assert.assertTrue(driveForward == -0.5 && rotate == 0.5);
+		Assert.assertTrue(driveForward == -0.5 && rotate == -0.5);
+		
+		
+		//tests if it does not invert if the button is still pressed
+		invert = true;
+		rotate = -0.5;
+		driveForward = 0.5;
+		drivetrain.run();
+		Assert.assertTrue(driveForward == -0.5 && rotate == -0.5);
 		
 		//tests if drivetrain continues to be inverted
 		invert = false;
 		rotate = -0.6;
 		driveForward = 0.6;
 		drivetrain.run();
-		Assert.assertTrue(driveForward == -0.6 && rotate == 0.6);
+		Assert.assertTrue(driveForward == -0.6 && rotate == -0.6);
 		
 		//tests if it inverts to the original position
 		invert = true;
@@ -97,7 +105,7 @@ public class WheelSystemTest {
 		rotate = -0.8;
 		driveForward = 0.8;
 		drivetrain.run();
-		Assert.assertTrue(driveForward == -0.8 && rotate == 0.8);
+		Assert.assertTrue(driveForward == -0.8 && rotate == -0.8);
 		
 	}
 	
