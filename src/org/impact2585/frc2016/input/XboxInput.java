@@ -15,7 +15,7 @@ public class XboxInput implements InputMethod{
 	 * Constructor that initializes new joystick
 	 */
 	public XboxInput() {
-		controller = new Joystick(1);
+		controller = new Joystick(0);
 	}
 	
 	/**Constructor that sets joystick controller to joystick
@@ -30,7 +30,7 @@ public class XboxInput implements InputMethod{
 	 */
 	@Override
 	public double forwardMovement() {
-		return controller.getRawAxis(XboxConstants.LEFT_Y_AXIS);
+		return -controller.getRawAxis(XboxConstants.LEFT_Y_AXIS);
 	}
 
 	/* (non-Javadoc)
