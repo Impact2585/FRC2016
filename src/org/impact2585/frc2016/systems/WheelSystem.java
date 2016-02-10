@@ -63,14 +63,13 @@ public class WheelSystem implements RobotSystem, Runnable{
 	 */
 	@Override
 	public void run() {
-		// TODO clean up the ramping code
 		
 		//inverts if the input tells it to and the previous invert command was false
 		if(input.invert() && !prevInvert) {
 			inverted ^= true;
 		}
 		
-		
+		//sets prevInvert, desiredRampForward, and rotationValue to the input values
 		prevInvert = input.invert();
 		desiredRampForward = input.forwardMovement();
 		rotationValue = input.rotationValue();
@@ -89,22 +88,19 @@ public class WheelSystem implements RobotSystem, Runnable{
 		//ramps up or down depending on the difference between the desired ramp and the current ramp multiplied by the RAMP constant
 		if(currentRampForward < desiredRampForward) {
 			double inc = desiredRampForward - currentRampForward;
-			inc = Math.round(inc * 10000)/10000.0;
+			
 			if(inc <= 0.01)
 				currentRampForward = desiredRampForward;
 			else
 				currentRampForward += (inc*RAMP);
 		} else if (currentRampForward > desiredRampForward) {
 			double decr = currentRampForward - desiredRampForward;
-			decr = Math.round(decr * 10000)/10000.0;
+			
 			if(decr > 0.01)
 				currentRampForward -= (decr*RAMP);
 			else
 				currentRampForward = desiredRampForward;
 		}
-		
-		//rounds to the nearest ten thousandth place
-		currentRampForward= Math.round(currentRampForward * 10000)/10000.0;
 		
 		drive(currentRampForward, rotationValue);
 

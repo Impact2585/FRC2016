@@ -24,8 +24,10 @@ public class AutonomousExecuter implements Executer{
 	 */
 	@Override
 	public void execute() {
-		if(System.currentTimeMillis() <= initialTime + 5000)
+		if(System.currentTimeMillis() <= initialTime + 2000)
 			drivetrain.drive(1.0, 0);
+		else
+			drivetrain.drive(0, 0);
 	}
 
 

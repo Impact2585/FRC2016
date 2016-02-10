@@ -87,14 +87,14 @@ public class WheelSystemTest {
 		rotate = -0.5;
 		driveForward = 0.5;
 		drivetrain.run();
-		Assert.assertTrue(currentRampForward ==  -0.4062 && rotate == -0.5);
+		Assert.assertTrue(currentRampForward ==  -0.40625 && rotate == -0.5);
 		
 		//tests if it inverts to the original position
 		invert = true;
 		rotate = 0.7;
-		driveForward = 0.7;
+		driveForward = 0.5;
 		drivetrain.run();
-		Assert.assertTrue(currentRampForward == 0.1469 && rotate == 0.7);
+		Assert.assertTrue(currentRampForward == 0.046875 && rotate == 0.7);
 	}
 	
 	/**
