@@ -14,6 +14,7 @@ public class WheelSystemTest {
 	private TestWheelSystem drivetrain;
 	private InputTest input;
 	private double driveForward;
+	private double currentRampForward;
 	private double rotate;
 	private boolean invert;
 	
@@ -26,6 +27,7 @@ public class WheelSystemTest {
 		drivetrain = new TestWheelSystem();
 		input = new InputTest();
 		drivetrain.setInput(input);
+		currentRampForward = 0;
 		driveForward = 0;
 		rotate = 0;
 		invert = false;
@@ -39,37 +41,38 @@ public class WheelSystemTest {
 				
 		//tests if the robot isn't moving at the start
 		drivetrain.run();
-		Assert.assertTrue(driveForward == 0 && rotate == 0);
+		Assert.assertTrue(currentRampForward == 0 && rotate == 0);
 		
 		//tests deadzone
 		driveForward = 0.14;
 		rotate = 0.14;
 		drivetrain.run();
-		Assert.assertTrue(driveForward == 0 && rotate == 0);
+		Assert.assertTrue(currentRampForward == 0 && rotate == 0);
 		
 		//tests forward driving
-		driveForward = 0.5;
+		driveForward = -0.5;
 		drivetrain.run();
-		Assert.assertTrue(0.5 == driveForward && rotate == 0);
+		Assert.assertTrue(-0.25 == currentRampForward && rotate == 0);
 		
 		//tests turning
 		rotate = 1;
 		driveForward = 0;
 		drivetrain.run();
-		Assert.assertTrue(driveForward == 0 && rotate == 1);
+		Assert.assertTrue(currentRampForward == -0.125 && rotate == 1);
 		
 		//tests turning and driving simultaneously
 		rotate = 1;
-		driveForward = 0.7;
+		driveForward = 0.5;
+		drivetrain.setCurrentRampForward(0);
 		drivetrain.run();
-		Assert.assertTrue(driveForward == 0.7 && rotate == 1);
+		Assert.assertTrue(currentRampForward == 0.25 && rotate == 1);
 		
 		//tests invert
 		invert = true;
 		rotate = -0.5;
 		driveForward = 0.5;
 		drivetrain.run();
-		Assert.assertTrue(driveForward == -0.5 && rotate == -0.5);
+		Assert.assertTrue(currentRampForward == -0.125 && rotate == -0.5);
 		
 		
 		//tests if it does not invert if the button is still pressed
@@ -77,36 +80,21 @@ public class WheelSystemTest {
 		rotate = -0.5;
 		driveForward = 0.5;
 		drivetrain.run();
-		Assert.assertTrue(driveForward == -0.5 && rotate == -0.5);
+		Assert.assertTrue(currentRampForward == -0.3125 && rotate == -0.5);
 		
 		//tests if drivetrain continues to be inverted
 		invert = false;
-		rotate = -0.6;
-		driveForward = 0.6;
+		rotate = -0.5;
+		driveForward = 0.5;
 		drivetrain.run();
-		Assert.assertTrue(driveForward == -0.6 && rotate == -0.6);
+		Assert.assertTrue(currentRampForward ==  -0.4062 && rotate == -0.5);
 		
 		//tests if it inverts to the original position
 		invert = true;
 		rotate = 0.7;
 		driveForward = 0.7;
 		drivetrain.run();
-		Assert.assertTrue(driveForward == 0.7 && rotate == 0.7);
-		
-		//tests if invert continues again
-		invert = false;
-		rotate = -0.5;
-		driveForward = 0.5;
-		drivetrain.run();
-		Assert.assertTrue(driveForward == 0.5 && rotate == -0.5);
-		
-		//tests if it inverts again
-		invert = true;
-		rotate = -0.8;
-		driveForward = 0.8;
-		drivetrain.run();
-		Assert.assertTrue(driveForward == -0.8 && rotate == -0.8);
-		
+		Assert.assertTrue(currentRampForward == 0.1469 && rotate == 0.7);
 	}
 	
 	/**
@@ -134,9 +122,18 @@ public class WheelSystemTest {
 		 * @see org.impact2585.frc2016.systems.WheelSystem#drive(double, double)
 		 */
 		@Override
-		public void drive(double driveStraight, double currentRotate) {
-			driveForward = driveStraight;
+		public void drive(double movement, double currentRotate) {
+			currentRampForward = movement;
 			rotate = currentRotate;
+		}
+
+		/* (non-Javadoc)
+		 * @see org.impact2585.frc2016.systems.WheelSystem#setCurrentRampForward(double)
+		 */
+		@Override
+		public void setCurrentRampForward(double rampForward) {
+			super.setCurrentRampForward(rampForward);
+			currentRampForward = rampForward;
 		}
 		
 	}
