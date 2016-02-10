@@ -41,6 +41,17 @@ public class Robot extends ExecuterBasedRobot {
 	public void teleopInit() {
 		setExecuter(new TeleopExecuter(environ));
 	}
+	
+
+	/* (non-Javadoc)
+	 * @see org.impact2585.lib2585.ExecuterBasedRobot#disabledInit()
+	 */
+	@Override
+	public void disabledInit() {
+		if (isDisabled()) {
+			setExecuter(new DisabledExecuter(environ));
+		}
+	}
 
 	/**
 	 * @returns the environment
