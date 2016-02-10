@@ -17,9 +17,12 @@ public class WheelSystem implements RobotSystem, Runnable{
 	private double currentRampForward;
 	private double rotationValue;
 	public static final double DEADZONE = 0.15;
+	public static final double RAMP = 0.5;
 	private InputMethod input;
 	private boolean inverted;
 	private boolean prevInvert;
+	private double desiredRampForward;
+
 
 	/* (non-Javadoc)
 	 * @see org.impact2585.frc2016.Initializable#init(org.impact2585.frc2016.Environment)
@@ -60,26 +63,65 @@ public class WheelSystem implements RobotSystem, Runnable{
 	 */
 	@Override
 	public void run() {
+		// TODO clean up the ramping code
+		
+		//inverts if the input tells it to and the previous invert command was false
 		if(input.invert() && !prevInvert) {
 			inverted ^= true;
 		}
 		
-		prevInvert = input.invert();
 		
-		currentRampForward = input.forwardMovement();
+		prevInvert = input.invert();
+		desiredRampForward = input.forwardMovement();
 		rotationValue = input.rotationValue();
 		
-		if(currentRampForward < DEADZONE && currentRampForward > -DEADZONE)
-			currentRampForward = 0;
+		//sets desiredRampForward and rotationValue to zero if they are below deadzone
+		if(desiredRampForward < DEADZONE && desiredRampForward > -DEADZONE)
+			desiredRampForward = 0;
 		if(rotationValue < DEADZONE && rotationValue > -DEADZONE)
 			rotationValue = 0;
 		
+		//inverts the desiredRampForward if the wheel system should be inverted
 		if(inverted) {
-			drive(-currentRampForward, rotationValue);
+			desiredRampForward *= -1;
 		}
-		else {
-			drive(currentRampForward, rotationValue);
+		
+		//ramps up or down depending on the difference between the desired ramp and the current ramp multiplied by the RAMP constant
+		if(currentRampForward < desiredRampForward) {
+			double inc = desiredRampForward - currentRampForward;
+			inc = Math.round(inc * 10000)/10000.0;
+			if(inc <= 0.01)
+				currentRampForward = desiredRampForward;
+			else
+				currentRampForward += (inc*RAMP);
+		} else if (currentRampForward > desiredRampForward) {
+			double decr = currentRampForward - desiredRampForward;
+			decr = Math.round(decr * 10000)/10000.0;
+			if(decr > 0.01)
+				currentRampForward -= (decr*RAMP);
+			else
+				currentRampForward = desiredRampForward;
 		}
+		
+		//rounds to the nearest ten thousandth place
+		currentRampForward= Math.round(currentRampForward * 10000)/10000.0;
+		
+		drive(currentRampForward, rotationValue);
+
+	}
+	
+	/**
+	 * @returns the current ramp forward
+	 */
+	public double getCurrentRampForward() {
+		return currentRampForward;
+	}
+	
+	/**sets the current ramp forward to rampForward
+	 * @param rampForward the distance the robot is moving forward
+	 */
+	public void setCurrentRampForward(double rampForward) {
+		currentRampForward = rampForward;
 	}
 	
 	/* (non-Javadoc)
