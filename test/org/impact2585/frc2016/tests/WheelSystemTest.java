@@ -54,11 +54,11 @@ public class WheelSystemTest {
 		drivetrain.run();
 		Assert.assertTrue(-0.25 == currentRampForward && rotate == 0);
 		
-		//tests turning
+		//tests turning and if currentRampForward immediately goes to 0 if the input is 0
 		rotate = 1;
 		driveForward = 0;
 		drivetrain.run();
-		Assert.assertTrue(currentRampForward == -0.125 && rotate == 1);
+		Assert.assertTrue(currentRampForward == 0 && rotate == 1);
 		
 		//tests turning and driving simultaneously
 		rotate = 1;
