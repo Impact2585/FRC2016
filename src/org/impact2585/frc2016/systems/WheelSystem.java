@@ -80,27 +80,35 @@ public class WheelSystem implements RobotSystem, Runnable{
 		if(rotationValue < DEADZONE && rotationValue > -DEADZONE)
 			rotationValue = 0;
 		
-		//inverts the desiredRampForward if the wheel system should be inverted
-		if(inverted) {
-			desiredRampForward *= -1;
+		if(desiredRampForward != 0) {
+			
+		
+			//inverts the desiredRampForward if the wheel system should be inverted
+			if(inverted) {
+				desiredRampForward *= -1;
+			}
+		
+			//ramps up or down depending on the difference between the desired ramp and the current ramp multiplied by the RAMP constant
+			if(currentRampForward < desiredRampForward) {
+				double inc = desiredRampForward - currentRampForward;
+			
+				if(inc <= 0.01)
+					currentRampForward = desiredRampForward;
+				else
+					currentRampForward += (inc*RAMP);
+			} else if (currentRampForward > desiredRampForward) {
+				double decr = currentRampForward - desiredRampForward;
+			
+				if(decr > 0.01)
+					currentRampForward -= (decr*RAMP);
+				else
+					currentRampForward = desiredRampForward;
+			}
 		}
 		
-		//ramps up or down depending on the difference between the desired ramp and the current ramp multiplied by the RAMP constant
-		if(currentRampForward < desiredRampForward) {
-			double inc = desiredRampForward - currentRampForward;
-			
-			if(inc <= 0.01)
-				currentRampForward = desiredRampForward;
-			else
-				currentRampForward += (inc*RAMP);
-		} else if (currentRampForward > desiredRampForward) {
-			double decr = currentRampForward - desiredRampForward;
-			
-			if(decr > 0.01)
-				currentRampForward -= (decr*RAMP);
-			else
-				currentRampForward = desiredRampForward;
-		}
+		//sets currentRampForward immediately to 0 if the input is 0
+		else
+			currentRampForward = 0;
 		
 		drive(currentRampForward, rotationValue);
 
