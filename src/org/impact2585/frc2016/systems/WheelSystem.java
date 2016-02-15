@@ -104,10 +104,8 @@ public class WheelSystem implements RobotSystem, Runnable{
 				else
 					currentRampForward = desiredRampForward;
 			}
-		}
-		
-		//sets currentRampForward immediately to 0 if the input is 0
-		else
+		}else
+			//sets currentRampForward immediately to 0 if the input is 0
 			currentRampForward = 0;
 		
 		drive(currentRampForward, rotationValue);

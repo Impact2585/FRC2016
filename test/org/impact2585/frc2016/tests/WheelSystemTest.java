@@ -95,6 +95,11 @@ public class WheelSystemTest {
 		driveForward = 0.5;
 		drivetrain.run();
 		Assert.assertTrue(currentRampForward == 0.046875 && rotate == 0.7);
+		
+		// see if movement and rotation go back to 0 again
+		rotate = driveForward = 0;
+		drivetrain.run();
+		Assert.assertTrue(currentRampForward == 0 && rotate == 0);
 	}
 	
 	/**
