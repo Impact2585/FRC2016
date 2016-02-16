@@ -48,6 +48,38 @@ public class XboxInput implements InputMethod{
 	public boolean invert() {
 		return controller.getRawButton(XboxConstants.Y_BUTTON);
 	}
+
+	/* (non-Javadoc)
+	 * @see org.impact2585.frc2016.input.InputMethod#topArmForward()
+	 */
+	@Override
+	public boolean topArmForward() {
+		return controller.getRawButton(XboxConstants.RIGHT_BUMPER);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.impact2585.frc2016.input.InputMethod#topArmBackward()
+	 */
+	@Override
+	public boolean topArmBackward() {
+		return controller.getRawButton(XboxConstants.LEFT_BUMPER);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.impact2585.frc2016.input.InputMethod#backArmForwardValue()
+	 */
+	@Override
+	public double backArmForwardValue() {
+		return controller.getRawAxis(XboxConstants.RIGHT_TRIGGER);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.impact2585.frc2016.input.InputMethod#backArmBackwardValue()
+	 */
+	@Override
+	public double backArmBackwardValue() {
+		return controller.getRawAxis(XboxConstants.LEFT_TRIGGER);
+	}
 	
 	
 	

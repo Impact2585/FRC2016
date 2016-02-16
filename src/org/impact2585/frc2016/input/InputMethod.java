@@ -19,5 +19,25 @@ public interface InputMethod {
 	 * @returns true if the robot drivetrain should invert
 	 */
 	public abstract boolean invert();
+	
+	/**
+	 * @returns true if the top arm should rotate forward
+	 */
+	public abstract boolean topArmForward();
+	
+	/**
+	 * @returns true if the top arm should rotate backwards
+	 */
+	public abstract boolean topArmBackward();
+	
+	/**
+	 * @returns how far the bottom arm should move forward
+	 */
+	public abstract double backArmForwardValue();
+	
+	/**
+	 * @returns how far the back arm should move backwards
+	 */
+	public abstract double backArmBackwardValue();
 
 }
