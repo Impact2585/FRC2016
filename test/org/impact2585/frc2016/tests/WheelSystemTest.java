@@ -171,6 +171,38 @@ public class WheelSystemTest {
 		public double rotationValue() {
 			return rotate;
 		}
+
+		/* (non-Javadoc)
+		 * @see org.impact2585.frc2016.input.InputMethod#topArmForward()
+		 */
+		@Override
+		public boolean topArmForward() {
+			return false;
+		}
+
+		/* (non-Javadoc)
+		 * @see org.impact2585.frc2016.input.InputMethod#topArmBackward()
+		 */
+		@Override
+		public boolean topArmBackward() {
+			return false;
+		}
+
+		/* (non-Javadoc)
+		 * @see org.impact2585.frc2016.input.InputMethod#backArmForwardValue()
+		 */
+		@Override
+		public double backArmForwardValue() {
+			return 0;
+		}
+
+		/* (non-Javadoc)
+		 * @see org.impact2585.frc2016.input.InputMethod#backArmBackwardValue()
+		 */
+		@Override
+		public double backArmBackwardValue() {
+			return 0;
+		}
 		
 	}
 }
