@@ -39,5 +39,25 @@ public interface InputMethod {
 	 * @returns how far the back arm should move backwards
 	 */
 	public abstract double backArmBackwardValue();
+	
+	/**
+	 * @returns true if the two wheels should spin in the direction that one should shoot
+	 */
+	public abstract boolean outtake();
+	
+	/**
+	 * @returns true if the two wheels should spin in the direction that one should intake
+	 */
+	public abstract boolean intake();
+	
+	/**
+	 * @returns true if the intake arms should move towards the bot
+	 */
+	public abstract boolean moveTowardsBot();
+	
+	/**
+	 * @returns true if the intake arms should mvoe away from the bot
+	 */
+	public abstract boolean moveAwayFromBot();
 
 }
