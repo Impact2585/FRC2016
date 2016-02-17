@@ -45,7 +45,23 @@
 		        <classpath refid="FRC2016.classpath"/>
 		</junit>
 	</target>
-    <target depends="build-project, WheelSystemTest" name= "test"/>
+	<target name="ArmSystemTest">
+		<mkdir dir="${junit.output.dir}"/>
+		<junit fork="yes" haltonfailure="yes" printsummary="withOutAndErr">
+		        <formatter type="xml"/>
+		        <test name="org.impact2585.frc2016.tests.ArmSystemTest" todir="${junit.output.dir}"/>
+		        <classpath refid="FRC2016.classpath"/>
+		</junit>
+	</target>
+	<target name="IntakeSystemTest">
+		<mkdir dir="${junit.output.dir}"/>
+		<junit fork="yes" haltonfailure="yes" printsummary="withOutAndErr">
+		        <formatter type="xml"/>
+		        <test name="org.impact2585.frc2016.tests.IntakeSystemTest" todir="${junit.output.dir}"/>
+		        <classpath refid="FRC2016.classpath"/>
+		</junit>
+	</target>
+    <target depends="build-project, WheelSystemTest, ArmSystemTest, IntakeSystemTest" name= "test"/>
     <target name="junitreport">
         <junitreport todir="${junit.output.dir}">
             <fileset dir="${junit.output.dir}">

@@ -3,6 +3,7 @@ package org.impact2585.frc2016;
 import org.impact2585.frc2016.input.InputMethod;
 import org.impact2585.frc2016.input.XboxInput;
 import org.impact2585.frc2016.systems.ArmSystem;
+import org.impact2585.frc2016.systems.IntakeSystem;
 import org.impact2585.frc2016.systems.WheelSystem;
 import org.impact2585.lib2585.RobotEnvironment;
 
@@ -15,6 +16,7 @@ public class Environment extends RobotEnvironment{
 	private InputMethod input;
 	private WheelSystem wheels;
 	private ArmSystem arm;
+	private IntakeSystem intake;
 	
 	/**
 	 * Just a default constructor
@@ -33,6 +35,8 @@ public class Environment extends RobotEnvironment{
 		wheels.init(this);
 		arm = new ArmSystem();
 		arm.init(this);
+		intake = new IntakeSystem();
+		intake.init(this);
 	}
 	
 	/**
@@ -77,6 +81,7 @@ public class Environment extends RobotEnvironment{
 	public void destroy() {
 		wheels.destroy();
 		arm.destroy();
+		intake.destroy();
 	}
 	
 }
