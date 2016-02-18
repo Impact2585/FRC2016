@@ -18,6 +18,7 @@ public class ArmSystem implements RobotSystem, Runnable{
 	private SpeedController topArm;
 	private SpeedController bottomArm;
 	public static final double SPEED_MULTIPLIER = 0.7;
+	public static final double ARM_SPEED = 0.5;
 	
 	
 
@@ -64,9 +65,9 @@ public class ArmSystem implements RobotSystem, Runnable{
 		double backArmBackwardValue = input.backArmBackwardValue();
 		
 		if (input.topArmForward() && !input.topArmBackward()) {
-			setTopArmSpeed(0.5);
+			setTopArmSpeed(ARM_SPEED);
 		} else if(input.topArmBackward() && !input.topArmForward()) {
-			setTopArmSpeed(-0.5);
+			setTopArmSpeed(-ARM_SPEED);
 		} else {
 			setTopArmSpeed(0);
 		}

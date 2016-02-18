@@ -123,62 +123,6 @@ public class IntakeSystemTest {
 	 */
 	private class InputTest implements InputMethod {
 
-		/* (non-Javadoc)
-		 * @see org.impact2585.frc2016.input.InputMethod#forwardMovement()
-		 */
-		@Override
-		public double forwardMovement() {
-			return 0;
-			
-		}
-
-		/* (non-Javadoc)
-		 * @see org.impact2585.frc2016.input.InputMethod#getInvert()
-		 */
-		@Override
-		public boolean invert() {
-			return false;
-		}
-
-		/* (non-Javadoc)
-		 * @see org.impact2585.frc2016.input.InputMethod#rotationValue()
-		 */
-		@Override
-		public double rotationValue() {
-			return 0;
-		}
-
-		/* (non-Javadoc)
-		 * @see org.impact2585.frc2016.input.InputMethod#topArmForward()
-		 */
-		@Override
-		public boolean topArmForward() {
-			return false;
-		}
-
-		/* (non-Javadoc)
-		 * @see org.impact2585.frc2016.input.InputMethod#topArmBackward()
-		 */
-		@Override
-		public boolean topArmBackward() {
-			return false;
-		}
-
-		/* (non-Javadoc)
-		 * @see org.impact2585.frc2016.input.InputMethod#backArmForwardValue()
-		 */
-		@Override
-		public double backArmForwardValue() {
-			return 0;
-		}
-
-		/* (non-Javadoc)
-		 * @see org.impact2585.frc2016.input.InputMethod#backArmBackwardValue()
-		 */
-		@Override
-		public double backArmBackwardValue() {
-			return 0;
-		}
 
 		/* (non-Javadoc)
 		 * @see org.impact2585.frc2016.input.InputMethod#outtake()
