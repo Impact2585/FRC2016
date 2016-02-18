@@ -37,7 +37,7 @@ public class IntakeSystem implements RobotSystem, Runnable{
 	 */
 	public void spinWheels(double speed) {
 		leftWheel.set(speed);
-		rightWheel.set(speed);
+		rightWheel.set(-speed);
 	}
 	
 	/**Sets the motors controlling the arms for the intake to speed
@@ -45,7 +45,7 @@ public class IntakeSystem implements RobotSystem, Runnable{
 	 */
 	public void moveArms(double speed) {
 		leftArm.set(speed);
-		rightArm.set(speed);
+		rightArm.set(-speed);
 	}
 	
 	/**Sets the input of the system to newInput

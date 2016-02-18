@@ -6,14 +6,23 @@ import org.impact2585.lib2585.Executer;
 /**
  * Executer for autonomous mode
  */
-public class AutonomousExecuter implements Executer{
+public enum AutonomousExecuter implements Executer, Initializable{
+	
+	/**
+	 *This version of auton drives forward
+	 */
+	BASIC;
+	
 	private Environment env;
 	private WheelSystem drivetrain;
 	private long initialTime;
-	/**Constructor for auton 
-	 * @param environ the environment of the robot
+
+	
+	/* (non-Javadoc)
+	 * @see org.impact2585.frc2016.Initializable#init(org.impact2585.frc2016.Environment)
 	 */
-	public AutonomousExecuter(Environment environ) {
+	@Override
+	public void init(Environment environ) {
 		env = environ;
 		drivetrain = env.getWheelSystem();
 		initialTime = System.currentTimeMillis();
@@ -24,11 +33,15 @@ public class AutonomousExecuter implements Executer{
 	 */
 	@Override
 	public void execute() {
-		if(System.currentTimeMillis() <= initialTime + 2000)
-			drivetrain.drive(1.0, 0);
-		else
+		switch(this) {
+		case BASIC:
+			if(System.currentTimeMillis() <= initialTime + 2000)
+				drivetrain.drive(1.0, 0);
+			else
+				drivetrain.drive(0, 0);
+			break;
+		default:
 			drivetrain.drive(0, 0);
+		}
 	}
-
-
 }

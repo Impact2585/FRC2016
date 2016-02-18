@@ -122,30 +122,6 @@ public class ArmSystemTest {
 	private class InputTest implements InputMethod {
 
 		/* (non-Javadoc)
-		 * @see org.impact2585.frc2016.input.InputMethod#forwardMovement()
-		 */
-		@Override
-		public double forwardMovement() {
-			return 0;
-		}
-
-		/* (non-Javadoc)
-		 * @see org.impact2585.frc2016.input.InputMethod#getInvert()
-		 */
-		@Override
-		public boolean invert() {
-			return false;
-		}
-
-		/* (non-Javadoc)
-		 * @see org.impact2585.frc2016.input.InputMethod#rotationValue()
-		 */
-		@Override
-		public double rotationValue() {
-			return 0;
-		}
-
-		/* (non-Javadoc)
 		 * @see org.impact2585.frc2016.input.InputMethod#topArmForward()
 		 */
 		@Override
@@ -175,38 +151,6 @@ public class ArmSystemTest {
 		@Override
 		public double backArmBackwardValue() {
 			return bottomArmBackwardValue;
-		}
-
-		/* (non-Javadoc)
-		 * @see org.impact2585.frc2016.input.InputMethod#outtake()
-		 */
-		@Override
-		public boolean outtake() {
-			return false;
-		}
-
-		/* (non-Javadoc)
-		 * @see org.impact2585.frc2016.input.InputMethod#intake()
-		 */
-		@Override
-		public boolean intake() {
-			return false;
-		}
-
-		/* (non-Javadoc)
-		 * @see org.impact2585.frc2016.input.InputMethod#moveTowardsBot()
-		 */
-		@Override
-		public boolean moveTowardsBot() {
-			return false;
-		}
-
-		/* (non-Javadoc)
-		 * @see org.impact2585.frc2016.input.InputMethod#moveAwayFromBot()
-		 */
-		@Override
-		public boolean moveAwayFromBot() {
-			return false;
 		}
 
 	}
