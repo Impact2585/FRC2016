@@ -5,8 +5,8 @@ import org.impact2585.frc2016.RobotMap;
 import org.impact2585.frc2016.input.InputMethod;
 
 import edu.wpi.first.wpilibj.SensorBase;
+import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.SpeedController;
-import edu.wpi.first.wpilibj.Talon;
 
 /**
  * The system for the robot's arm
@@ -17,8 +17,8 @@ public class ArmSystem implements RobotSystem, Runnable{
 	private InputMethod input;
 	private SpeedController topArm;
 	private SpeedController bottomArm;
-	public static final double SPEED_MULTIPLIER = 0.7;
-	public static final double ARM_SPEED = 0.5;
+	public static final double BOTTOM_ARM_SPEED = 0.5;
+	public static final double TOP_ARM_SPEED = 0.7;
 	
 	
 
@@ -29,8 +29,8 @@ public class ArmSystem implements RobotSystem, Runnable{
 	public void init(Environment environ) {
 		env = environ;
 		input = env.getInput();
-		topArm = new Talon(RobotMap.TOP_ARM);
-		bottomArm = new Talon(RobotMap.BOTTOM_ARM);
+		topArm = new Spark(RobotMap.TOP_ARM);
+		bottomArm = new Spark(RobotMap.BOTTOM_ARM);
 		
 	}
 	
@@ -61,24 +61,9 @@ public class ArmSystem implements RobotSystem, Runnable{
 	 */
 	@Override
 	public void run() {
-		double backArmForwardValue = input.backArmForwardValue();
-		double backArmBackwardValue = input.backArmBackwardValue();
-		
-		if (input.topArmForward() && !input.topArmBackward()) {
-			setTopArmSpeed(ARM_SPEED);
-		} else if(input.topArmBackward() && !input.topArmForward()) {
-			setTopArmSpeed(-ARM_SPEED);
-		} else {
-			setTopArmSpeed(0);
-		}
-		
-		if(backArmForwardValue > 0 && backArmBackwardValue == 0) {
-			setBottomArmSpeed(backArmForwardValue * SPEED_MULTIPLIER);
-		} else if (backArmBackwardValue > 0 && backArmForwardValue == 0) {
-			setBottomArmSpeed(-backArmBackwardValue * SPEED_MULTIPLIER);
-		} else {
-			setBottomArmSpeed(0);
-		}
+		setTopArmSpeed(input.moveTopArm() * TOP_ARM_SPEED);
+		setBottomArmSpeed(input.moveBottomArm() *BOTTOM_ARM_SPEED);
+
 	}
 	
 	/* (non-Javadoc)

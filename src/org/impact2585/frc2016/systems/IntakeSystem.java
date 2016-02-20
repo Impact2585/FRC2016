@@ -6,7 +6,8 @@ import org.impact2585.frc2016.input.InputMethod;
 
 import edu.wpi.first.wpilibj.SensorBase;
 import edu.wpi.first.wpilibj.SpeedController;
-import edu.wpi.first.wpilibj.Victor;
+import edu.wpi.first.wpilibj.Talon;
+
 
 /**
  * Ignore the class name, this is actually an IO shooter
@@ -17,6 +18,7 @@ public class IntakeSystem implements RobotSystem, Runnable{
 	private SpeedController rightWheel;
 	private SpeedController leftArm;
 	private SpeedController rightArm;
+	public static final double ARM_SPEED = 0.3;
 	
 
 	/* (non-Javadoc)
@@ -25,10 +27,10 @@ public class IntakeSystem implements RobotSystem, Runnable{
 	@Override
 	public void init(Environment environ) {
 		input = environ.getInput();
-		leftWheel = new Victor(RobotMap.INTAKE_LEFT_WHEEL);
-		rightWheel = new Victor(RobotMap.INTAKE_RIGHT_WHEEL);
-		leftArm = new Victor(RobotMap.INTAKE_LEFT_ARM);
-		rightArm = new Victor(RobotMap.INTAKE_RIGHT_ARM);
+		leftWheel = new Talon(RobotMap.INTAKE_LEFT_WHEEL);
+		rightWheel = new Talon(RobotMap.INTAKE_RIGHT_WHEEL);
+		leftArm = new Talon(RobotMap.INTAKE_LEFT_ARM);
+		rightArm = new Talon(RobotMap.INTAKE_RIGHT_ARM);
 		
 	}
 	
@@ -60,21 +62,15 @@ public class IntakeSystem implements RobotSystem, Runnable{
 	 */
 	@Override
 	public void run() {
-		if(input.intake() && !input.outtake()) {
+		if(input.intake() && !input.outake()) {
 			spinWheels(1);
-		} else if(input.outtake() && !input.intake()) {
+		} else if(input.outake() && !input.intake()) {
 			spinWheels(-1);
 		} else {
 			spinWheels(0);
 		}
 		
-		if(input.moveTowardsBot() && !input.moveAwayFromBot()) {
-			moveArms(0.3);
-		} else if(input.moveAwayFromBot() && !input.moveTowardsBot()) {
-			moveArms(-0.3);
-		} else {
-			moveArms(0);
-		}
+		moveArms(input.moveIntake() * ARM_SPEED);
 		
 	}
 	

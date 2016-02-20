@@ -16,7 +16,7 @@ public interface RobotMap {
 	public static final int INTAKE_LEFT_WHEEL = 7;
 	public static final int INTAKE_RIGHT_WHEEL = 8;
 	public static final int INTAKE_LEFT_ARM = 9;
-	public static final int INTAKE_RIGHT_ARM = 10;
+	public static final int INTAKE_RIGHT_ARM = 0;
 	
 
 }
