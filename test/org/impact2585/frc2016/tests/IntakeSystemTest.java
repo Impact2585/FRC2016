@@ -13,8 +13,10 @@ import org.junit.Test;
  */
 public class IntakeSystemTest {
 	private InputMethod input;
-	private boolean moveArmAwayFromBot;
-	private boolean moveArmTowardsBot;
+	private boolean digitalMoveArmAwayFromBot;
+	private boolean digitalMoveArmTowardsBot;
+	private double analogMoveArmAwayFromBot;
+	private double analogMoveArmTowardsBot;
 	private boolean moveWheelsForward;
 	private boolean moveWheelsBackwards;
 	private TestIntakeSystem ioshooter;
@@ -29,10 +31,12 @@ public class IntakeSystemTest {
 		ioshooter = new TestIntakeSystem();
 		input = new InputTest();
 		ioshooter.setInput(input);
-		moveArmAwayFromBot = false;
-		moveArmTowardsBot = false;
+		digitalMoveArmAwayFromBot = false;
+		digitalMoveArmTowardsBot = false;
 		moveWheelsBackwards = false;
 		moveWheelsForward = false;
+		analogMoveArmAwayFromBot = 0;
+		analogMoveArmTowardsBot = 0;
 		
 	}
 
@@ -63,28 +67,54 @@ public class IntakeSystemTest {
 		//tests if the arms move forward
 		moveWheelsForward = false;
 		moveWheelsBackwards = false;
-		moveArmAwayFromBot = true;
+		digitalMoveArmAwayFromBot = true;
 		ioshooter.run();
 		Assert.assertTrue(wheelSpeed == 0 && armSpeed == -0.3);
 		
 		//tests if the arms move backwards
-		moveArmAwayFromBot = false;
-		moveArmTowardsBot = true;
+		digitalMoveArmAwayFromBot = false;
+		digitalMoveArmTowardsBot = true;
 		ioshooter.run();
 		Assert.assertTrue(wheelSpeed == 0 && armSpeed == 0.3);
 		
 		//tests if the arms don't move if the users pushes both buttons
-		moveArmAwayFromBot = true;
+		digitalMoveArmAwayFromBot = true;
 		ioshooter.run();
 		Assert.assertTrue(wheelSpeed == 0 && armSpeed == 0);
 		
 		//tests if the arms and the wheels can both move simultaneously
-		moveArmTowardsBot = false;
+		digitalMoveArmTowardsBot = false;
 		moveWheelsForward = true;
 		ioshooter.run();
 		Assert.assertTrue(wheelSpeed == 1 && armSpeed == -0.3);
 		
+		//turn off the digital input
+		moveWheelsForward = false;
+		digitalMoveArmAwayFromBot = false;
+		ioshooter.run();
+		Assert.assertTrue(wheelSpeed == 0 && armSpeed == 0);
 		
+		//tests if arms move away with the analog input
+		analogMoveArmAwayFromBot = 1;
+		ioshooter.run();
+		Assert.assertTrue(wheelSpeed == 0 && armSpeed == -0.3);
+		
+		//tests if the arms move towards the bot with analog input
+		analogMoveArmTowardsBot = 1;
+		analogMoveArmAwayFromBot = 0;
+		ioshooter.run();
+		Assert.assertTrue(wheelSpeed == 0 && armSpeed == 0.3);
+		
+		//tests if the arms don't move at all if Harris pushes both triggers
+		analogMoveArmAwayFromBot = 1;
+		ioshooter.run();
+		Assert.assertTrue(wheelSpeed == 0 && armSpeed == 0);
+		
+		//tests if the input arms can move while the input runs
+		analogMoveArmAwayFromBot = 0;
+		moveWheelsForward = true;
+		ioshooter.run();
+		Assert.assertTrue(wheelSpeed == 1 && armSpeed == 0.3);
 	}
 	
 	/**
@@ -121,14 +151,13 @@ public class IntakeSystemTest {
 	/**
 	 * input version for testing
 	 */
-	private class InputTest implements InputMethod {
-
+	private class InputTest extends InputMethod {
 
 		/* (non-Javadoc)
-		 * @see org.impact2585.frc2016.input.InputMethod#outtake()
+		 * @see org.impact2585.frc2016.input.InputMethod#outake()
 		 */
 		@Override
-		public boolean outtake() {
+		public boolean outake() {
 			return moveWheelsBackwards;
 		}
 
@@ -141,21 +170,37 @@ public class IntakeSystemTest {
 		}
 
 		/* (non-Javadoc)
-		 * @see org.impact2585.frc2016.input.InputMethod#moveTowardsBot()
+		 * @see org.impact2585.frc2016.input.InputMethod#digitalMoveIntakeTowardsBot()
 		 */
 		@Override
-		public boolean moveTowardsBot() {
-			return moveArmTowardsBot;
+		public boolean digitalMoveIntakeTowardsBot() {
+			return digitalMoveArmTowardsBot;
 		}
 
 		/* (non-Javadoc)
-		 * @see org.impact2585.frc2016.input.InputMethod#moveAwayFromBot()
+		 * @see org.impact2585.frc2016.input.InputMethod#digitalMoveIntakeAwayFromBot()
 		 */
 		@Override
-		public boolean moveAwayFromBot() {
-			return moveArmAwayFromBot;
+		public boolean digitalMoveIntakeAwayFromBot() {
+			return digitalMoveArmAwayFromBot;
 		}
-		
+
+		/* (non-Javadoc)
+		 * @see org.impact2585.frc2016.input.InputMethod#analogMoveIntakeTowardsBot()
+		 */
+		@Override
+		public double analogMoveIntakeTowardsBot() {
+			return analogMoveArmTowardsBot;
+		}
+
+		/* (non-Javadoc)
+		 * @see org.impact2585.frc2016.input.InputMethod#analogMoveIntakeAwayFromBot()
+		 */
+		@Override
+		public double analogMoveIntakeAwayFromBot() {
+			return analogMoveArmAwayFromBot;
+		}
+				
 	}
 	
 }

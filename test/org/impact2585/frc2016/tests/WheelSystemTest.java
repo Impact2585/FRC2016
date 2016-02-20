@@ -146,7 +146,7 @@ public class WheelSystemTest {
 	/**
 	 * input version for testing
 	 */
-	private class InputTest implements InputMethod {
+	private class InputTest extends InputMethod {
 
 		/* (non-Javadoc)
 		 * @see org.impact2585.frc2016.input.InputMethod#forwardMovement()

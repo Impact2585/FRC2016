@@ -7,7 +7,7 @@ import org.impact2585.lib2585.XboxConstants;
 /**
  * Uses Xbox controller for input
  */
-public class XboxInput implements InputMethod{
+public class XboxInput extends InputMethod{
 
 	private Joystick controller;
 	
@@ -46,46 +46,46 @@ public class XboxInput implements InputMethod{
 	 */
 	@Override
 	public boolean invert() {
-		return controller.getRawButton(XboxConstants.Y_BUTTON);
+		return controller.getRawButton(XboxConstants.LEFT_JOYSTICK_BUTTON);
 	}
 
 	/* (non-Javadoc)
 	 * @see org.impact2585.frc2016.input.InputMethod#topArmForward()
 	 */
 	@Override
-	public boolean topArmForward() {
+	public boolean digitalTopArmForward() {
 		return controller.getRawButton(XboxConstants.RIGHT_BUMPER);
 	}
 
 	/* (non-Javadoc)
-	 * @see org.impact2585.frc2016.input.InputMethod#topArmBackward()
+	 * @see org.impact2585.frc2016.input.InputMethod#digitalTopArmBackward()
 	 */
 	@Override
-	public boolean topArmBackward() {
+	public boolean digitalTopArmBackward() {
 		return controller.getRawButton(XboxConstants.LEFT_BUMPER);
 	}
 
 	/* (non-Javadoc)
-	 * @see org.impact2585.frc2016.input.InputMethod#backArmForwardValue()
+	 * @see org.impact2585.frc2016.input.InputMethod#bottomArmForwardValue()
 	 */
 	@Override
-	public double backArmForwardValue() {
+	public double bottomArmForwardValue() {
 		return controller.getRawAxis(XboxConstants.RIGHT_TRIGGER);
 	}
 
 	/* (non-Javadoc)
-	 * @see org.impact2585.frc2016.input.InputMethod#backArmBackwardValue()
+	 * @see org.impact2585.frc2016.input.InputMethod#bottomArmBackwardValue()
 	 */
 	@Override
-	public double backArmBackwardValue() {
+	public double bottomArmBackwardValue() {
 		return controller.getRawAxis(XboxConstants.LEFT_TRIGGER);
 	}
 
 	/* (non-Javadoc)
-	 * @see org.impact2585.frc2016.input.InputMethod#outtake()
+	 * @see org.impact2585.frc2016.input.InputMethod#outake()
 	 */
 	@Override
-	public boolean outtake() {
+	public boolean outake() {
 		return controller.getRawButton(XboxConstants.X_BUTTON);
 	}
 
@@ -98,21 +98,19 @@ public class XboxInput implements InputMethod{
 	}
 
 	/* (non-Javadoc)
-	 * @see org.impact2585.frc2016.input.InputMethod#moveTowardsBot()
+	 * @see org.impact2585.frc2016.input.InputMethod#digitalMoveIntakeTowardsBot()
 	 */
 	@Override
-	public boolean moveTowardsBot() {
-		return controller.getRawButton(XboxConstants.RIGHT_JOYSTICK_BUTTON);
+	public boolean digitalMoveIntakeTowardsBot() {
+		return controller.getRawButton(XboxConstants.Y_BUTTON);
 	}
 
 	/* (non-Javadoc)
-	 * @see org.impact2585.frc2016.input.InputMethod#moveAwayFromBot()
+	 * @see org.impact2585.frc2016.input.InputMethod#digitalMoveIntakeAwayFromBot()
 	 */
 	@Override
-	public boolean moveAwayFromBot() {
-		return controller.getRawButton(XboxConstants.LEFT_JOYSTICK_BUTTON);
+	public boolean digitalMoveIntakeAwayFromBot() {
+		return controller.getRawButton(XboxConstants.B_BUTTON);
 	}
-	
-	
 	
 }

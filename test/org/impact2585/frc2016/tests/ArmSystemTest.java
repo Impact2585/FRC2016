@@ -15,8 +15,10 @@ public class ArmSystemTest {
 	private double bottomArmSpeed;
 	private double bottomArmForwardValue;
 	private double bottomArmBackwardValue;
-	private boolean topArmForward;
-	private boolean topArmBackward;
+	private boolean digitalTopArmForward;
+	private boolean digitalTopArmBackward;
+	private double analogTopArmForward;
+	private double reversibleBottomArm;
 	private TestArmSystem arm;
 	private InputMethod input;
 
@@ -29,6 +31,8 @@ public class ArmSystemTest {
 		bottomArmSpeed = 0;
 		bottomArmForwardValue = 0;
 		bottomArmBackwardValue = 0;
+		analogTopArmForward = 0;
+		reversibleBottomArm = 0;
 		input = new InputTest();
 		arm = new TestArmSystem();
 		arm.setInput(input);		
@@ -41,37 +45,37 @@ public class ArmSystemTest {
 	public void test() {
 
 		//tests if the arms do not move initially
-		topArmForward = false;
-		topArmBackward = false;
+		digitalTopArmForward = false;
+		digitalTopArmBackward = false;
 		arm.run();
 		Assert.assertTrue(topArmSpeed == 0 && bottomArmSpeed == 0);
 
 		//tests if the top arm moves
-		topArmForward = true;
+		digitalTopArmForward = true;
 		arm.run();
-		Assert.assertTrue(topArmSpeed == 0.5 && bottomArmSpeed == 0);
+		Assert.assertTrue(topArmSpeed == 0.7 && bottomArmSpeed == 0);
 
 		//tests if the top arm moves backwards
-		topArmForward = false;
-		topArmBackward = true;
+		digitalTopArmForward = false;
+		digitalTopArmBackward = true;
 		arm.run();
-		Assert.assertTrue(topArmSpeed == -0.5 && bottomArmSpeed == 0);
+		Assert.assertTrue(topArmSpeed == -0.7 && bottomArmSpeed == 0);
 
 		//tests if the top arm does not move if both top arm input buttons are pressed
-		topArmForward = true;
+		digitalTopArmForward = true;
 		arm.run();
 		Assert.assertTrue(topArmSpeed == 0 && bottomArmSpeed == 0);
 
 		//tests if the bottom arm moves forward
 		bottomArmForwardValue = 1;
 		arm.run();
-		Assert.assertTrue(topArmSpeed == 0 && bottomArmSpeed == 0.7);
+		Assert.assertTrue(topArmSpeed == 0 && bottomArmSpeed == 0.5);
 
 		//tests if the bottom arm moves backwards
 		bottomArmForwardValue = 0;
 		bottomArmBackwardValue = 1;
 		arm.run();
-		Assert.assertTrue(topArmSpeed == 0 && bottomArmSpeed == -0.7);
+		Assert.assertTrue(topArmSpeed == 0 && bottomArmSpeed == -0.5);
 
 		//tests if the bottom arm doesn't move if the both of the buttons for the bottom arm are pressed
 		bottomArmForwardValue = 1;
@@ -80,9 +84,42 @@ public class ArmSystemTest {
 
 		//tests if the bottom and top arm can move simultaneously
 		bottomArmBackwardValue = 0;
-		topArmBackward = false;
+		digitalTopArmBackward = false;
 		arm.run();
-		Assert.assertTrue(topArmSpeed == 0.5 && bottomArmSpeed == 0.7);
+		Assert.assertTrue(topArmSpeed == 0.7 && bottomArmSpeed == 0.5);
+		
+		//turns off the digital input
+		bottomArmForwardValue = 0;
+		digitalTopArmForward = false;
+		arm.run();
+		Assert.assertTrue(topArmSpeed == 0 && bottomArmSpeed == 0);
+		
+		//tests the analog input moving the top arm
+		analogTopArmForward = 1;
+		arm.run();
+		Assert.assertTrue(topArmSpeed == 0.7 && bottomArmSpeed == 0);
+		
+		//tests if the input returns 0 if analog input and digital input are both used
+		digitalTopArmForward = true;
+		arm.run();
+		Assert.assertTrue(topArmSpeed == 0 && bottomArmSpeed == 0);
+		
+		//tests if the analog input moves the bottom arm
+		digitalTopArmForward = false;
+		analogTopArmForward = 0;
+		reversibleBottomArm = 1;
+		arm.run();
+		Assert.assertTrue(topArmSpeed == 0 && bottomArmSpeed == 0.5);
+		
+		//tests if the bottom arm can move backwards with analog input
+		reversibleBottomArm = -0.5;
+		arm.run();
+		Assert.assertTrue(topArmSpeed == 0 && bottomArmSpeed == -0.25);
+		
+		//tests if the top arm can move backwards with analog input while the bottom arm is moving
+		analogTopArmForward = -1;
+		arm.run();
+		Assert.assertTrue(topArmSpeed == -0.7 && bottomArmSpeed == -0.25);
 	}
 
 	/**
@@ -119,40 +156,55 @@ public class ArmSystemTest {
 	/**
 	 * input version for testing
 	 */
-	private class InputTest implements InputMethod {
+	private class InputTest extends InputMethod {
 
 		/* (non-Javadoc)
-		 * @see org.impact2585.frc2016.input.InputMethod#topArmForward()
+		 * @see org.impact2585.frc2016.input.InputMethod#digitalTopArmForward()
 		 */
 		@Override
-		public boolean topArmForward() {
-			return topArmForward;
+		public boolean digitalTopArmForward() {
+			return digitalTopArmForward;
 		}
 
 		/* (non-Javadoc)
-		 * @see org.impact2585.frc2016.input.InputMethod#topArmBackward()
+		 * @see org.impact2585.frc2016.input.InputMethod#digitalTopArmBackward()
 		 */
 		@Override
-		public boolean topArmBackward() {
-			return topArmBackward;
+		public boolean digitalTopArmBackward() {
+			return digitalTopArmBackward;
 		}
 
 		/* (non-Javadoc)
 		 * @see org.impact2585.frc2016.input.InputMethod#backArmForwardValue()
 		 */
 		@Override
-		public double backArmForwardValue() {
+		public double bottomArmForwardValue() {
 			return bottomArmForwardValue;
 		}
 
 		/* (non-Javadoc)
-		 * @see org.impact2585.frc2016.input.InputMethod#backArmBackwardValue()
+		 * @see org.impact2585.frc2016.input.InputMethod#bottomArmBackwardValue()
 		 */
 		@Override
-		public double backArmBackwardValue() {
+		public double bottomArmBackwardValue() {
 			return bottomArmBackwardValue;
 		}
 
+		/* (non-Javadoc)
+		 * @see org.impact2585.frc2016.input.InputMethod#analogTopArm()
+		 */
+		@Override
+		public double analogTopArm() {
+			return analogTopArmForward;
+		}
+
+		/* (non-Javadoc)
+		 * @see org.impact2585.frc2016.input.InputMethod#reversibleBottomArmValue()
+		 */
+		@Override
+		public double reversibleBottomArmValue() {
+			return reversibleBottomArm;
+		}
 	}
 
 }
