@@ -53,13 +53,13 @@ public class ArmSystemTest {
 		//tests if the top arm moves
 		digitalTopArmForward = true;
 		arm.run();
-		Assert.assertTrue(topArmSpeed == 0.7 && bottomArmSpeed == 0);
+		Assert.assertTrue(topArmSpeed == ArmSystem.TOP_ARM_SPEED && bottomArmSpeed == 0);
 
 		//tests if the top arm moves backwards
 		digitalTopArmForward = false;
 		digitalTopArmBackward = true;
 		arm.run();
-		Assert.assertTrue(topArmSpeed == -0.7 && bottomArmSpeed == 0);
+		Assert.assertTrue(topArmSpeed == -ArmSystem.TOP_ARM_SPEED && bottomArmSpeed == 0);
 
 		//tests if the top arm does not move if both top arm input buttons are pressed
 		digitalTopArmForward = true;
@@ -69,13 +69,13 @@ public class ArmSystemTest {
 		//tests if the bottom arm moves forward
 		bottomArmForwardValue = 1;
 		arm.run();
-		Assert.assertTrue(topArmSpeed == 0 && bottomArmSpeed == 0.5);
+		Assert.assertTrue(topArmSpeed == 0 && bottomArmSpeed == ArmSystem.BOTTOM_ARM_SPEED);
 
 		//tests if the bottom arm moves backwards
 		bottomArmForwardValue = 0;
 		bottomArmBackwardValue = 1;
 		arm.run();
-		Assert.assertTrue(topArmSpeed == 0 && bottomArmSpeed == -0.5);
+		Assert.assertTrue(topArmSpeed == 0 && bottomArmSpeed == -ArmSystem.BOTTOM_ARM_SPEED);
 
 		//tests if the bottom arm doesn't move if the both of the buttons for the bottom arm are pressed
 		bottomArmForwardValue = 1;
@@ -86,7 +86,7 @@ public class ArmSystemTest {
 		bottomArmBackwardValue = 0;
 		digitalTopArmBackward = false;
 		arm.run();
-		Assert.assertTrue(topArmSpeed == 0.7 && bottomArmSpeed == 0.5);
+		Assert.assertTrue(topArmSpeed == ArmSystem.TOP_ARM_SPEED && bottomArmSpeed == ArmSystem.BOTTOM_ARM_SPEED);
 		
 		//turns off the digital input
 		bottomArmForwardValue = 0;
@@ -97,7 +97,7 @@ public class ArmSystemTest {
 		//tests the analog input moving the top arm
 		analogTopArmForward = 1;
 		arm.run();
-		Assert.assertTrue(topArmSpeed == 0.7 && bottomArmSpeed == 0);
+		Assert.assertTrue(topArmSpeed == analogTopArmForward * ArmSystem.TOP_ARM_SPEED && bottomArmSpeed == 0);
 		
 		//tests if the input returns 0 if analog input and digital input are both used
 		digitalTopArmForward = true;
@@ -109,17 +109,17 @@ public class ArmSystemTest {
 		analogTopArmForward = 0;
 		reversibleBottomArm = 1;
 		arm.run();
-		Assert.assertTrue(topArmSpeed == 0 && bottomArmSpeed == 0.5);
+		Assert.assertTrue(topArmSpeed == 0 && bottomArmSpeed == reversibleBottomArm * ArmSystem.BOTTOM_ARM_SPEED);
 		
 		//tests if the bottom arm can move backwards with analog input
 		reversibleBottomArm = -0.5;
 		arm.run();
-		Assert.assertTrue(topArmSpeed == 0 && bottomArmSpeed == -0.25);
+		Assert.assertTrue(topArmSpeed == 0 && bottomArmSpeed == reversibleBottomArm * ArmSystem.BOTTOM_ARM_SPEED);
 		
 		//tests if the top arm can move backwards with analog input while the bottom arm is moving
 		analogTopArmForward = -1;
 		arm.run();
-		Assert.assertTrue(topArmSpeed == -0.7 && bottomArmSpeed == -0.25);
+		Assert.assertTrue(topArmSpeed == analogTopArmForward * ArmSystem.TOP_ARM_SPEED && bottomArmSpeed == reversibleBottomArm * ArmSystem.BOTTOM_ARM_SPEED);
 	}
 
 	/**
