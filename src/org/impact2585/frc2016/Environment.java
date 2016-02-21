@@ -3,6 +3,7 @@ package org.impact2585.frc2016;
 import org.impact2585.frc2016.input.InputMethod;
 import org.impact2585.frc2016.input.XboxInput;
 import org.impact2585.frc2016.systems.ArmSystem;
+import org.impact2585.frc2016.systems.ElectricalSystem;
 import org.impact2585.frc2016.systems.IntakeSystem;
 import org.impact2585.frc2016.systems.WheelSystem;
 import org.impact2585.lib2585.RobotEnvironment;
@@ -17,6 +18,7 @@ public class Environment extends RobotEnvironment{
 	private WheelSystem wheels;
 	private ArmSystem arm;
 	private IntakeSystem intake;
+	private ElectricalSystem panel;
 	
 	/**
 	 * Just a default constructor
@@ -37,6 +39,8 @@ public class Environment extends RobotEnvironment{
 		arm.init(this);
 		intake = new IntakeSystem();
 		intake.init(this);
+		panel = new ElectricalSystem();
+		panel.init(this);
 	}
 	
 	/**
@@ -73,6 +77,34 @@ public class Environment extends RobotEnvironment{
 	public void setArmSystem(ArmSystem armsystem) {
 		arm = armsystem;
 	}
+	
+	/**
+	 * @returns the intake system
+	 */
+	public IntakeSystem getIntakeSystem() {
+		return intake;
+	}
+	
+	/**Sets the intake system to the intake system passed in the parameter
+	 * @param intakesystem the new intakesystem to set
+	 */
+	public void setIntakeSystem(IntakeSystem intakesystem) {
+		intake = intakesystem;
+	}
+	
+	/**
+	 * @returns the eletrical system of the robot
+	 */
+	public ElectricalSystem getElectricalSystem() {
+		return panel;
+	}
+	
+	/**Sets the eletrical system
+	 * @param electricystem the new eletrical system to set
+	 */
+	public void setElectricalSystem(ElectricalSystem electricystem) {
+		panel = electricystem;
+	}
 
 	/* (non-Javadoc)
 	 * @see org.impact2585.lib2585.Destroyable#destroy()
@@ -82,6 +114,7 @@ public class Environment extends RobotEnvironment{
 		wheels.destroy();
 		arm.destroy();
 		intake.destroy();
+		panel.destroy();
 	}
 	
 }

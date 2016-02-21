@@ -104,6 +104,7 @@ public class InputMethodTest {
 		
 		//tests if the input arms don't move if one of the analog inputs are negative
 		analogMoveIntakeAwayFromBot = -1;
+		analogMoveIntakeTowardsBot = 0;
 		Assert.assertTrue(input.moveIntake() == 0);
 		
 		//tests if the input arms move towards the bot with digital input
@@ -118,6 +119,7 @@ public class InputMethodTest {
 		
 		//tests if the input arms don't move if Harris presses both buttons
 		digitalMoveIntakeTowardsBot = true;
+		analogMoveIntakeAwayFromBot = 0;
 		Assert.assertTrue(input.moveIntake() == 0);
 	}
 	

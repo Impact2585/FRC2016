@@ -35,7 +35,7 @@ public enum AutonomousExecuter implements Executer, Initializable{
 	public void execute() {
 		switch(this) {
 		case BASIC:
-			if(System.currentTimeMillis() <= initialTime + 2000)
+			if(System.currentTimeMillis() <= initialTime + 1000)
 				drivetrain.drive(1.0, 0);
 			else
 				drivetrain.drive(0, 0);
