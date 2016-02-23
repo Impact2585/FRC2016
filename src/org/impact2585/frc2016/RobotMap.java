@@ -17,6 +17,8 @@ public interface RobotMap {
 	public static final int INTAKE_RIGHT_WHEEL = 8;
 	public static final int INTAKE_LEFT_ARM = 9;
 	public static final int INTAKE_RIGHT_ARM = 0;
+
+	public static final AutonomousExecuter CURRENT_AUTON = AutonomousExecuter.BASIC;
 	
 
 }
