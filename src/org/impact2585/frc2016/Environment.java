@@ -1,7 +1,7 @@
 package org.impact2585.frc2016;
 
 import org.impact2585.frc2016.input.InputMethod;
-import org.impact2585.frc2016.input.XboxInput;
+import org.impact2585.frc2016.input.PartnerXboxInput;
 import org.impact2585.frc2016.systems.ArmSystem;
 import org.impact2585.frc2016.systems.ElectricalSystem;
 import org.impact2585.frc2016.systems.IntakeSystem;
@@ -33,7 +33,7 @@ public class Environment extends RobotEnvironment{
 	public Environment(Robot robot) {
 		super(robot);
 		wheels = new WheelSystem();
-		input = new XboxInput();
+		input = new PartnerXboxInput();
 		wheels.init(this);
 		arm = new ArmSystem();
 		arm.init(this);
