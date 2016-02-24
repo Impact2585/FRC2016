@@ -17,7 +17,7 @@ public class WheelSystem implements RobotSystem, Runnable{
 	private double currentRampForward;
 	private double rotationValue;
 	public static final double DEADZONE = 0.15;
-	public static final double RAMP = 0.5;
+	public static final double RAMP = 0.6;
 	private InputMethod input;
 	private boolean inverted;
 	private boolean prevInvert;
