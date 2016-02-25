@@ -34,9 +34,6 @@ public class ElectricalSystem implements RobotSystem, Runnable{
 	 */
 	@Override
 	public void destroy() {
-		if(panel instanceof SensorBase) {
-			SensorBase powerPanel = (SensorBase) panel;
-			powerPanel.free();
-		}
+		panel.free();
 	}
 }
