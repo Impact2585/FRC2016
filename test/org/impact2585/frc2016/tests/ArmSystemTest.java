@@ -21,6 +21,7 @@ public class ArmSystemTest {
 	private double reversibleBottomArm;
 	private TestArmSystem arm;
 	private InputMethod input;
+	private boolean toggleSpeed;
 
 	/**
 	 * sets up the test
@@ -35,7 +36,8 @@ public class ArmSystemTest {
 		reversibleBottomArm = 0;
 		input = new InputTest();
 		arm = new TestArmSystem();
-		arm.setInput(input);		
+		arm.setInput(input);
+		toggleSpeed = false;
 	}
 
 	/**
@@ -120,6 +122,40 @@ public class ArmSystemTest {
 		analogTopArmForward = -1;
 		arm.run();
 		Assert.assertTrue(topArmSpeed == analogTopArmForward * ArmSystem.TOP_ARM_SPEED && bottomArmSpeed == reversibleBottomArm * ArmSystem.BOTTOM_ARM_SPEED);
+		
+		//tests if the the speed multiplier is turned off
+		reversibleBottomArm = 0;
+		analogTopArmForward = 0;
+		digitalTopArmForward = true;
+		toggleSpeed = true;
+		arm.run();
+		Assert.assertTrue(topArmSpeed == 1 && bottomArmBackwardValue == 0);
+		
+		//tests if the speed does not toggle if Harris keeps holding down the button
+		arm.run();
+		Assert.assertTrue(topArmSpeed == 1 && bottomArmBackwardValue == 0);
+		
+		//tests if the speed multiplier is not toggled and if it works for analog input
+		toggleSpeed = false;
+		digitalTopArmForward = false;
+		analogTopArmForward = 1;
+		arm.run();
+		Assert.assertTrue(topArmSpeed == analogTopArmForward && bottomArmBackwardValue == 0);
+		
+		//tests if the speed multiplier can be toggled on and if it works for the bottom arm 
+		toggleSpeed = true;
+		bottomArmForwardValue = 1;
+		arm.run();
+		Assert.assertTrue(topArmSpeed == analogTopArmForward * ArmSystem.TOP_ARM_SPEED && bottomArmSpeed == bottomArmForwardValue * ArmSystem.BOTTOM_ARM_SPEED);
+		
+		//tests if the speed multiplier can be toggled off for the bottom and top arm
+		toggleSpeed = false;
+		arm.run();
+		bottomArmForwardValue = 0;
+		reversibleBottomArm = -1;
+		toggleSpeed = true;
+		arm.run();
+		Assert.assertTrue(topArmSpeed == analogTopArmForward && bottomArmSpeed == reversibleBottomArm);
 	}
 
 	/**
@@ -205,6 +241,16 @@ public class ArmSystemTest {
 		public double reversibleBottomArmValue() {
 			return reversibleBottomArm;
 		}
+
+		/* (non-Javadoc)
+		 * @see org.impact2585.frc2016.input.InputMethod#toggleSpeed()
+		 */
+		@Override
+		public boolean toggleSpeed() {
+			return toggleSpeed;
+		}
+		
+		
 	}
 
 }

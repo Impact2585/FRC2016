@@ -19,7 +19,8 @@ public class ArmSystem implements RobotSystem, Runnable{
 	private SpeedController bottomArm;
 	public static final double BOTTOM_ARM_SPEED = 0.5;
 	public static final double TOP_ARM_SPEED = 0.7;
-	
+	private boolean disableSpeedMultiplier;
+	private boolean prevSpeedToggle;
 	
 
 	/* (non-Javadoc)
@@ -31,7 +32,8 @@ public class ArmSystem implements RobotSystem, Runnable{
 		input = env.getInput();
 		topArm = new Spark(RobotMap.TOP_ARM);
 		bottomArm = new Spark(RobotMap.BOTTOM_ARM);
-		
+		disableSpeedMultiplier = false;
+		prevSpeedToggle = false;
 	}
 	
 	
@@ -61,9 +63,19 @@ public class ArmSystem implements RobotSystem, Runnable{
 	 */
 	@Override
 	public void run() {
-		setTopArmSpeed(input.moveTopArm() * TOP_ARM_SPEED);
-		setBottomArmSpeed(input.moveBottomArm() *BOTTOM_ARM_SPEED);
-
+		double toparmspeed = input.moveTopArm();
+		double bottomarmspeed = input.moveBottomArm();
+		if (input.toggleSpeed() && !prevSpeedToggle)
+			disableSpeedMultiplier = !disableSpeedMultiplier;
+		
+		if(!disableSpeedMultiplier) {
+			toparmspeed *= TOP_ARM_SPEED;
+			bottomarmspeed *= BOTTOM_ARM_SPEED;
+		}
+		
+		setTopArmSpeed(toparmspeed);
+		setBottomArmSpeed(bottomarmspeed);
+		prevSpeedToggle = input.toggleSpeed();
 	}
 	
 	/* (non-Javadoc)

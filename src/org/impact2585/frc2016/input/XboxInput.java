@@ -112,5 +112,13 @@ public class XboxInput extends InputMethod{
 	public boolean digitalMoveIntakeAwayFromBot() {
 		return controller.getRawButton(XboxConstants.B_BUTTON);
 	}
+
+	/* (non-Javadoc)
+	 * @see org.impact2585.frc2016.input.InputMethod#toggleSpeed()
+	 */
+	@Override
+	public boolean toggleSpeed() {
+		return controller.getRawButton(XboxConstants.RIGHT_JOYSTICK_BUTTON);
+	}
 	
 }

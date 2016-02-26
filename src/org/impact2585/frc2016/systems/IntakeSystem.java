@@ -19,7 +19,8 @@ public class IntakeSystem implements RobotSystem, Runnable{
 	private SpeedController leftArm;
 	private SpeedController rightArm;
 	public static final double ARM_SPEED = 0.3;
-	
+	private boolean disableSpeedMultiplier;
+	private boolean prevSpeedToggle;
 
 	/* (non-Javadoc)
 	 * @see org.impact2585.frc2016.Initializable#init(org.impact2585.frc2016.Environment)
@@ -31,7 +32,8 @@ public class IntakeSystem implements RobotSystem, Runnable{
 		rightWheel = new Talon(RobotMap.INTAKE_RIGHT_WHEEL);
 		leftArm = new Talon(RobotMap.INTAKE_LEFT_ARM);
 		rightArm = new Talon(RobotMap.INTAKE_RIGHT_ARM);
-		
+		disableSpeedMultiplier = false;
+		prevSpeedToggle = false;
 	}
 	
 	/**Sets the motors controlling the wheels on intake to speed
@@ -70,8 +72,14 @@ public class IntakeSystem implements RobotSystem, Runnable{
 			spinWheels(0);
 		}
 		
-		moveArms(input.moveIntake() * ARM_SPEED);
-		
+		double intakeArmSpeed = input.moveIntake();
+		if(input.toggleSpeed() && !prevSpeedToggle)
+			disableSpeedMultiplier = !disableSpeedMultiplier;
+		if(!disableSpeedMultiplier) {
+			intakeArmSpeed *= ARM_SPEED;
+		}
+		moveArms(intakeArmSpeed);
+		prevSpeedToggle = input.toggleSpeed();
 	}
 	
 	/* (non-Javadoc)

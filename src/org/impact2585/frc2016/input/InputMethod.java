@@ -112,6 +112,13 @@ public abstract class InputMethod {
 	public boolean intake() {
 		return false;
 	}
+	
+	/**
+	 * @returns true if the speed multiplier of the arms should be toggled on or off
+	 */
+	public boolean toggleSpeed() {
+		return false;
+	}
 
 	/**
 	 * @returns 1 or -1 if the input is digital or returns the analog input if the input is analog
