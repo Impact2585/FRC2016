@@ -22,6 +22,7 @@ public class IntakeSystemTest {
 	private TestIntakeSystem ioshooter;
 	private double wheelSpeed;
 	private double armSpeed;
+	private boolean toggleArmSpeed;
 	
 	/**
 	 * sets up the intake system test
@@ -37,7 +38,7 @@ public class IntakeSystemTest {
 		moveWheelsForward = false;
 		analogMoveArmAwayFromBot = 0;
 		analogMoveArmTowardsBot = 0;
-		
+		toggleArmSpeed = false;
 	}
 
 	/**
@@ -115,6 +116,32 @@ public class IntakeSystemTest {
 		moveWheelsForward = true;
 		ioshooter.run();
 		Assert.assertTrue(wheelSpeed == 1 && armSpeed == IntakeSystem.ARM_SPEED);
+		
+		//tests if the arm speed multiplier can be toggled off
+		toggleArmSpeed = true;
+		ioshooter.run();
+		Assert.assertTrue(wheelSpeed == 1 && armSpeed == 1);
+		
+		//tests if the arm speed multiplier doesn't toggle if Harris keeps pushing the button
+		ioshooter.run();
+		Assert.assertTrue(wheelSpeed == 1 && armSpeed == 1);
+		
+		//tests if the arm speed multiplier toggles on
+		moveWheelsForward = false;
+		toggleArmSpeed = false;
+		ioshooter.run();
+		toggleArmSpeed = true;
+		ioshooter.run();
+		Assert.assertTrue(wheelSpeed == 0 && armSpeed == IntakeSystem.ARM_SPEED);
+		
+		//tests if the arm speed multiplier toggles off for digital input
+		toggleArmSpeed = false;
+		ioshooter.run();
+		analogMoveArmTowardsBot = 0;
+		digitalMoveArmTowardsBot = true;
+		toggleArmSpeed = true;
+		ioshooter.run();
+		Assert.assertTrue(wheelSpeed == 0 && armSpeed == 1);
 	}
 	
 	/**
@@ -200,6 +227,16 @@ public class IntakeSystemTest {
 		public double analogMoveIntakeAwayFromBot() {
 			return analogMoveArmAwayFromBot;
 		}
+
+		/* (non-Javadoc)
+		 * @see org.impact2585.frc2016.input.InputMethod#toggleSpeed()
+		 */
+		@Override
+		public boolean toggleSpeed() {
+			return toggleArmSpeed;
+		}
+		
+		
 				
 	}
 	

@@ -89,6 +89,14 @@ public class PartnerXboxInput extends InputMethod{
 	@Override
 	public double reversibleBottomArmValue() {
 		return controller2.getRawAxis(XboxConstants.RIGHT_Y_AXIS);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.impact2585.frc2016.input.InputMethod#toggleSpeed()
+	 */
+	@Override
+	public boolean toggleSpeed() {
+		return controller2.getRawButton(XboxConstants.RIGHT_JOYSTICK_BUTTON);
 	}	
 
 }
