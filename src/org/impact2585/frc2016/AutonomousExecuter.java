@@ -14,20 +14,20 @@ public enum AutonomousExecuter implements Executer, Initializable{
 	NONE, 
 	
 	/**
-	 * This version of auton drives forward for 1 second
+	 * This version of auton drives forward for 1.5 seconds
 	 */
 	BASIC, 
 	
 	/**
-	 * This version of auton waits for 10 seconds, and then drives forward for 1 second
+	 * This version of auton waits for 10 seconds, and then drives forward for 1.5 seconds
 	 */
 	DELAYED;
 	
 	private Environment env;
 	private WheelSystem drivetrain;
 	private long initialTime;
-	public static final int BASIC_DURATION = 1000;
-	public static final int DELAYED_DURATION = 1000;
+	public static final int BASIC_DURATION = 1500;
+	public static final int DELAYED_DURATION = 1500;
 	public static final int DELAYED_WAIT = 10000;
 
 	
