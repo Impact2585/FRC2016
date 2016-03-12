@@ -26,7 +26,7 @@ public class PartnerXboxInput extends InputMethod {
 	 */
 	@Override
 	public double forwardMovement() {
-		return controller1.getRawAxis(-XboxConstants.LEFT_Y_AXIS);
+		return -controller1.getRawAxis(XboxConstants.LEFT_Y_AXIS);
 	}
 
 	/*
@@ -98,7 +98,7 @@ public class PartnerXboxInput extends InputMethod {
 	 */
 	@Override
 	public double analogTopArm() {
-		return controller2.getRawAxis(-XboxConstants.LEFT_Y_AXIS);
+		return -controller2.getRawAxis(XboxConstants.LEFT_Y_AXIS);
 	}
 
 	/*
@@ -108,7 +108,7 @@ public class PartnerXboxInput extends InputMethod {
 	 */
 	@Override
 	public double reversibleBottomArmValue() {
-		return controller2.getRawAxis(-XboxConstants.RIGHT_Y_AXIS);
+		return -controller2.getRawAxis(XboxConstants.RIGHT_Y_AXIS);
 	}
 
 	/*
