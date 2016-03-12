@@ -4,6 +4,7 @@ import org.impact2585.frc2016.Environment;
 import org.impact2585.frc2016.RobotMap;
 import org.impact2585.frc2016.input.InputMethod;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.SensorBase;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Talon;
@@ -18,6 +19,8 @@ public class IntakeSystem implements RobotSystem, Runnable{
 	private SpeedController rightWheel;
 	private SpeedController leftArm;
 	private SpeedController rightArm;
+	private DigitalInput leftLimitSwitch;
+	private DigitalInput rightLimitSwitch;
 	public static final double ARM_SPEED = 0.3;
 	private boolean disableSpeedMultiplier;
 	private boolean prevSpeedToggle;
@@ -32,6 +35,8 @@ public class IntakeSystem implements RobotSystem, Runnable{
 		rightWheel = new Talon(RobotMap.INTAKE_RIGHT_WHEEL);
 		leftArm = new Talon(RobotMap.INTAKE_LEFT_ARM);
 		rightArm = new Talon(RobotMap.INTAKE_RIGHT_ARM);
+		leftLimitSwitch = new DigitalInput(RobotMap.LEFT_INTAKE_LIMIT_SWITCH);
+		rightLimitSwitch = new DigitalInput(RobotMap.RIGHT_INTAKE_LIMIT_SWITCH);
 		disableSpeedMultiplier = false;
 		prevSpeedToggle = false;
 	}
@@ -50,6 +55,27 @@ public class IntakeSystem implements RobotSystem, Runnable{
 	public void moveArms(double speed) {
 		leftArm.set(speed);
 		rightArm.set(-speed);
+	}
+	
+	/**
+	 * @returns true if the left limit switch is pressed
+	 */
+	public boolean isLeftSwitchClosed() {
+		return leftLimitSwitch.get();
+	}
+	
+	/**
+	 * @returns true if the right limit switch is pressed
+	 */
+	public boolean isRightSwitchClosed() {
+		return rightLimitSwitch.get();
+	}
+	
+	/**
+	 * @returns true if the right or left limit switch is closed
+	 */
+	public boolean isSwitchClosed() {
+		return isRightSwitchClosed() || isLeftSwitchClosed();
 	}
 	
 	/**Sets the input of the system to newInput
@@ -78,6 +104,11 @@ public class IntakeSystem implements RobotSystem, Runnable{
 		if(!disableSpeedMultiplier) {
 			intakeArmSpeed *= ARM_SPEED;
 		}
+		
+		if(isSwitchClosed() && intakeArmSpeed < 0) {
+			intakeArmSpeed = 0;
+		}
+		
 		moveArms(intakeArmSpeed);
 		prevSpeedToggle = input.toggleSpeed();
 	}
@@ -106,6 +137,8 @@ public class IntakeSystem implements RobotSystem, Runnable{
 			SensorBase motor = (SensorBase) rightArm;
 			motor.free();
 		}
+		leftLimitSwitch.free();
+		rightLimitSwitch.free();
 	}
 
 	

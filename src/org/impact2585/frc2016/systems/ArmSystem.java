@@ -4,6 +4,7 @@ import org.impact2585.frc2016.Environment;
 import org.impact2585.frc2016.RobotMap;
 import org.impact2585.frc2016.input.InputMethod;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.SensorBase;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.SpeedController;
@@ -21,6 +22,7 @@ public class ArmSystem implements RobotSystem, Runnable{
 	public static final double TOP_ARM_SPEED = 0.7;
 	private boolean disableSpeedMultiplier;
 	private boolean prevSpeedToggle;
+	private DigitalInput limitswitch;
 	
 
 	/* (non-Javadoc)
@@ -32,6 +34,7 @@ public class ArmSystem implements RobotSystem, Runnable{
 		input = env.getInput();
 		topArm = new Spark(RobotMap.TOP_ARM);
 		bottomArm = new Spark(RobotMap.BOTTOM_ARM);
+		limitswitch = new DigitalInput(RobotMap.ARM_LIMIT_SWITCH);
 		disableSpeedMultiplier = false;
 		prevSpeedToggle = false;
 	}
@@ -49,6 +52,13 @@ public class ArmSystem implements RobotSystem, Runnable{
 	 */
 	public void setBottomArmSpeed(double speed) {
 		bottomArm.set(speed);
+	}
+	
+	/**
+	 * @returns true if the limitswitch is closed, false if open
+	 */
+	public boolean isSwitchClosed() {
+		return limitswitch.get();
 	}
 	
 	/**sets the input method of the arm system
@@ -73,6 +83,10 @@ public class ArmSystem implements RobotSystem, Runnable{
 			bottomarmspeed *= BOTTOM_ARM_SPEED;
 		}
 		
+		if(isSwitchClosed() && bottomarmspeed > 0) {
+			bottomarmspeed = 0;
+		}
+		
 		setTopArmSpeed(toparmspeed);
 		setBottomArmSpeed(bottomarmspeed);
 		prevSpeedToggle = input.toggleSpeed();
@@ -92,6 +106,7 @@ public class ArmSystem implements RobotSystem, Runnable{
 			SensorBase motor = (SensorBase) topArm;
 			motor.free();
 		}
+		limitswitch.free();
 	}
 
 

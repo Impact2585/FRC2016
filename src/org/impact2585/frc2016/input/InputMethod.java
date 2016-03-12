@@ -125,13 +125,13 @@ public abstract class InputMethod {
 	 */
 	public double moveIntake() {
 		if(digitalMoveIntakeAwayFromBot() && !digitalMoveIntakeTowardsBot()) {
-			return -1;
+			return 1;
 		} else if (digitalMoveIntakeTowardsBot() && !digitalMoveIntakeAwayFromBot()) {
-			return 1; 
+			return -1; 
 		} else if((analogMoveIntakeAwayFromBot() > 0 && analogMoveIntakeTowardsBot() == 0)) {
-			return -analogMoveIntakeAwayFromBot();
+			return analogMoveIntakeAwayFromBot();
 		} else if (analogMoveIntakeTowardsBot() > 0 && analogMoveIntakeAwayFromBot() == 0) {
-			return analogMoveIntakeTowardsBot();
+			return -analogMoveIntakeTowardsBot();
 		} else {
 			return 0;
 		}

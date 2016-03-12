@@ -91,12 +91,12 @@ public class InputMethodTest {
 		
 		//tests if the input arms move away with analog input
 		analogMoveIntakeAwayFromBot = 1;
-		Assert.assertTrue(input.moveIntake() == -1);
+		Assert.assertTrue(input.moveIntake() == 1);
 		
 		//tests if the input arms move towards the bot with analog input
 		analogMoveIntakeAwayFromBot = 0;
 		analogMoveIntakeTowardsBot = 1;
-		Assert.assertTrue(input.moveIntake() == 1);
+		Assert.assertTrue(input.moveIntake() == -1);
 		
 		//tests if the input arms don't move if Harris presses both triggers
 		analogMoveIntakeAwayFromBot = 1;
@@ -110,12 +110,12 @@ public class InputMethodTest {
 		//tests if the input arms move towards the bot with digital input
 		analogMoveIntakeAwayFromBot = 0;
 		digitalMoveIntakeTowardsBot = true;
-		Assert.assertTrue(input.moveIntake() == 1);
+		Assert.assertTrue(input.moveIntake() == -1);
 		
 		//tests if the input arms move away from the bot with digital input
 		digitalMoveIntakeTowardsBot = false;
 		digitalMoveIntakeAwayFromBot = true;
-		Assert.assertTrue(input.moveIntake() == -1);
+		Assert.assertTrue(input.moveIntake() == 1);
 		
 		//tests if the input arms don't move if Harris presses both buttons
 		digitalMoveIntakeTowardsBot = true;
