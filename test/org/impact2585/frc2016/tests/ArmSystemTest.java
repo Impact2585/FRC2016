@@ -22,6 +22,7 @@ public class ArmSystemTest {
 	private TestArmSystem arm;
 	private InputMethod input;
 	private boolean toggleSpeed;
+	private boolean isSwitchClosed;
 
 	/**
 	 * sets up the test
@@ -38,6 +39,7 @@ public class ArmSystemTest {
 		arm = new TestArmSystem();
 		arm.setInput(input);
 		toggleSpeed = false;
+		isSwitchClosed = false;
 	}
 
 	/**
@@ -156,6 +158,34 @@ public class ArmSystemTest {
 		toggleSpeed = true;
 		arm.run();
 		Assert.assertTrue(topArmSpeed == analogTopArmForward && bottomArmSpeed == reversibleBottomArm);
+		
+		//tests if the bottom arm cannot move forward if the limit switch is pressed
+		reversibleBottomArm = 1;
+		isSwitchClosed = true;
+		analogTopArmForward = 0;
+		arm.run();
+		Assert.assertTrue(topArmSpeed == 0 && bottomArmSpeed == 0);
+		
+		//tests if the bottom arm cannot move forward for the non reversible analog values(the triggers) and if the top arm can still move forward
+		reversibleBottomArm = 0;
+		bottomArmForwardValue = 1;
+		analogTopArmForward = 1;
+		arm.run();
+		Assert.assertTrue(topArmSpeed == analogTopArmForward && bottomArmSpeed == 0);
+		
+		//tests if the bottom arm can move back if the limit switch is pressed
+		bottomArmForwardValue = 0;
+		bottomArmBackwardValue = 1;
+		arm.run();
+		Assert.assertTrue(topArmSpeed == analogTopArmForward && bottomArmSpeed == -bottomArmBackwardValue);
+		
+		//tests if the bottom arm can move forward if the limit switch is not pressed
+		isSwitchClosed = false;
+		bottomArmBackwardValue = 0;
+		bottomArmForwardValue = 1;
+		analogTopArmForward = 0;
+		arm.run();
+		Assert.assertTrue(topArmSpeed == 0 && bottomArmSpeed == bottomArmForwardValue);
 	}
 
 	/**
@@ -177,6 +207,14 @@ public class ArmSystemTest {
 		@Override
 		public void setBottomArmSpeed(double speed) {
 			bottomArmSpeed = speed;
+		}
+
+		/* (non-Javadoc)
+		 * @see org.impact2585.frc2016.systems.ArmSystem#isSwitchClosed()
+		 */
+		@Override
+		public boolean isSwitchClosed() {
+			return isSwitchClosed;
 		}
 
 		/* (non-Javadoc)

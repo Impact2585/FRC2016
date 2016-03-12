@@ -3,7 +3,6 @@ package org.impact2585.frc2016.systems;
 import org.impact2585.frc2016.Environment;
 
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
-import edu.wpi.first.wpilibj.SensorBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
