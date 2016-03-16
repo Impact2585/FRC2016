@@ -21,6 +21,10 @@ public class DisabledExecuter implements Executer{
 	@Override
 	public void execute() {
 		environ.getWheelSystem().drive(0, 0);
+		environ.getArmSystem().setTopArmSpeed(0);
+		environ.getArmSystem().setBottomArmSpeed(0);
+		environ.getIntakeSystem().spinWheels(0);
+		environ.getIntakeSystem().moveArms(0);
 	}
 
 }
