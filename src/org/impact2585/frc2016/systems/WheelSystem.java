@@ -18,6 +18,7 @@ public class WheelSystem implements RobotSystem, Runnable{
 	private double rotationValue;
 	public static final double DEADZONE = 0.15;
 	public static final double RAMP = 0.6;
+	public static final double ROTATION_EXPONENT = 1;
 	private InputMethod input;
 	private boolean inverted;
 	private boolean prevInvert;
@@ -79,6 +80,18 @@ public class WheelSystem implements RobotSystem, Runnable{
 			desiredRampForward = 0;
 		if(rotationValue < DEADZONE && rotationValue > -DEADZONE)
 			rotationValue = 0;
+		
+		// adjusts sensitivity of the turns 
+		if(rotationValue > 0)
+			rotationValue = Math.pow(rotationValue, ROTATION_EXPONENT);
+		if(rotationValue < 0){
+			if(ROTATION_EXPONENT%2 != 0)
+				rotationValue = (Math.pow(rotationValue, ROTATION_EXPONENT));
+			else
+				rotationValue = -1*(Math.pow(rotationValue, ROTATION_EXPONENT));
+			
+		}
+		
 		
 		if(desiredRampForward != 0) {
 			
