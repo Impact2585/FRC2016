@@ -97,10 +97,7 @@ public class WheelSystemTest {
 		driveForward = 0.5;
 		ramp = rampForward();
 		drivetrain.run();
-		if(WheelSystem.ROTATION_EXPONENT%2 == 0)
-			Assert.assertTrue(currentRampForward == ramp && rotate == Math.signum(-0.5)*Math.pow(-0.5, WheelSystem.ROTATION_EXPONENT));
-		else
-			Assert.assertTrue(currentRampForward == ramp && rotate == Math.pow(-0.5, WheelSystem.ROTATION_EXPONENT));
+		Assert.assertTrue(currentRampForward == ramp && rotate == -1*Math.abs(Math.pow(-0.5, WheelSystem.ROTATION_EXPONENT)));
 			
 
 		// tests if it does not invert if the button is still pressed
@@ -111,10 +108,7 @@ public class WheelSystemTest {
 		ramp = rampForward();
 		drivetrain.setCurrentRampForward(-0.5);
 		drivetrain.run();
-		if(WheelSystem.ROTATION_EXPONENT%2 == 0)
-			Assert.assertTrue(currentRampForward == ramp && rotate == Math.signum(-0.5)*Math.pow(-0.5, WheelSystem.ROTATION_EXPONENT));
-		else
-			Assert.assertTrue(currentRampForward == ramp && rotate == Math.pow(-0.5, WheelSystem.ROTATION_EXPONENT));
+		Assert.assertTrue(currentRampForward == ramp && rotate == -1*Math.abs(Math.pow(-0.5, WheelSystem.ROTATION_EXPONENT)));
 		
 		// tests if drivetrain continues to be inverted
 		invert = false;
@@ -124,10 +118,7 @@ public class WheelSystemTest {
 		ramp = rampForward();
 		drivetrain.setCurrentRampForward(-0.5);
 		drivetrain.run();
-		if(WheelSystem.ROTATION_EXPONENT%2 == 0)
-			Assert.assertTrue(currentRampForward == ramp && rotate == Math.signum(-0.5)*Math.pow(-0.5, WheelSystem.ROTATION_EXPONENT));
-		else
-			Assert.assertTrue(currentRampForward == ramp && rotate == Math.pow(-0.5, WheelSystem.ROTATION_EXPONENT));
+		Assert.assertTrue(currentRampForward == ramp && rotate == -1*Math.abs(Math.pow(-0.5, WheelSystem.ROTATION_EXPONENT)));
 		
 		// tests if it inverts to the original position
 		invert = true;
