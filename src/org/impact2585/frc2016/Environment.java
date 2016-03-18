@@ -2,6 +2,7 @@ package org.impact2585.frc2016;
 
 import org.impact2585.frc2016.input.InputMethod;
 import org.impact2585.frc2016.input.PartnerXboxInput;
+import org.impact2585.frc2016.systems.AccelerometerSystem;
 import org.impact2585.frc2016.systems.ArmSystem;
 import org.impact2585.frc2016.systems.ElectricalSystem;
 import org.impact2585.frc2016.systems.IntakeSystem;
@@ -19,6 +20,7 @@ public class Environment extends RobotEnvironment{
 	private ArmSystem arm;
 	private IntakeSystem intake;
 	private ElectricalSystem panel;
+	private AccelerometerSystem accelerometer;
 	
 	/**
 	 * Just a default constructor
@@ -41,6 +43,8 @@ public class Environment extends RobotEnvironment{
 		intake.init(this);
 		panel = new ElectricalSystem();
 		panel.init(this);
+		accelerometer = new AccelerometerSystem();
+		accelerometer.init(this);
 	}
 	
 	/**
@@ -105,6 +109,20 @@ public class Environment extends RobotEnvironment{
 	public void setElectricalSystem(ElectricalSystem electricystem) {
 		panel = electricystem;
 	}
+	
+	/**
+	 * @returns the accelerometer system
+	 */
+	public AccelerometerSystem getAccelerometerSystem() {
+		return accelerometer;
+	}
+	
+	/**sets the accelerometer system to accel
+	 * @param accel new accelerometer system to set
+	 */
+	public void setAccelerometerSystem(AccelerometerSystem accel) {
+		accelerometer = accel;
+	}
 
 	/* (non-Javadoc)
 	 * @see org.impact2585.lib2585.Destroyable#destroy()
@@ -115,6 +133,7 @@ public class Environment extends RobotEnvironment{
 		arm.destroy();
 		intake.destroy();
 		panel.destroy();
+		accelerometer.destroy();
 	}
 	
 }
