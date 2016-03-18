@@ -85,11 +85,7 @@ public class WheelSystem implements RobotSystem, Runnable{
 		if(rotationValue > 0)
 			rotationValue = Math.pow(rotationValue, ROTATION_EXPONENT);
 		if(rotationValue < 0){
-			if(ROTATION_EXPONENT%2 != 0)
-				rotationValue = (Math.pow(rotationValue, ROTATION_EXPONENT));
-			else
-				rotationValue = -1*(Math.pow(rotationValue, ROTATION_EXPONENT));
-			
+				rotationValue = -1*Math.abs(Math.pow(rotationValue, ROTATION_EXPONENT));
 		}
 		
 		
