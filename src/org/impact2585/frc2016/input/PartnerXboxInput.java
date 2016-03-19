@@ -120,4 +120,24 @@ public class PartnerXboxInput extends InputMethod {
 	public boolean toggleSpeed() {
 		return controller2.getRawButton(XboxConstants.RIGHT_JOYSTICK_BUTTON);
 	}
+	
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.impact2585.frc2016.input.InputMethod#ignoreIntakeLimitSwitch()
+	 */
+	@Override
+	public boolean ignoreIntakeLimitSwitch(){
+		return controller2.getRawButton(XboxConstants.X_BUTTON);
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.impact2585.frc2016.input.InputMethod#ignoreArmLimitSwitch()
+	 */
+	@Override
+	public boolean ignoreArmLimitSwitch(){
+		return controller2.getRawButton(XboxConstants.A_BUTTON);
+	}
 }

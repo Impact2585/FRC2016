@@ -83,7 +83,7 @@ public class ArmSystem implements RobotSystem, Runnable{
 			bottomarmspeed *= BOTTOM_ARM_SPEED;
 		}
 		
-		if(isSwitchClosed() && bottomarmspeed > 0) {
+		if(isSwitchClosed() && bottomarmspeed > 0 && !input.ignoreArmLimitSwitch()) {
 			bottomarmspeed = 0;
 		}
 		
@@ -108,6 +108,5 @@ public class ArmSystem implements RobotSystem, Runnable{
 		}
 		limitswitch.free();
 	}
-
-
+	
 }

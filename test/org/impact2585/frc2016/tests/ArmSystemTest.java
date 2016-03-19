@@ -23,6 +23,7 @@ public class ArmSystemTest {
 	private InputMethod input;
 	private boolean toggleSpeed;
 	private boolean isSwitchClosed;
+	private boolean ignoreArmLimitSwitch;
 
 	/**
 	 * sets up the test
@@ -40,6 +41,7 @@ public class ArmSystemTest {
 		arm.setInput(input);
 		toggleSpeed = false;
 		isSwitchClosed = false;
+		ignoreArmLimitSwitch = false;
 	}
 
 	/**
@@ -186,7 +188,14 @@ public class ArmSystemTest {
 		analogTopArmForward = 0;
 		arm.run();
 		Assert.assertTrue(topArmSpeed == 0 && bottomArmSpeed == bottomArmForwardValue);
+		
+		//tests of the bottom arm can move forward if the limit switch and the a button are pressed
+		isSwitchClosed = true;
+		ignoreArmLimitSwitch = true;
+		arm.run();
+		Assert.assertTrue(topArmSpeed == 0 && bottomArmSpeed == bottomArmForwardValue);
 	}
+	
 
 	/**
 	 * testable version of the arm system
@@ -288,7 +297,9 @@ public class ArmSystemTest {
 			return toggleSpeed;
 		}
 		
-		
+		public boolean ignoreArmLimitSwitch(){
+			return ignoreArmLimitSwitch;
+		}
 	}
 
 }

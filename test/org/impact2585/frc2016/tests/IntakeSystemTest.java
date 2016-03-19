@@ -25,6 +25,7 @@ public class IntakeSystemTest {
 	private boolean toggleArmSpeed;
 	private boolean isLeftLimitSwitchClosed;
 	private boolean isRightLimitSwitchClosed;
+	private boolean ignoreIntakeLimitSwitch;
 	
 	/**
 	 * sets up the intake system test
@@ -43,6 +44,7 @@ public class IntakeSystemTest {
 		toggleArmSpeed = false;
 		isLeftLimitSwitchClosed = false;
 		isRightLimitSwitchClosed = false;
+		ignoreIntakeLimitSwitch = false;
 	}
 
 	/**
@@ -176,6 +178,18 @@ public class IntakeSystemTest {
 		isRightLimitSwitchClosed = false;
 		ioshooter.run();
 		Assert.assertTrue(wheelSpeed == 0 && armSpeed == -analogMoveArmTowardsBot);
+		
+		//tests if the arms can move forward if both limit switches and x button are pressed
+		isLeftLimitSwitchClosed = true;
+		isRightLimitSwitchClosed = true;
+		ignoreIntakeLimitSwitch = true;
+		ioshooter.run();
+		Assert.assertTrue(wheelSpeed == 0 && armSpeed == -analogMoveArmTowardsBot);
+		
+		//tests if the arms can move forward if one limit switch and the x button are pressed
+		isLeftLimitSwitchClosed = false;
+		ioshooter.run();
+		Assert.assertTrue(wheelSpeed == 0 && armSpeed == -analogMoveArmTowardsBot);
 	}
 	
 	/**
@@ -286,7 +300,9 @@ public class IntakeSystemTest {
 			return toggleArmSpeed;
 		}
 		
-		
+		public boolean ignoreIntakeLimitSwitch(){
+			return ignoreIntakeLimitSwitch;
+		}
 				
 	}
 	
