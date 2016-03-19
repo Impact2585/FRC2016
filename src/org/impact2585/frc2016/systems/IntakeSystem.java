@@ -105,7 +105,7 @@ public class IntakeSystem implements RobotSystem, Runnable{
 			intakeArmSpeed *= ARM_SPEED;
 		}
 		
-		if(isSwitchClosed() && intakeArmSpeed < 0) {
+		if(isSwitchClosed() && intakeArmSpeed < 0 && !input.ignoreIntakeLimitSwitch()) {
 			intakeArmSpeed = 0;
 		}
 		
