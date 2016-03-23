@@ -178,4 +178,11 @@ public abstract class InputMethod {
 	public boolean ignoreArmLimitSwitch(){
 		return false;
 	}
+	
+	/**
+	 * @returns true if the lever should spin, false otherwise
+	 */
+	public boolean turnLever(){
+		return false;
+	}
 }

@@ -140,4 +140,13 @@ public class PartnerXboxInput extends InputMethod {
 	public boolean ignoreArmLimitSwitch(){
 		return controller2.getRawButton(XboxConstants.A_BUTTON);
 	}
+
+	/* (non-Javadoc)
+	 * @see org.impact2585.frc2016.input.InputMethod#turnLever()
+	 */
+	@Override
+	public boolean turnLever() {
+		return controller2.getRawButton(XboxConstants.B_BUTTON);
+	}
+	
 }
