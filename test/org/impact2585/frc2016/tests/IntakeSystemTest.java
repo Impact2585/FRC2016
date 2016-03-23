@@ -25,6 +25,9 @@ public class IntakeSystemTest {
 	private boolean toggleArmSpeed;
 	private boolean isLeftLimitSwitchClosed;
 	private boolean isRightLimitSwitchClosed;
+	private boolean ignoreIntakeLimitSwitch;
+	private boolean turnLever;
+	private double leverSpeed;
 	
 	/**
 	 * sets up the intake system test
@@ -43,6 +46,7 @@ public class IntakeSystemTest {
 		toggleArmSpeed = false;
 		isLeftLimitSwitchClosed = false;
 		isRightLimitSwitchClosed = false;
+		ignoreIntakeLimitSwitch = false;
 	}
 
 	/**
@@ -176,6 +180,26 @@ public class IntakeSystemTest {
 		isRightLimitSwitchClosed = false;
 		ioshooter.run();
 		Assert.assertTrue(wheelSpeed == 0 && armSpeed == -analogMoveArmTowardsBot);
+		
+		//tests if the arms can move forward if both limit switches and x button are pressed
+		isLeftLimitSwitchClosed = true;
+		isRightLimitSwitchClosed = true;
+		ignoreIntakeLimitSwitch = true;
+		ioshooter.run();
+		Assert.assertTrue(wheelSpeed == 0 && armSpeed == -analogMoveArmTowardsBot);
+		
+		//tests if the arms can move forward if one limit switch and the x button are pressed
+		isLeftLimitSwitchClosed = false;
+		ioshooter.run();
+		Assert.assertTrue(wheelSpeed == 0 && armSpeed == -analogMoveArmTowardsBot);
+		
+		turnLever = true;
+		ioshooter.run();
+		Assert.assertTrue(leverSpeed == 0.5);
+		
+		turnLever = false;
+		ioshooter.run();
+		Assert.assertTrue(leverSpeed == 0);
 	}
 	
 	/**
@@ -221,6 +245,14 @@ public class IntakeSystemTest {
 		@Override
 		protected void setInput(InputMethod newInput) {
 			super.setInput(newInput);
+		}
+
+		/* (non-Javadoc)
+		 * @see org.impact2585.frc2016.systems.IntakeSystem#spinLever(double)
+		 */
+		@Override
+		public void spinLever(double speed) {
+			leverSpeed = speed;
 		}
 		
 	}
@@ -286,8 +318,21 @@ public class IntakeSystemTest {
 			return toggleArmSpeed;
 		}
 		
-		
-				
+		/* (non-Javadoc)
+		 * @see org.impact2585.frc2016.input.InputMethod#ignoreIntakeLimitSwitch()
+		 */
+		@Override
+		public boolean ignoreIntakeLimitSwitch(){
+			return ignoreIntakeLimitSwitch;
+		}
+
+		/* (non-Javadoc)
+		 * @see org.impact2585.frc2016.input.InputMethod#turnLever()
+		 */
+		@Override
+		public boolean turnLever() {
+			return turnLever;
+		}
 	}
 	
 }

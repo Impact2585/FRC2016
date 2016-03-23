@@ -34,6 +34,7 @@ public class TeleopExecuter extends RunnableExecuter implements Initializable {
 		getRunnables().add(environment.getArmSystem());
 		getRunnables().add(environment.getIntakeSystem());
 		getRunnables().add(environment.getElectricalSystem());
+		getRunnables().add(environment.getAccelerometerSystem());
 	}
 
 }

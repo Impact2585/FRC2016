@@ -5,9 +5,11 @@ import org.impact2585.frc2016.RobotMap;
 import org.impact2585.frc2016.input.InputMethod;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SensorBase;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Talon;
+import edu.wpi.first.wpilibj.Victor;
 
 
 /**
@@ -15,15 +17,17 @@ import edu.wpi.first.wpilibj.Talon;
  */
 public class IntakeSystem implements RobotSystem, Runnable{
 	private InputMethod input;
-	private SpeedController leftWheel;
-	private SpeedController rightWheel;
+	private SpeedController wheels;
 	private SpeedController leftArm;
 	private SpeedController rightArm;
+	private SpeedController lever;
 	private DigitalInput leftLimitSwitch;
 	private DigitalInput rightLimitSwitch;
 	public static final double ARM_SPEED = 0.3;
+	public static final long LEVER_TIME = 2000;
 	private boolean disableSpeedMultiplier;
 	private boolean prevSpeedToggle;
+	private Encoder encoder;
 
 	/* (non-Javadoc)
 	 * @see org.impact2585.frc2016.Initializable#init(org.impact2585.frc2016.Environment)
@@ -31,22 +35,22 @@ public class IntakeSystem implements RobotSystem, Runnable{
 	@Override
 	public void init(Environment environ) {
 		input = environ.getInput();
-		leftWheel = new Talon(RobotMap.INTAKE_LEFT_WHEEL);
-		rightWheel = new Talon(RobotMap.INTAKE_RIGHT_WHEEL);
+		wheels = new Talon(RobotMap.INTAKE_WHEEL);
 		leftArm = new Talon(RobotMap.INTAKE_LEFT_ARM);
 		rightArm = new Talon(RobotMap.INTAKE_RIGHT_ARM);
+		lever = new Victor(RobotMap.LEVER);
 		leftLimitSwitch = new DigitalInput(RobotMap.LEFT_INTAKE_LIMIT_SWITCH);
 		rightLimitSwitch = new DigitalInput(RobotMap.RIGHT_INTAKE_LIMIT_SWITCH);
 		disableSpeedMultiplier = false;
 		prevSpeedToggle = false;
+		setEncoder(new Encoder(RobotMap.INTAKE_ARM_ENCODER_PORT_A, RobotMap.INTAKE_ARM_ENCODER_PORT_B));
 	}
 	
 	/**Sets the motors controlling the wheels on intake to speed
 	 * @param speed the speed to set the motors to
 	 */
 	public void spinWheels(double speed) {
-		leftWheel.set(speed);
-		rightWheel.set(-speed);
+		wheels.set(speed);
 	}
 	
 	/**Sets the motors controlling the arms for the intake to speed
@@ -57,6 +61,9 @@ public class IntakeSystem implements RobotSystem, Runnable{
 		rightArm.set(-speed);
 	}
 	
+	public void spinLever(double speed){
+		lever.set(speed);
+	}
 	/**
 	 * @returns true if the left limit switch is pressed
 	 */
@@ -85,6 +92,20 @@ public class IntakeSystem implements RobotSystem, Runnable{
 		input = newInput;
 	}
 
+	/**
+	 * @return the encoder
+	 */
+	public Encoder getEncoder() {
+		return encoder;
+	}
+
+	/**
+	 * @param encoder the encoder to set
+	 */
+	public void setEncoder(Encoder encoder) {
+		this.encoder = encoder;
+	}
+
 	/* (non-Javadoc)
 	 * @see java.lang.Runnable#run()
 	 */
@@ -105,7 +126,14 @@ public class IntakeSystem implements RobotSystem, Runnable{
 			intakeArmSpeed *= ARM_SPEED;
 		}
 		
-		if(isSwitchClosed() && intakeArmSpeed < 0) {
+		
+		if(input.turnLever()){
+			spinLever(0.5);
+		} else {
+			spinLever(0);
+		}
+			
+		if(isSwitchClosed() && intakeArmSpeed < 0 && !input.ignoreIntakeLimitSwitch()) {
 			intakeArmSpeed = 0;
 		}
 		
@@ -118,13 +146,13 @@ public class IntakeSystem implements RobotSystem, Runnable{
 	 */
 	@Override
 	public void destroy() {
-		if(leftWheel instanceof SensorBase) {
-			SensorBase motor = (SensorBase) leftWheel;
+		if(wheels instanceof SensorBase) {
+			SensorBase motor = (SensorBase) wheels;
 			motor.free();
 		}
 		
-		if(rightWheel instanceof SensorBase) {
-			SensorBase motor = (SensorBase) rightWheel;
+		if(lever instanceof SensorBase) {
+			SensorBase motor = (SensorBase) lever;
 			motor.free();
 		}
 		
@@ -139,8 +167,7 @@ public class IntakeSystem implements RobotSystem, Runnable{
 		}
 		leftLimitSwitch.free();
 		rightLimitSwitch.free();
+		encoder.free();
 	}
-
-	
 
 }

@@ -164,5 +164,25 @@ public abstract class InputMethod {
 	public boolean digitalMoveIntakeAwayFromBot() {
 		return false;
 	}
-
+	
+	/**
+	 * @returns true if the intake should ignore the limit switch, false otherwise
+	 */
+	public boolean ignoreIntakeLimitSwitch(){
+		return false;
+	}
+	
+	/**
+	 * @returns true if the Arm should ignore the limit switch, false otherwise
+	 */
+	public boolean ignoreArmLimitSwitch(){
+		return false;
+	}
+	
+	/**
+	 * @returns true if the lever should spin, false otherwise
+	 */
+	public boolean turnLever(){
+		return false;
+	}
 }
