@@ -5,6 +5,7 @@ import org.impact2585.frc2016.RobotMap;
 import org.impact2585.frc2016.input.InputMethod;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SensorBase;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Talon;
@@ -26,8 +27,7 @@ public class IntakeSystem implements RobotSystem, Runnable{
 	public static final long LEVER_TIME = 2000;
 	private boolean disableSpeedMultiplier;
 	private boolean prevSpeedToggle;
-	
-	
+	private Encoder encoder;
 
 	/* (non-Javadoc)
 	 * @see org.impact2585.frc2016.Initializable#init(org.impact2585.frc2016.Environment)
@@ -43,6 +43,7 @@ public class IntakeSystem implements RobotSystem, Runnable{
 		rightLimitSwitch = new DigitalInput(RobotMap.RIGHT_INTAKE_LIMIT_SWITCH);
 		disableSpeedMultiplier = false;
 		prevSpeedToggle = false;
+		setEncoder(new Encoder(RobotMap.INTAKE_ARM_ENCODER_PORT_A, RobotMap.INTAKE_ARM_ENCODER_PORT_B));
 	}
 	
 	/**Sets the motors controlling the wheels on intake to speed
@@ -89,6 +90,20 @@ public class IntakeSystem implements RobotSystem, Runnable{
 	 */
 	protected void setInput(InputMethod newInput) {
 		input = newInput;
+	}
+
+	/**
+	 * @return the encoder
+	 */
+	public Encoder getEncoder() {
+		return encoder;
+	}
+
+	/**
+	 * @param encoder the encoder to set
+	 */
+	public void setEncoder(Encoder encoder) {
+		this.encoder = encoder;
 	}
 
 	/* (non-Javadoc)
@@ -152,6 +167,7 @@ public class IntakeSystem implements RobotSystem, Runnable{
 		}
 		leftLimitSwitch.free();
 		rightLimitSwitch.free();
+		encoder.free();
 	}
 
 }

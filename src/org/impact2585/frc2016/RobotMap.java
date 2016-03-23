@@ -23,6 +23,12 @@ public interface RobotMap {
 	public static final int LEFT_INTAKE_LIMIT_SWITCH = 2;
 	public static final int RIGHT_INTAKE_LIMIT_SWITCH = 3;
 	
+	public static final int BOTTOM_ARM_ENCODER_PORT_A = 4;
+	public static final int BOTTOM_ARM_ENCODER_PORT_B = 5;
+	public static final int TOP_ARM_ENCODER_PORT_A = 6;
+	public static final int TOP_ARM_ENCODER_PORT_B = 7;
+	public static final int INTAKE_ARM_ENCODER_PORT_A = 8;
+	public static final int INTAKE_ARM_ENCODER_PORT_B  = 9;
 	public static final AutonomousExecuter CURRENT_AUTON = AutonomousExecuter.BASIC;
 	
 

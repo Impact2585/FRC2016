@@ -5,6 +5,7 @@ import org.impact2585.frc2016.RobotMap;
 import org.impact2585.frc2016.input.InputMethod;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SensorBase;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.SpeedController;
@@ -23,6 +24,8 @@ public class ArmSystem implements RobotSystem, Runnable{
 	private boolean disableSpeedMultiplier;
 	private boolean prevSpeedToggle;
 	private DigitalInput limitswitch;
+	private Encoder topArmEncoder;
+	private Encoder bottomArmEncoder;
 	
 
 	/* (non-Javadoc)
@@ -35,6 +38,8 @@ public class ArmSystem implements RobotSystem, Runnable{
 		topArm = new Spark(RobotMap.TOP_ARM);
 		bottomArm = new Spark(RobotMap.BOTTOM_ARM);
 		limitswitch = new DigitalInput(RobotMap.ARM_LIMIT_SWITCH);
+		topArmEncoder = new Encoder(RobotMap.TOP_ARM_ENCODER_PORT_A, RobotMap.TOP_ARM_ENCODER_PORT_B);
+		bottomArmEncoder = new Encoder(RobotMap.BOTTOM_ARM_ENCODER_PORT_A, RobotMap.BOTTOM_ARM_ENCODER_PORT_B);
 		disableSpeedMultiplier = false;
 		prevSpeedToggle = false;
 	}
@@ -68,6 +73,38 @@ public class ArmSystem implements RobotSystem, Runnable{
 		input = newInput;
 	}
 	
+	/**
+	 * @return the topArmEncoder
+	 */
+	public Encoder getTopArmEncoder() {
+		return topArmEncoder;
+	}
+
+
+	/**
+	 * @param topArmEncoder the topArmEncoder to set
+	 */
+	public void setTopArmEncoder(Encoder topArmEncoder) {
+		this.topArmEncoder = topArmEncoder;
+	}
+
+
+	/**
+	 * @return the bottomArmEncoder
+	 */
+	public Encoder getBottomArmEncoder() {
+		return bottomArmEncoder;
+	}
+
+
+	/**
+	 * @param bottomArmEncoder the bottomArmEncoder to set
+	 */
+	public void setBottomArmEncoder(Encoder bottomArmEncoder) {
+		this.bottomArmEncoder = bottomArmEncoder;
+	}
+
+
 	/* (non-Javadoc)
 	 * @see java.lang.Runnable#run()
 	 */
@@ -107,6 +144,8 @@ public class ArmSystem implements RobotSystem, Runnable{
 			motor.free();
 		}
 		limitswitch.free();
+		topArmEncoder.free();
+		bottomArmEncoder.free();
 	}
 	
 }
