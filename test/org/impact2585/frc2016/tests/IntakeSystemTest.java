@@ -26,7 +26,8 @@ public class IntakeSystemTest {
 	private boolean isLeftLimitSwitchClosed;
 	private boolean isRightLimitSwitchClosed;
 	private boolean ignoreIntakeLimitSwitch;
-	private boolean turnLever;
+	private boolean shoot;
+	private boolean turnLeverReverse;
 	private double leverSpeed;
 	
 	/**
@@ -47,6 +48,8 @@ public class IntakeSystemTest {
 		isLeftLimitSwitchClosed = false;
 		isRightLimitSwitchClosed = false;
 		ignoreIntakeLimitSwitch = false;
+		turnLeverReverse = false;
+		shoot = false;
 	}
 
 	/**
@@ -193,11 +196,16 @@ public class IntakeSystemTest {
 		ioshooter.run();
 		Assert.assertTrue(wheelSpeed == 0 && armSpeed == -analogMoveArmTowardsBot);
 		
-		turnLever = true;
+		shoot = true;
 		ioshooter.run();
 		Assert.assertTrue(leverSpeed == 0.5);
 		
-		turnLever = false;
+		shoot = false;
+		turnLeverReverse = true;
+		ioshooter.run();
+		Assert.assertTrue(leverSpeed == -0.5 );
+		
+		turnLeverReverse = false;
 		ioshooter.run();
 		Assert.assertTrue(leverSpeed == 0);
 	}
@@ -330,9 +338,19 @@ public class IntakeSystemTest {
 		 * @see org.impact2585.frc2016.input.InputMethod#turnLever()
 		 */
 		@Override
-		public boolean turnLever() {
-			return turnLever;
+		public boolean shoot() {
+			return shoot;
 		}
+
+		/* (non-Javadoc)
+		 * @see org.impact2585.frc2016.input.InputMethod#turnLeverReverse()
+		 */
+		@Override
+		public boolean turnLeverReverse(){
+			return turnLeverReverse;
+		}
+		
+		
 	}
 	
 }

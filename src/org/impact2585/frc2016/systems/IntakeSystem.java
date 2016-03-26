@@ -127,11 +127,14 @@ public class IntakeSystem implements RobotSystem, Runnable{
 		}
 		
 		
-		if(input.turnLever()){
+		if(input.shoot()){
 			spinLever(0.5);
+		} else if(input.turnLeverReverse()){
+			spinLever(-0.5);
 		} else {
 			spinLever(0);
 		}
+	
 			
 		if(isSwitchClosed() && intakeArmSpeed < 0 && !input.ignoreIntakeLimitSwitch()) {
 			intakeArmSpeed = 0;
