@@ -23,11 +23,14 @@ public class IntakeSystem implements RobotSystem, Runnable{
 	private SpeedController lever;
 	private DigitalInput leftLimitSwitch;
 	private DigitalInput rightLimitSwitch;
+	private DigitalInput shootingLimitSwitch;
 	public static final double ARM_SPEED = 0.3;
-	public static final long LEVER_TIME = 2000;
+	public static final long LEVER_TIME = 750;
 	private boolean disableSpeedMultiplier;
 	private boolean prevSpeedToggle;
+	private boolean shooting;
 	private Encoder encoder;
+	private long startTime; 
 
 	/* (non-Javadoc)
 	 * @see org.impact2585.frc2016.Initializable#init(org.impact2585.frc2016.Environment)
@@ -39,6 +42,7 @@ public class IntakeSystem implements RobotSystem, Runnable{
 		leftArm = new Talon(RobotMap.INTAKE_LEFT_ARM);
 		rightArm = new Talon(RobotMap.INTAKE_RIGHT_ARM);
 		lever = new Victor(RobotMap.LEVER);
+		shootingLimitSwitch = new DigitalInput(RobotMap.SHOOTING_LIMIT_SWITCH);
 		leftLimitSwitch = new DigitalInput(RobotMap.LEFT_INTAKE_LIMIT_SWITCH);
 		rightLimitSwitch = new DigitalInput(RobotMap.RIGHT_INTAKE_LIMIT_SWITCH);
 		disableSpeedMultiplier = false;
@@ -61,9 +65,13 @@ public class IntakeSystem implements RobotSystem, Runnable{
 		rightArm.set(-speed);
 	}
 	
+	/**Sets the motor controlling the lever for shooting to speed
+	 * @param speed the speed to set the motor to
+	 */
 	public void spinLever(double speed){
 		lever.set(speed);
 	}
+	
 	/**
 	 * @returns true if the left limit switch is pressed
 	 */
@@ -83,6 +91,13 @@ public class IntakeSystem implements RobotSystem, Runnable{
 	 */
 	public boolean isSwitchClosed() {
 		return isRightSwitchClosed() || isLeftSwitchClosed();
+	}
+	
+	/**
+	 * @returns true if shooting limit switch is pressed 
+	 */
+	public boolean isShootingSwitchClosed(){
+		return shootingLimitSwitch.get();
 	}
 	
 	/**Sets the input of the system to newInput
@@ -106,6 +121,20 @@ public class IntakeSystem implements RobotSystem, Runnable{
 		this.encoder = encoder;
 	}
 
+	/**
+	 * @return the startTime
+	 */
+	public long getStartTime() {
+		return startTime;
+	}
+
+	/**
+	 * @param startTime the startTime to set
+	 */
+	protected void setStartTime(long startTime) {
+		this.startTime = startTime;
+	}
+
 	/* (non-Javadoc)
 	 * @see java.lang.Runnable#run()
 	 */
@@ -127,14 +156,23 @@ public class IntakeSystem implements RobotSystem, Runnable{
 		}
 		
 		
-		if(input.shoot()){
-			spinLever(0.5);
+		if(input.shoot() && !shooting){
+			shooting = true;
+			startTime = System.currentTimeMillis();
 		} else if(input.turnLeverReverse()){
 			spinLever(-0.5);
-		} else {
+		} else if(!shooting){
 			spinLever(0);
+		} else{
+			if(System.currentTimeMillis()-startTime < LEVER_TIME){ // if the time that has passed since the lever has started rotating is less than the constant
+				spinLever(1.0);
+			} else if(isShootingSwitchClosed()){ // if the limit switch has been pressed 
+				shooting = false;
+				spinLever(0);
+			} else if(System.currentTimeMillis()-startTime >= LEVER_TIME){ // if the time that has passed since the lever has started rotating is more than or equal to the constant
+				spinLever(-1.0);
+			}
 		}
-	
 			
 		if(isSwitchClosed() && intakeArmSpeed < 0 && !input.ignoreIntakeLimitSwitch()) {
 			intakeArmSpeed = 0;
@@ -170,6 +208,7 @@ public class IntakeSystem implements RobotSystem, Runnable{
 		}
 		leftLimitSwitch.free();
 		rightLimitSwitch.free();
+		shootingLimitSwitch.free();
 		encoder.free();
 	}
 

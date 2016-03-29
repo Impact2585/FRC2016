@@ -25,6 +25,7 @@ public class IntakeSystemTest {
 	private boolean toggleArmSpeed;
 	private boolean isLeftLimitSwitchClosed;
 	private boolean isRightLimitSwitchClosed;
+	private boolean isShootingSwitchClosed;
 	private boolean ignoreIntakeLimitSwitch;
 	private boolean shoot;
 	private boolean turnLeverReverse;
@@ -196,15 +197,25 @@ public class IntakeSystemTest {
 		ioshooter.run();
 		Assert.assertTrue(wheelSpeed == 0 && armSpeed == -analogMoveArmTowardsBot);
 		
+		//tests if the lever can automatically turn forward to shoot then reverse back after B button is pressed
 		shoot = true;
 		ioshooter.run();
-		Assert.assertTrue(leverSpeed == 0.5);
+		ioshooter.run();
+		Assert.assertTrue(leverSpeed == 1.0);
+		ioshooter.setStartTime(System.currentTimeMillis()-750);
+		ioshooter.run();
+		Assert.assertTrue(leverSpeed == -1.0);
+		isShootingSwitchClosed = true;
+		ioshooter.run();
+		Assert.assertTrue(leverSpeed == 0);
 		
+		//tests if lever will turn in reverse if Y button is pressed
 		shoot = false;
 		turnLeverReverse = true;
 		ioshooter.run();
 		Assert.assertTrue(leverSpeed == -0.5 );
 		
+		//tests if lever will not run if neither B nor Y buttons are pressed
 		turnLeverReverse = false;
 		ioshooter.run();
 		Assert.assertTrue(leverSpeed == 0);
@@ -246,6 +257,16 @@ public class IntakeSystemTest {
 		public boolean isRightSwitchClosed() {
 			return isRightLimitSwitchClosed;
 		}
+		
+		
+
+		/* (non-Javadoc)
+		 * @see org.impact2585.frc2016.systems.IntakeSystem#isShootingSwitchClosed()
+		 */
+		@Override
+		public boolean isShootingSwitchClosed() {
+			return isShootingSwitchClosed;
+		}
 
 		/* (non-Javadoc)
 		 * @see org.impact2585.frc2016.systems.IntakeSystem#setInput(org.impact2585.frc2016.input.InputMethod)
@@ -262,8 +283,15 @@ public class IntakeSystemTest {
 		public void spinLever(double speed) {
 			leverSpeed = speed;
 		}
-		
-	}
+
+		/* (non-Javadoc)
+		 * @see org.impact2585.frc2016.systems.IntakeSystem#setStartTime(long)
+		 */
+		@Override
+		protected void setStartTime(long startTime) {
+			super.setStartTime(startTime);
+		}
+	}	
 	
 	/**
 	 * input version for testing
