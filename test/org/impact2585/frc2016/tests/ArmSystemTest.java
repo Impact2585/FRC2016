@@ -234,6 +234,13 @@ public class ArmSystemTest {
 			super.setInput(newInput);
 		}
 
+		/* (non-Javadoc)
+		 * @see org.impact2585.frc2016.systems.ArmSystem#accessSmartDasboard()
+		 */
+		@Override
+		public void accessSmartDasboard() {
+		}
+
 	}
 
 	/**

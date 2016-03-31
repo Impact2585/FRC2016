@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.SensorBase;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.Victor;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 /**
@@ -30,7 +31,7 @@ public class IntakeSystem implements RobotSystem, Runnable{
 	private boolean prevSpeedToggle;
 	private boolean shooting;
 	private Encoder encoder;
-	private long startTime; 
+	private long startTime;
 
 	/* (non-Javadoc)
 	 * @see org.impact2585.frc2016.Initializable#init(org.impact2585.frc2016.Environment)
@@ -134,6 +135,14 @@ public class IntakeSystem implements RobotSystem, Runnable{
 	protected void setStartTime(long startTime) {
 		this.startTime = startTime;
 	}
+	
+	/**
+	 * Puts the encoder's rate and distance to the SmartDashboard
+	 */
+	public void accessSmartDashboard() {
+		SmartDashboard.putNumber("Intake Arm Rate: ", encoder.getRate());
+		SmartDashboard.putNumber("Intake Arm Distance: ", encoder.getDistance());
+	}
 
 	/* (non-Javadoc)
 	 * @see java.lang.Runnable#run()
@@ -180,6 +189,7 @@ public class IntakeSystem implements RobotSystem, Runnable{
 		
 		moveArms(intakeArmSpeed);
 		prevSpeedToggle = input.toggleSpeed();
+		accessSmartDashboard();
 	}
 	
 	/* (non-Javadoc)

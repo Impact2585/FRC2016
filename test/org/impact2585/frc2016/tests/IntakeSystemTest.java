@@ -291,6 +291,13 @@ public class IntakeSystemTest {
 		protected void setStartTime(long startTime) {
 			super.setStartTime(startTime);
 		}
+
+		/* (non-Javadoc)
+		 * @see org.impact2585.frc2016.systems.IntakeSystem#accessSmartDashboard()
+		 */
+		@Override
+		public void accessSmartDashboard() {
+		}
 	}	
 	
 	/**
