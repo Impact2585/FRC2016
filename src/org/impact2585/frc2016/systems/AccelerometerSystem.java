@@ -105,6 +105,7 @@ public class AccelerometerSystem implements RobotSystem, Runnable{
 		gravity = new Vector();
 		gyro = new double[3];
 		
+		
 	}
 
 	/* (non-Javadoc)
@@ -120,6 +121,14 @@ public class AccelerometerSystem implements RobotSystem, Runnable{
 			gravity();
 			accelerationValues();
 			gyroValues();
+			
+			SmartDashboard.putNumber("X axis Acceleration: ", accel.x / 8192.0 * 9.8);
+			SmartDashboard.putNumber("Y axis Acceleration: ", accel.y / 8192.0 * 9.8);
+			SmartDashboard.putNumber("Z axis Acceleration: ", accel.z / 8192.0 * 9.8);
+			
+			SmartDashboard.putNumber("Yaw: ", gyro[0]*180/Math.PI);
+			SmartDashboard.putNumber("Pitch: ", gyro[1]*180/Math.PI);
+			SmartDashboard.putNumber("Roll: ", gyro[2]*180/Math.PI);
 		}
 	}
 	

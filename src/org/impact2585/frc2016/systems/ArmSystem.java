@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SensorBase;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.SpeedController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * The system for the robot's arm
@@ -104,6 +105,15 @@ public class ArmSystem implements RobotSystem, Runnable{
 		this.bottomArmEncoder = bottomArmEncoder;
 	}
 
+	/**
+	 * Puts the encoders' rate and distance to the SmartDashboard
+	 */
+	public void accessSmartDasboard() {
+		SmartDashboard.putNumber("Top Arm Rate: ", topArmEncoder.getRate());
+		SmartDashboard.putNumber("Top Arm Distance: ", topArmEncoder.getDistance());
+		SmartDashboard.putNumber("Bottom Arm Rate: ", topArmEncoder.getRate());
+		SmartDashboard.putNumber("Bottom Arm Distance: ", topArmEncoder.getDistance());
+	}
 
 	/* (non-Javadoc)
 	 * @see java.lang.Runnable#run()
@@ -127,6 +137,7 @@ public class ArmSystem implements RobotSystem, Runnable{
 		setTopArmSpeed(toparmspeed);
 		setBottomArmSpeed(bottomarmspeed);
 		prevSpeedToggle = input.toggleSpeed();
+		accessSmartDasboard();
 	}
 	
 	/* (non-Javadoc)
