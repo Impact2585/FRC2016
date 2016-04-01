@@ -46,7 +46,7 @@ public class PartnerXboxInput extends InputMethod {
 	 */
 	@Override
 	public boolean invert() {
-		return controller1.getRawButton(XboxConstants.LEFT_JOYSTICK_BUTTON);
+		return controller1.getRawButton(XboxConstants.Y_BUTTON);
 	}
 
 	/*
@@ -56,7 +56,7 @@ public class PartnerXboxInput extends InputMethod {
 	 */
 	@Override
 	public boolean outake() {
-		return controller2.getRawButton(XboxConstants.RIGHT_BUMPER);
+		return controller2.getRawButton(XboxConstants.LEFT_BUMPER);
 	}
 
 	/*
@@ -66,7 +66,7 @@ public class PartnerXboxInput extends InputMethod {
 	 */
 	@Override
 	public boolean intake() {
-		return controller2.getRawButton(XboxConstants.LEFT_BUMPER);
+		return controller2.getRawButton(XboxConstants.RIGHT_BUMPER);
 	}
 
 	/*
@@ -77,7 +77,7 @@ public class PartnerXboxInput extends InputMethod {
 	 */
 	@Override
 	public double analogMoveIntakeTowardsBot() {
-		return controller2.getRawAxis(XboxConstants.LEFT_TRIGGER);
+		return controller2.getRawAxis(XboxConstants.RIGHT_TRIGGER);
 	}
 
 	/*
@@ -88,7 +88,7 @@ public class PartnerXboxInput extends InputMethod {
 	 */
 	@Override
 	public double analogMoveIntakeAwayFromBot() {
-		return controller2.getRawAxis(XboxConstants.RIGHT_TRIGGER);
+		return controller2.getRawAxis(XboxConstants.LEFT_TRIGGER);
 	}
 
 	/*
@@ -98,7 +98,7 @@ public class PartnerXboxInput extends InputMethod {
 	 */
 	@Override
 	public double analogTopArm() {
-		return -controller2.getRawAxis(XboxConstants.LEFT_Y_AXIS);
+		return -controller2.getRawAxis(XboxConstants.RIGHT_Y_AXIS);
 	}
 
 	/*
@@ -108,7 +108,7 @@ public class PartnerXboxInput extends InputMethod {
 	 */
 	@Override
 	public double reversibleBottomArmValue() {
-		return -controller2.getRawAxis(XboxConstants.RIGHT_Y_AXIS);
+		return -controller2.getRawAxis(XboxConstants.LEFT_Y_AXIS);
 	}
 
 	/*
@@ -118,7 +118,7 @@ public class PartnerXboxInput extends InputMethod {
 	 */
 	@Override
 	public boolean toggleSpeed() {
-		return controller2.getRawButton(XboxConstants.RIGHT_JOYSTICK_BUTTON);
+		return controller2.getRawButton(XboxConstants.START_BUTTON);
 	}
 	
 	/*
