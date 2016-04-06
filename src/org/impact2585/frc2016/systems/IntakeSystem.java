@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.SensorBase;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.Victor;
+import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
@@ -25,6 +26,7 @@ public class IntakeSystem implements RobotSystem, Runnable{
 	private DigitalInput leftLimitSwitch;
 	private DigitalInput rightLimitSwitch;
 	private DigitalInput shootingLimitSwitch;
+	private IntakePID armPID;
 	public static final double ARM_SPEED = 0.3;
 	public static final long LEVER_TIME = 750;
 	private boolean disableSpeedMultiplier;
@@ -48,6 +50,7 @@ public class IntakeSystem implements RobotSystem, Runnable{
 		rightLimitSwitch = new DigitalInput(RobotMap.RIGHT_INTAKE_LIMIT_SWITCH);
 		disableSpeedMultiplier = false;
 		prevSpeedToggle = false;
+		armPID = new IntakePID(.3, .1, 0);
 		setEncoder(new Encoder(RobotMap.INTAKE_ARM_ENCODER_PORT_A, RobotMap.INTAKE_ARM_ENCODER_PORT_B));
 	}
 	
@@ -137,6 +140,20 @@ public class IntakeSystem implements RobotSystem, Runnable{
 	}
 	
 	/**
+	 * @return the armPID
+	 */
+	public IntakePID getArmPID() {
+		return armPID;
+	}
+
+	/**
+	 * @param armPID the armPID to set
+	 */
+	public void setArmPID(IntakePID armPID) {
+		this.armPID = armPID;
+	}
+
+	/**
 	 * Puts the encoder's rate and distance to the SmartDashboard
 	 */
 	public void accessSmartDashboard() {
@@ -221,5 +238,45 @@ public class IntakeSystem implements RobotSystem, Runnable{
 		shootingLimitSwitch.free();
 		encoder.free();
 	}
+	
+	/**
+	 * allows methods inside abstract class PIDSubsystem to be used to move arms 
+	 *
+	 */
+	public class IntakePID extends PIDSubsystem{
+		
+		/**
+		 * @param p proportional constant
+		 * @param i integral constant
+		 * @param d derivative constant
+		 */
+		public IntakePID(double p, double i, double d) {
+			super(p, i, d);
+		}
 
+		/* (non-Javadoc)
+		 * @see edu.wpi.first.wpilibj.command.PIDSubsystem#returnPIDInput()
+		 */
+		@Override
+		protected double returnPIDInput(){
+			return encoder.get();
+		}
+		
+		/* (non-Javadoc)
+		 * @see edu.wpi.first.wpilibj.command.PIDSubsystem#usePIDOutput(double)
+		 */
+		@Override
+		protected void usePIDOutput(double output){
+			moveArms(output);
+		}
+
+		/* (non-Javadoc)
+		 * @see edu.wpi.first.wpilibj.command.Subsystem#initDefaultCommand()
+		 */
+		@Override
+		protected void initDefaultCommand() {
+		}
+	}
 }
+
+
