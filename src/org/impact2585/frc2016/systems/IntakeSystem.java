@@ -26,7 +26,8 @@ public class IntakeSystem implements RobotSystem, Runnable{
 	private DigitalInput rightLimitSwitch;
 	private DigitalInput shootingLimitSwitch;
 	public static final double ARM_SPEED = 0.3;
-	public static final long LEVER_TIME = 750;
+	public static final long FORWARD_LEVER_TIME = 250;
+	public static final long BACKWARDS_LEVER_TIME = 233;
 	private boolean disableSpeedMultiplier;
 	private boolean prevSpeedToggle;
 	private boolean shooting;
@@ -42,6 +43,7 @@ public class IntakeSystem implements RobotSystem, Runnable{
 		wheels = new Talon(RobotMap.INTAKE_WHEEL);
 		leftArm = new Talon(RobotMap.INTAKE_LEFT_ARM);
 		rightArm = new Talon(RobotMap.INTAKE_RIGHT_ARM);
+		rightArm.setInverted(true);
 		lever = new Victor(RobotMap.LEVER);
 		shootingLimitSwitch = new DigitalInput(RobotMap.SHOOTING_LIMIT_SWITCH);
 		leftLimitSwitch = new DigitalInput(RobotMap.LEFT_INTAKE_LIMIT_SWITCH);
@@ -63,7 +65,7 @@ public class IntakeSystem implements RobotSystem, Runnable{
 	 */
 	public void moveArms(double speed) {
 		leftArm.set(speed);
-		rightArm.set(-speed);
+		rightArm.set(speed);
 	}
 	
 	/**Sets the motor controlling the lever for shooting to speed
@@ -165,21 +167,29 @@ public class IntakeSystem implements RobotSystem, Runnable{
 		}
 		
 		
-		if(input.shoot() && !shooting){
+		if(input.shoot() && !shooting && !input.turnLeverForward() && !input.turnLeverReverse()){
 			shooting = true;
 			startTime = System.currentTimeMillis();
-		} else if(input.turnLeverReverse()){
+		} else if(input.turnLeverForward() && !input.turnLeverReverse() && !input.shoot()) {
+			spinLever(0.5);
+			shooting = false;
+		} else if(input.turnLeverReverse() && !input.turnLeverForward() && !input.shoot()){
 			spinLever(-0.5);
+			shooting = false;
 		} else if(!shooting){
 			spinLever(0);
-		} else{
-			if(System.currentTimeMillis()-startTime < LEVER_TIME){ // if the time that has passed since the lever has started rotating is less than the constant
-				spinLever(1.0);
-			} else if(isShootingSwitchClosed()){ // if the limit switch has been pressed 
+		} 
+		if(shooting) {
+			if(isShootingSwitchClosed()) {
 				shooting = false;
 				spinLever(0);
-			} else if(System.currentTimeMillis()-startTime >= LEVER_TIME){ // if the time that has passed since the lever has started rotating is more than or equal to the constant
+			} else if(System.currentTimeMillis()-startTime < FORWARD_LEVER_TIME){ // if the time that has passed since the lever has started rotating is less than the constant
+				spinLever(1.0);
+			} else if(System.currentTimeMillis()-startTime >= FORWARD_LEVER_TIME && System.currentTimeMillis() - startTime < FORWARD_LEVER_TIME + BACKWARDS_LEVER_TIME){ // if the time that has passed since the lever has started rotating is more than or equal to the constant
 				spinLever(-1.0);
+			}  else {
+				spinLever(0);
+				shooting = false;
 			}
 		}
 			

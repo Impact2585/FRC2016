@@ -46,6 +46,7 @@
 					<include name="org/impact2585/frc2016/tests/ArmSystemTest.java"/>
 					<include name="org/impact2585/frc2016/tests/IntakeSystemTest.java"/>
 					<include name="org/impact2585/frc2016/tests/InputMethodTest.java"/>
+					<include name="org/impact2585/frc2016/tests/AccelerometerTest.java"/>
 				</fileset>
 			</batchtest>
 			<classpath refid="FRC2016.classpath"/>
