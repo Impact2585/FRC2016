@@ -30,6 +30,7 @@ public class IntakeSystemTest {
 	private boolean shoot;
 	private boolean turnLeverReverse;
 	private double leverSpeed;
+	private boolean turnLeverForward;
 	
 	/**
 	 * sets up the intake system test
@@ -51,6 +52,7 @@ public class IntakeSystemTest {
 		ignoreIntakeLimitSwitch = false;
 		turnLeverReverse = false;
 		shoot = false;
+		turnLeverForward = false;
 	}
 
 	/**
@@ -200,25 +202,58 @@ public class IntakeSystemTest {
 		//tests if the lever can automatically turn forward to shoot then reverse back after B button is pressed
 		shoot = true;
 		ioshooter.run();
-		ioshooter.run();
 		Assert.assertTrue(leverSpeed == 1.0);
-		ioshooter.setStartTime(System.currentTimeMillis()-750);
+		ioshooter.setStartTime(System.currentTimeMillis()-250);
 		ioshooter.run();
 		Assert.assertTrue(leverSpeed == -1.0);
-		isShootingSwitchClosed = true;
+		
+		//tests that the lever stops moving after the time
+		ioshooter.setStartTime(System.currentTimeMillis() - 483);
 		ioshooter.run();
 		Assert.assertTrue(leverSpeed == 0);
 		
-		//tests if lever will turn in reverse if Y button is pressed
+		//tests the limit switch for the timed shoot
+		isShootingSwitchClosed = true;
+		ioshooter.setStartTime(System.currentTimeMillis() - 200);
+		shoot = true;
+		ioshooter.run();
+		Assert.assertTrue(leverSpeed == 0);
+		
+		//tests if lever will turn in reverse if A button is pressed
 		shoot = false;
+		isShootingSwitchClosed = false;
 		turnLeverReverse = true;
 		ioshooter.run();
 		Assert.assertTrue(leverSpeed == -0.5 );
 		
-		//tests if lever will not run if neither B nor Y buttons are pressed
+		//tests if lever will not run if neither B nor A buttons are pressed
 		turnLeverReverse = false;
 		ioshooter.run();
 		Assert.assertTrue(leverSpeed == 0);
+		
+		//tests if the lever will go forward if it gets forward input
+		turnLeverForward = true;
+		ioshooter.run();
+		Assert.assertTrue(leverSpeed == 0.5);
+		
+		//tests if forward input can interrupt the timed lever
+		turnLeverForward = false;
+		shoot = true;
+		ioshooter.run();
+		Assert.assertTrue(leverSpeed == 1);
+		turnLeverForward = true;
+		shoot = false;
+		ioshooter.run();
+		Assert.assertTrue(leverSpeed == 0.5);
+		turnLeverForward = false;
+		ioshooter.run();
+		Assert.assertTrue(leverSpeed == 0);
+		
+		//tests if the limit switch is ignored for forward input
+		turnLeverForward = true;
+		isShootingSwitchClosed = true;
+		ioshooter.run();
+		Assert.assertTrue(leverSpeed == 0.5);
 	}
 	
 	/**
@@ -383,6 +418,14 @@ public class IntakeSystemTest {
 		@Override
 		public boolean turnLeverReverse(){
 			return turnLeverReverse;
+		}
+
+		/* (non-Javadoc)
+		 * @see org.impact2585.frc2016.input.InputMethod#turnLeverForward()
+		 */
+		@Override
+		public boolean turnLeverForward() {
+			return turnLeverForward;
 		}
 		
 		

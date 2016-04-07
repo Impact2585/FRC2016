@@ -154,6 +154,14 @@ public class PartnerXboxInput extends InputMethod {
 	 */
 	@Override
 	public boolean turnLeverReverse() {
+		return controller2.getRawButton(XboxConstants.A_BUTTON);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.impact2585.frc2016.input.InputMethod#turnLeverForward()
+	 */
+	@Override
+	public boolean turnLeverForward() {
 		return controller2.getRawButton(XboxConstants.Y_BUTTON);
 	}
 	

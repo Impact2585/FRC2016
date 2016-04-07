@@ -180,7 +180,7 @@ public abstract class InputMethod {
 	}
 	
 	/**
-	 * @returns true if the lever should spin forward, false otherwise
+	 * @returns true if the lever undergo the shooting procedure(move forward then move back)
 	 */
 	public boolean shoot(){
 		return false;
@@ -191,5 +191,12 @@ public abstract class InputMethod {
 	 */
 	public boolean turnLeverReverse(){
 		return false;
-	}  
+	}
+	
+	/**
+	 * @returns true if the lever should spin forward, false otherwise
+	 */
+	public boolean turnLeverForward() {
+		return false;
+	}
 }
