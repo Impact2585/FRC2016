@@ -27,6 +27,7 @@ public class IntakeSystem implements RobotSystem, Runnable{
 	private DigitalInput rightLimitSwitch;
 	private DigitalInput shootingLimitSwitch;
 	private IntakePID armPID;
+	private boolean isPIDEnabled;
 	public static final double ARM_SPEED = 0.3;
 	public static final long FORWARD_LEVER_TIME = 250;
 	public static final long BACKWARDS_LEVER_TIME = 233;
@@ -52,6 +53,7 @@ public class IntakeSystem implements RobotSystem, Runnable{
 		rightLimitSwitch = new DigitalInput(RobotMap.RIGHT_INTAKE_LIMIT_SWITCH);
 		disableSpeedMultiplier = false;
 		prevSpeedToggle = false;
+		isPIDEnabled = false;
 		armPID = new IntakePID(.3, .1, 0);
 		setEncoder(new Encoder(RobotMap.INTAKE_ARM_ENCODER_PORT_A, RobotMap.INTAKE_ARM_ENCODER_PORT_B));
 	}
@@ -61,6 +63,30 @@ public class IntakeSystem implements RobotSystem, Runnable{
 	 */
 	public void spinWheels(double speed) {
 		wheels.set(speed);
+	}
+	
+	/**Rotates the intake arm 
+	 * @param count the encoder count that the arm should rotate until reached
+	 * @param moveTowardBot whether the intake arm should rotate toward the bot
+	 */
+	public void rotateAngle(int count, boolean moveTowardBot) {
+		if(!isPIDEnabled) {
+			enableIntakeArmPID(count);
+		}
+		if(moveTowardBot)
+			encoder.setReverseDirection(true);
+		if(encoder.get() == count) {
+			armPID.getPIDController().reset();
+		}
+	}
+	
+	/**Enables the intake arm PID controller
+	 * @param count the encoder count to reach
+	 */
+	public void enableIntakeArmPID(int count) {
+		armPID.enable();
+		armPID.getSetpoint();
+		isPIDEnabled = true;
 	}
 	
 	/**Sets the motors controlling the arms for the intake to speed
@@ -197,17 +223,7 @@ public class IntakeSystem implements RobotSystem, Runnable{
 			spinLever(0);
 		} 
 		if(shooting) {
-			if(isShootingSwitchClosed()) {
-				shooting = false;
-				spinLever(0);
-			} else if(System.currentTimeMillis()-startTime < FORWARD_LEVER_TIME){ // if the time that has passed since the lever has started rotating is less than the constant
-				spinLever(1.0);
-			} else if(System.currentTimeMillis()-startTime >= FORWARD_LEVER_TIME && System.currentTimeMillis() - startTime < FORWARD_LEVER_TIME + BACKWARDS_LEVER_TIME){ // if the time that has passed since the lever has started rotating is more than or equal to the constant
-				spinLever(-1.0);
-			}  else {
-				spinLever(0);
-				shooting = false;
-			}
+			shoot();
 		}
 			
 		if(isSwitchClosed() && intakeArmSpeed < 0 && !input.ignoreIntakeLimitSwitch()) {
@@ -217,6 +233,37 @@ public class IntakeSystem implements RobotSystem, Runnable{
 		moveArms(intakeArmSpeed);
 		prevSpeedToggle = input.toggleSpeed();
 		accessSmartDashboard();
+	}
+	
+	/**
+	 * Moves the lever forward for 250 ms, back for 233 ms, and stops if it hits the limit switch
+	 */
+	public void shoot(){
+		if(isShootingSwitchClosed()) {
+			shooting = false;
+			spinLever(0);
+		} else if(System.currentTimeMillis()-startTime < FORWARD_LEVER_TIME){ // if the time that has passed since the lever has started rotating is less than the constant
+			spinLever(1.0);
+		} else if(System.currentTimeMillis()-startTime >= FORWARD_LEVER_TIME && System.currentTimeMillis() - startTime < FORWARD_LEVER_TIME + BACKWARDS_LEVER_TIME){ // if the time that has passed since the lever has started rotating is more than or equal to the constant
+			spinLever(-1.0);
+		}  else {
+			spinLever(0);
+			shooting = false;
+		}
+	}
+	
+	/**Sets whether or not the intake system should undergo the timed shoot
+	 * @param shoot the boolean value to set shooting to
+	 */
+	public void setShoot(boolean shoot) {
+		shooting = shoot;
+	}
+	
+	/**
+	 * @return if the ioshooter is undergoing a timed shoot
+	 */
+	public boolean isShooting() {
+		return shooting;
 	}
 	
 	/* (non-Javadoc)
@@ -247,6 +294,7 @@ public class IntakeSystem implements RobotSystem, Runnable{
 		rightLimitSwitch.free();
 		shootingLimitSwitch.free();
 		encoder.free();
+		armPID.getPIDController().free();
 	}
 	
 	/**

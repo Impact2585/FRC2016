@@ -28,7 +28,7 @@ public class WheelSystem implements RobotSystem, Runnable{
 	private double timeDrivingForward;
 	private double distanceDrivenForward;
 	private AccelerometerSystem accel;
-
+	
 
 	/* (non-Javadoc)
 	 * @see org.impact2585.frc2016.Initializable#init(org.impact2585.frc2016.Environment)
@@ -95,22 +95,27 @@ public class WheelSystem implements RobotSystem, Runnable{
 		return input;
 	}
 	
+
 	/**drives forward for distance
 	 * @param distance the distance in meters to drive
+	 * @return true if the drivetrain has driven the distance false if the drivetrain has not reached the distance
 	 */
-	public void driveDistanceForward(double distance) {
+	public boolean driveDistanceForward(double distance) {
 		if(timeDrivingForward == 0) {
 			initializeForwardPID(distance);
 			timeDrivingForward = System.currentTimeMillis();
+			return false;
 		}
 		if(distanceDrivenForward < distance) {
 			distanceDrivenForward += accel.getXSpeed() * (System.currentTimeMillis() - timeDrivingForward) * 1000;
 			timeDrivingForward = System.currentTimeMillis();
+			return false;
 		} else {
 			timeDrivingForward = 0;
 			distanceDrivenForward = 0;
 			forwardPIDSystem.getPIDController().reset();
 			forwardPIDSystem.disable();
+			return true;
 		}
 		
 	}
