@@ -7,10 +7,6 @@ import edu.wpi.first.wpilibj.Joystick;
 /**
  * Use this if you are using two xbox controllers as input
  */
-/**
- * @author jingy
- *
- */
 public class PartnerXboxInput extends InputMethod {
 	private Joystick controller1;
 	private Joystick controller2;
