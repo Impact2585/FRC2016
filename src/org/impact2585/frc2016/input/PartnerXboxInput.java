@@ -7,6 +7,10 @@ import edu.wpi.first.wpilibj.Joystick;
 /**
  * Use this if you are using two xbox controllers as input
  */
+/**
+ * @author jingy
+ *
+ */
 public class PartnerXboxInput extends InputMethod {
 	private Joystick controller1;
 	private Joystick controller2;
@@ -120,28 +124,30 @@ public class PartnerXboxInput extends InputMethod {
 	public boolean toggleSpeed() {
 		return controller2.getRawButton(XboxConstants.START_BUTTON);
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * 
 	 * @see org.impact2585.frc2016.input.InputMethod#ignoreIntakeLimitSwitch()
 	 */
 	@Override
-	public boolean ignoreIntakeLimitSwitch(){
+	public boolean ignoreIntakeLimitSwitch() {
 		return controller2.getRawButton(XboxConstants.X_BUTTON);
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * 
 	 * @see org.impact2585.frc2016.input.InputMethod#ignoreArmLimitSwitch()
 	 */
 	@Override
-	public boolean ignoreArmLimitSwitch(){
+	public boolean ignoreArmLimitSwitch() {
 		return controller2.getRawButton(XboxConstants.A_BUTTON);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.impact2585.frc2016.input.InputMethod#turnLever()
 	 */
 	@Override
@@ -149,7 +155,9 @@ public class PartnerXboxInput extends InputMethod {
 		return controller2.getRawButton(XboxConstants.B_BUTTON);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.impact2585.frc2016.input.InputMethod#turnLeverReverse()
 	 */
 	@Override
@@ -157,13 +165,39 @@ public class PartnerXboxInput extends InputMethod {
 		return controller2.getRawButton(XboxConstants.A_BUTTON);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.impact2585.frc2016.input.InputMethod#turnLeverForward()
 	 */
 	@Override
 	public boolean turnLeverForward() {
 		return controller2.getRawButton(XboxConstants.Y_BUTTON);
 	}
-	
-	
+
+	/* (non-Javadoc)
+	 * @see org.impact2585.frc2016.input.InputMethod#manualIntakeControl()
+	 */
+	@Override
+	public boolean manualIntakeControl() {
+		return controller2.getRawButton(XboxConstants.BACK_BUTTON);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.impact2585.frc2016.input.InputMethod#rightIntake()
+	 */
+	@Override
+	public double rightIntake() {
+		return controller2.getRawAxis(XboxConstants.RIGHT_TRIGGER);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.impact2585.frc2016.input.InputMethod#leftIntake()
+	 */
+	@Override
+	public double leftIntake() {
+		return controller2.getRawAxis(XboxConstants.LEFT_TRIGGER);
+	}
+
+
 }

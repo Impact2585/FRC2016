@@ -17,6 +17,18 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 /**
  * Ignore the class name, this is actually an IO shooter
  */
+/**
+ * @author jingy
+ *
+ */
+/**
+ * @author jingy
+ *
+ */
+/**
+ * @author jingy
+ *
+ */
 public class IntakeSystem implements RobotSystem, Runnable{
 	private InputMethod input;
 	private SpeedController wheels;
@@ -43,11 +55,11 @@ public class IntakeSystem implements RobotSystem, Runnable{
 	@Override
 	public void init(Environment environ) {
 		input = environ.getInput();
-		wheels = new Talon(RobotMap.INTAKE_WHEEL);
+		wheels = new Victor(RobotMap.INTAKE_WHEEL);
 		leftArm = new Talon(RobotMap.INTAKE_LEFT_ARM);
 		rightArm = new Talon(RobotMap.INTAKE_RIGHT_ARM);
 		rightArm.setInverted(true);
-		lever = new Victor(RobotMap.LEVER);
+		lever = new Talon(RobotMap.LEVER);
 		shootingLimitSwitch = new DigitalInput(RobotMap.SHOOTING_LIMIT_SWITCH);
 		leftLimitSwitch = new DigitalInput(RobotMap.LEFT_INTAKE_LIMIT_SWITCH);
 		rightLimitSwitch = new DigitalInput(RobotMap.RIGHT_INTAKE_LIMIT_SWITCH);
@@ -95,6 +107,20 @@ public class IntakeSystem implements RobotSystem, Runnable{
 	public void moveArms(double speed) {
 		leftArm.set(speed);
 		rightArm.set(speed);
+	}
+	
+	/**Sets the motor controlling the right arm for the intake to speed
+	 * @param speed the speed to set the motor to
+	 */
+	public void moveRightArm(double speed){
+		rightArm.set(speed);
+	}
+	
+	/**Sets the motor controlling the left arm for the intake to speed
+	 * @param speed the speed to set the motor to
+	 */
+	public void moveLeftArm(double speed){
+		leftArm.set(speed);
 	}
 	
 	/**Sets the motor controlling the lever for shooting to speed
@@ -201,15 +227,23 @@ public class IntakeSystem implements RobotSystem, Runnable{
 		} else {
 			spinWheels(0);
 		}
-		
-		double intakeArmSpeed = input.moveIntake();
-		if(input.toggleSpeed() && !prevSpeedToggle)
-			disableSpeedMultiplier = !disableSpeedMultiplier;
-		if(!disableSpeedMultiplier) {
-			intakeArmSpeed *= ARM_SPEED;
+
+		if (input.manualIntakeControl()){
+			moveRightArm(input.rightIntake());
+			moveLeftArm(input.leftIntake());
+		} else {
+			double intakeArmSpeed = input.moveIntake();
+			if(input.toggleSpeed() && !prevSpeedToggle)
+				disableSpeedMultiplier = !disableSpeedMultiplier;
+			if(!disableSpeedMultiplier) {
+				intakeArmSpeed *= ARM_SPEED;
+			}
+			if(isSwitchClosed() && intakeArmSpeed < 0 && !input.ignoreIntakeLimitSwitch()) {
+				intakeArmSpeed = 0;
+			}
+			moveArms(intakeArmSpeed);
 		}
-		
-		
+
 		if(input.shoot() && !shooting && !input.turnLeverForward() && !input.turnLeverReverse()){
 			shooting = true;
 			startTime = System.currentTimeMillis();
@@ -225,12 +259,6 @@ public class IntakeSystem implements RobotSystem, Runnable{
 		if(shooting) {
 			shoot();
 		}
-			
-		if(isSwitchClosed() && intakeArmSpeed < 0 && !input.ignoreIntakeLimitSwitch()) {
-			intakeArmSpeed = 0;
-		}
-		
-		moveArms(intakeArmSpeed);
 		prevSpeedToggle = input.toggleSpeed();
 		accessSmartDashboard();
 	}
