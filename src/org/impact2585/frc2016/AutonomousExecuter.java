@@ -40,7 +40,8 @@ public enum AutonomousExecuter implements Executer, Initializable{
 	public static final int BASIC_DURATION = 1500;
 	public static final int DELAYED_DURATION = 1500;
 	public static final int DELAYED_WAIT = 10000;
-	public static final int ANGLE = 500;
+	public static final int TILT_UP_ANGLE = 800;
+	public static final int SHOOTING_ANGLE = 500;
 
 	
 	/* (non-Javadoc)
@@ -82,14 +83,14 @@ public enum AutonomousExecuter implements Executer, Initializable{
 				if(startingShoot) {
 					ioshooter.setShoot(true);
 					startingShoot = false;
+					ioshooter.rotateAngle(SHOOTING_ANGLE, true);
 				}
 				ioshooter.spinWheels(127);
 				ioshooter.shoot();
+			} else if(handsUpDontShoot()) {
+				ioshooter.rotateAngle(TILT_UP_ANGLE, true);
 			}
-			
-			if(handsUpDontShoot()) {
-				ioshooter.rotateAngle(ANGLE, true);;
-			}
+			distanceDrivenForward = drivetrain.getDistanceDrivenForward();
 			break;
 		default:
 			drivetrain.drive(0, 0);

@@ -17,18 +17,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 /**
  * Ignore the class name, this is actually an IO shooter
  */
-/**
- * @author jingy
- *
- */
-/**
- * @author jingy
- *
- */
-/**
- * @author jingy
- *
- */
 public class IntakeSystem implements RobotSystem, Runnable{
 	private InputMethod input;
 	private SpeedController wheels;
