@@ -25,6 +25,7 @@ public class DisabledExecuter implements Executer{
 		environ.getArmSystem().setBottomArmSpeed(0);
 		environ.getIntakeSystem().spinWheels(0);
 		environ.getIntakeSystem().moveArms(0);
+		environ.getIntakeSystem().spinLever(0);
 	}
 
 }

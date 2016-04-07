@@ -203,18 +203,18 @@ public class IntakeSystemTest {
 		shoot = true;
 		ioshooter.run();
 		Assert.assertTrue(leverSpeed == 1.0);
-		ioshooter.setStartTime(System.currentTimeMillis()-250);
+		ioshooter.setStartTime(System.currentTimeMillis()-IntakeSystem.FORWARD_LEVER_TIME);
 		ioshooter.run();
 		Assert.assertTrue(leverSpeed == -1.0);
 		
 		//tests that the lever stops moving after the time
-		ioshooter.setStartTime(System.currentTimeMillis() - 483);
+		ioshooter.setStartTime(System.currentTimeMillis() - (IntakeSystem.FORWARD_LEVER_TIME + IntakeSystem.BACKWARDS_LEVER_TIME));
 		ioshooter.run();
 		Assert.assertTrue(leverSpeed == 0);
 		
 		//tests the limit switch for the timed shoot
 		isShootingSwitchClosed = true;
-		ioshooter.setStartTime(System.currentTimeMillis() - 200);
+		ioshooter.setStartTime(System.currentTimeMillis() - IntakeSystem.FORWARD_LEVER_TIME);
 		shoot = true;
 		ioshooter.run();
 		Assert.assertTrue(leverSpeed == 0);
