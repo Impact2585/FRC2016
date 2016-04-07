@@ -31,6 +31,12 @@ public class IntakeSystemTest {
 	private boolean turnLeverReverse;
 	private double leverSpeed;
 	private boolean turnLeverForward;
+	private boolean manualIntake;
+	private double rightArmSpeed;
+	private double leftArmSpeed;
+	private double leftIntakeSpeed;
+	private double rightIntakeSpeed;
+	
 	
 	/**
 	 * sets up the intake system test
@@ -40,19 +46,6 @@ public class IntakeSystemTest {
 		ioshooter = new TestIntakeSystem();
 		input = new InputTest();
 		ioshooter.setInput(input);
-		digitalMoveArmAwayFromBot = false;
-		digitalMoveArmTowardsBot = false;
-		moveWheelsBackwards = false;
-		moveWheelsForward = false;
-		analogMoveArmAwayFromBot = 0;
-		analogMoveArmTowardsBot = 0;
-		toggleArmSpeed = false;
-		isLeftLimitSwitchClosed = false;
-		isRightLimitSwitchClosed = false;
-		ignoreIntakeLimitSwitch = false;
-		turnLeverReverse = false;
-		shoot = false;
-		turnLeverForward = false;
 	}
 
 	/**
@@ -254,6 +247,23 @@ public class IntakeSystemTest {
 		isShootingSwitchClosed = true;
 		ioshooter.run();
 		Assert.assertTrue(leverSpeed == 0.5);
+		
+		//tests if manual intake control works
+		manualIntake = true;
+		rightArmSpeed = 0.5;
+		leftArmSpeed = 0.5;
+		ioshooter.run();
+		Assert.assertTrue(rightIntakeSpeed == 0.5);
+		Assert.assertTrue(leftIntakeSpeed == 0.5);
+		
+		//tests if manual intake can be disabled
+		manualIntake = false;
+		analogMoveArmAwayFromBot = 0;
+		analogMoveArmTowardsBot = 0;
+		digitalMoveArmAwayFromBot = false;
+		digitalMoveArmTowardsBot = false;
+		ioshooter.run();
+		Assert.assertTrue(armSpeed == 0);
 	}
 	
 	/**
@@ -333,6 +343,23 @@ public class IntakeSystemTest {
 		@Override
 		public void accessSmartDashboard() {
 		}
+
+		/* (non-Javadoc)
+		 * @see org.impact2585.frc2016.systems.IntakeSystem#moveRightArm(double)
+		 */
+		@Override
+		public void moveRightArm(double speed) {
+			rightIntakeSpeed = speed;
+		}
+
+		/* (non-Javadoc)
+		 * @see org.impact2585.frc2016.systems.IntakeSystem#moveLeftArm(double)
+		 */
+		@Override
+		public void moveLeftArm(double speed) {
+			leftIntakeSpeed = speed;
+		}
+		
 	}	
 	
 	/**
@@ -427,8 +454,31 @@ public class IntakeSystemTest {
 		public boolean turnLeverForward() {
 			return turnLeverForward;
 		}
-		
-		
+
+		/* (non-Javadoc)
+		 * @see org.impact2585.frc2016.input.InputMethod#rightIntake()
+		 */
+		@Override
+		public double rightIntake() {
+			return rightArmSpeed;
+		}
+
+		/* (non-Javadoc)
+		 * @see org.impact2585.frc2016.input.InputMethod#leftIntake()
+		 */
+		@Override
+		public double leftIntake() {
+			return leftArmSpeed;
+		}
+
+		/* (non-Javadoc)
+		 * @see org.impact2585.frc2016.input.InputMethod#manualIntakeControl()
+		 */
+		@Override
+		public boolean manualIntakeControl() {
+			return manualIntake;
+		}
+			
 	}
 	
 }

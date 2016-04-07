@@ -199,4 +199,25 @@ public abstract class InputMethod {
 	public boolean turnLeverForward() {
 		return false;
 	}
+	
+	/**
+	 * @return true if the intake is being moved manually
+	 */
+	public boolean manualIntakeControl(){
+		return false;
+	}
+	
+	/**
+	 * @return how much the right intake arm should move
+	 */
+	public double rightIntake(){
+		return 0;
+	}
+	
+	/**
+	 * @return how much the left intake arm should move
+	 */
+	public double leftIntake(){
+		return 0;
+	}
 }
