@@ -43,11 +43,11 @@ public class IntakeSystem implements RobotSystem, Runnable{
 	@Override
 	public void init(Environment environ) {
 		input = environ.getInput();
-		wheels = new Victor(RobotMap.INTAKE_WHEEL);
-		leftArm = new Talon(RobotMap.INTAKE_LEFT_ARM);
+		wheels = new Talon(RobotMap.INTAKE_WHEEL);
+		leftArm = new Victor(RobotMap.INTAKE_LEFT_ARM);
 		rightArm = new Talon(RobotMap.INTAKE_RIGHT_ARM);
 		rightArm.setInverted(true);
-		lever = new Talon(RobotMap.LEVER);
+		lever = new Victor(RobotMap.LEVER);
 		shootingLimitSwitch = new DigitalInput(RobotMap.SHOOTING_LIMIT_SWITCH);
 		leftLimitSwitch = new DigitalInput(RobotMap.LEFT_INTAKE_LIMIT_SWITCH);
 		rightLimitSwitch = new DigitalInput(RobotMap.RIGHT_INTAKE_LIMIT_SWITCH);
@@ -255,11 +255,15 @@ public class IntakeSystem implements RobotSystem, Runnable{
 	 * Moves the lever forward for 250 ms, back for 233 ms, and stops if it hits the limit switch
 	 */
 	public void shoot(){
-		if(isShootingSwitchClosed()) {
+		if(!shooting){
+			shooting = true;
+			startTime = System.currentTimeMillis();
+		}
+		if(System.currentTimeMillis()-startTime < FORWARD_LEVER_TIME){ // if the time that has passed since the lever has started rotating is less than the constant
+			spinLever(1.0);
+		} else if(isShootingSwitchClosed()) {
 			shooting = false;
 			spinLever(0);
-		} else if(System.currentTimeMillis()-startTime < FORWARD_LEVER_TIME){ // if the time that has passed since the lever has started rotating is less than the constant
-			spinLever(1.0);
 		} else if(System.currentTimeMillis()-startTime >= FORWARD_LEVER_TIME && System.currentTimeMillis() - startTime < FORWARD_LEVER_TIME + BACKWARDS_LEVER_TIME){ // if the time that has passed since the lever has started rotating is more than or equal to the constant
 			spinLever(-1.0);
 		}  else {
