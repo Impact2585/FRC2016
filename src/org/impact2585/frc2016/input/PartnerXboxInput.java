@@ -138,7 +138,7 @@ public class PartnerXboxInput extends InputMethod {
 	 */
 	@Override
 	public boolean ignoreArmLimitSwitch() {
-		return controller2.getRawButton(XboxConstants.A_BUTTON);
+		return controller2.getRawButton(XboxConstants.RIGHT_JOYSTICK_BUTTON);
 	}
 
 	/*
