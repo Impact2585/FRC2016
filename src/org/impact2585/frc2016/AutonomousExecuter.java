@@ -105,7 +105,7 @@ public enum AutonomousExecuter implements Executer, Initializable{
 				drivetrain.drive(1.0, 0);
 			else{
 				drivetrain.drive(0, 0);	
-				ioshooter.spinWheels(1.0);
+				ioshooter.spinWheels(-1);
 				ioshooter.shoot();
 			}
 			break;
