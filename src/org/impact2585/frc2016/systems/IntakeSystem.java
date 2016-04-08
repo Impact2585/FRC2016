@@ -69,7 +69,7 @@ public class IntakeSystem implements RobotSystem, Runnable{
 	 * @param count the encoder count that the arm should rotate until reached
 	 * @param moveTowardBot whether the intake arm should rotate toward the bot
 	 */
-	public void rotateAngle(int count, boolean moveTowardBot) {
+	public boolean rotateAngle(int count, boolean moveTowardBot) {
 		if(!isPIDEnabled) {
 			enableIntakeArmPID(count);
 		}
@@ -78,6 +78,7 @@ public class IntakeSystem implements RobotSystem, Runnable{
 		if(encoder.get() == count) {
 			armPID.getPIDController().reset();
 		}
+		return encoder.get() == count;
 	}
 	
 	/**Enables the intake arm PID controller

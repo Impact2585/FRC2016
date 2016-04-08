@@ -23,6 +23,7 @@ public class AccelerometerTest {
 		yAccel = 0;
 		zAccel = 0;
 		accel = new TestAccelerometer();
+		accel.setSuccessfulConnection(true);
 	}
 
 	/**
@@ -90,8 +91,8 @@ public class AccelerometerTest {
 		 * @see org.impact2585.frc2016.systems.AccelerometerSystem#getFIFOcount()
 		 */
 		@Override
-		public short getFIFOcount() {
-			return AccelerometerSystem.DMP_PACKET_SIZE;
+		public void updateFIFOcount() {
+			setCurrentFIFOCount(AccelerometerSystem.DMP_PACKET_SIZE);
 		}
 
 		/*
@@ -102,6 +103,14 @@ public class AccelerometerTest {
 		 */
 		@Override
 		public void accessSmartDashboard() {
+		}
+
+		/* (non-Javadoc)
+		 * @see org.impact2585.frc2016.systems.AccelerometerSystem#setSuccessfulConnection(boolean)
+		 */
+		@Override
+		public void setSuccessfulConnection(boolean connect) {
+			super.setSuccessfulConnection(connect);
 		}
 
 		/*

@@ -8,22 +8,22 @@ import org.impact2585.lib2585.Executer;
  * Executer for autonomous mode
  */
 public enum AutonomousExecuter implements Executer, Initializable{
-	
+
 	/**
 	 *This version of auton does nothing
 	 */
 	NONE, 
-	
+
 	/**
 	 * This version of auton drives forward for 1.5 seconds
 	 */
 	BASIC, 
-	
+
 	/**
 	 * This version of auton waits for 10 seconds, and then drives forward for 1.5 seconds
 	 */
 	DELAYED,
-	
+
 	/**
 	 * This version of auton drives forward for 5 meters then shoots
 	 */
@@ -33,7 +33,6 @@ public enum AutonomousExecuter implements Executer, Initializable{
 	 * This version of auton drives forward and makes a low goal
 	 */
 	LOW_GOAL;
-	
 	
 	private Environment env;
 	private WheelSystem drivetrain;
@@ -50,7 +49,7 @@ public enum AutonomousExecuter implements Executer, Initializable{
 	public static final int SHOOTING_ANGLE = 500;
 	public static final int LOW_GOAL_DURATION = 2500;
 
-	
+
 	/* (non-Javadoc)
 	 * @see org.impact2585.frc2016.Initializable#init(org.impact2585.frc2016.Environment)
 	 */
@@ -90,10 +89,12 @@ public enum AutonomousExecuter implements Executer, Initializable{
 				if(startingShoot) {
 					ioshooter.setShoot(true);
 					startingShoot = false;
-					ioshooter.rotateAngle(SHOOTING_ANGLE, true);
 				}
-				ioshooter.spinWheels(1);
-				ioshooter.shoot();
+
+				if(ioshooter.rotateAngle(SHOOTING_ANGLE, true)) {
+					ioshooter.spinWheels(-1);
+					ioshooter.shoot();
+				}
 			} else if(handsUpDontShoot()) {
 				ioshooter.rotateAngle(TILT_UP_ANGLE, true);
 			}
@@ -112,7 +113,7 @@ public enum AutonomousExecuter implements Executer, Initializable{
 			drivetrain.drive(0, 0);
 		}
 	}
-	
+
 	/**
 	 * @return true if the drivetrain can't move for more than half a second, false if otherwise
 	 */
@@ -131,7 +132,7 @@ public enum AutonomousExecuter implements Executer, Initializable{
 			return false;
 		}
 	}
-	
+
 	/**
 	 * @return true if the drivetrain is not moving false if otherwise
 	 */
