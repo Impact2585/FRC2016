@@ -27,7 +27,13 @@ public enum AutonomousExecuter implements Executer, Initializable{
 	/**
 	 * This version of auton drives forward for 5 meters then shoots
 	 */
-	SHOOT;
+	SHOOT,
+	
+	/**
+	 * This version of auton drives forward and makes a low goal
+	 */
+	LOW_GOAL;
+	
 	
 	private Environment env;
 	private WheelSystem drivetrain;
@@ -42,6 +48,7 @@ public enum AutonomousExecuter implements Executer, Initializable{
 	public static final int DELAYED_WAIT = 10000;
 	public static final int TILT_UP_ANGLE = 800;
 	public static final int SHOOTING_ANGLE = 500;
+	public static final int LOW_GOAL_DURATION = 2500;
 
 	
 	/* (non-Javadoc)
@@ -85,12 +92,21 @@ public enum AutonomousExecuter implements Executer, Initializable{
 					startingShoot = false;
 					ioshooter.rotateAngle(SHOOTING_ANGLE, true);
 				}
-				ioshooter.spinWheels(127);
+				ioshooter.spinWheels(1);
 				ioshooter.shoot();
 			} else if(handsUpDontShoot()) {
 				ioshooter.rotateAngle(TILT_UP_ANGLE, true);
 			}
 			distanceDrivenForward = drivetrain.getDistanceDrivenForward();
+			break;
+		case LOW_GOAL:
+			if(System.currentTimeMillis()- initialTime <= LOW_GOAL_DURATION)
+				drivetrain.drive(1.0, 0);
+			else{
+				drivetrain.drive(0, 0);	
+				ioshooter.spinWheels(1.0);
+				ioshooter.shoot();
+			}
 			break;
 		default:
 			drivetrain.drive(0, 0);

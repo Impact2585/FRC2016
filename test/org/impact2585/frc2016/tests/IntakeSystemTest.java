@@ -205,13 +205,6 @@ public class IntakeSystemTest {
 		ioshooter.run();
 		Assert.assertTrue(leverSpeed == 0);
 		
-		//tests the limit switch for the timed shoot
-		isShootingSwitchClosed = true;
-		ioshooter.setStartTime(System.currentTimeMillis() - IntakeSystem.FORWARD_LEVER_TIME);
-		shoot = true;
-		ioshooter.run();
-		Assert.assertTrue(leverSpeed == 0);
-		
 		//tests if lever will turn in reverse if A button is pressed
 		shoot = false;
 		isShootingSwitchClosed = false;
