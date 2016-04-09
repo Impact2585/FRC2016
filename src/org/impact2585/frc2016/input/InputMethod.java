@@ -166,9 +166,9 @@ public abstract class InputMethod {
 	}
 	
 	/**
-	 * @returns true if the intake should ignore the limit switch, false otherwise
+	 * @returns true if the state of ignoring the intake arm limit switch should be toggled, false if otherwise
 	 */
-	public boolean ignoreIntakeLimitSwitch(){
+	public boolean toggleIntakeLimitSwitch(){
 		return false;
 	}
 	

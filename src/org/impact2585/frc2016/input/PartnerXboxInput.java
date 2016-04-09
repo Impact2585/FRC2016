@@ -127,7 +127,7 @@ public class PartnerXboxInput extends InputMethod {
 	 * @see org.impact2585.frc2016.input.InputMethod#ignoreIntakeLimitSwitch()
 	 */
 	@Override
-	public boolean ignoreIntakeLimitSwitch() {
+	public boolean toggleIntakeLimitSwitch() {
 		return controller2.getRawButton(XboxConstants.X_BUTTON);
 	}
 
