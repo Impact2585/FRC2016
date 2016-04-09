@@ -31,7 +31,7 @@ public class IntakeSystemTest {
 	private boolean turnLeverReverse;
 	private double leverSpeed;
 	private boolean turnLeverForward;
-	private boolean manualIntake;
+	private boolean toggleManualIntake;
 	private double rightArmSpeed;
 	private double leftArmSpeed;
 	private double leftIntakeSpeed;
@@ -242,19 +242,29 @@ public class IntakeSystemTest {
 		Assert.assertTrue(leverSpeed == 0.5);
 		
 		//tests if manual intake control works
-		manualIntake = true;
+		toggleManualIntake = true;
 		rightArmSpeed = 0.5;
 		leftArmSpeed = 0.5;
 		ioshooter.run();
 		Assert.assertTrue(rightIntakeSpeed == 0.5);
 		Assert.assertTrue(leftIntakeSpeed == 0.5);
 		
-		//tests if manual intake can be disabled
-		manualIntake = false;
+		//tests if manual intake stays on
+		toggleManualIntake = true;
 		analogMoveArmAwayFromBot = 0;
 		analogMoveArmTowardsBot = 0;
 		digitalMoveArmAwayFromBot = false;
 		digitalMoveArmTowardsBot = false;
+		ioshooter.run();
+		Assert.assertTrue(rightIntakeSpeed == 0.5);
+		Assert.assertTrue(leftIntakeSpeed == 0.5);
+		toggleManualIntake = false;
+		ioshooter.run();
+		Assert.assertTrue(rightIntakeSpeed == 0.5);
+		Assert.assertTrue(leftIntakeSpeed == 0.5);
+		
+		//tests if manual intake can be toggled off
+		toggleManualIntake = true;
 		ioshooter.run();
 		Assert.assertTrue(armSpeed == 0);
 	}
@@ -420,7 +430,7 @@ public class IntakeSystemTest {
 		 * @see org.impact2585.frc2016.input.InputMethod#ignoreIntakeLimitSwitch()
 		 */
 		@Override
-		public boolean ignoreIntakeLimitSwitch(){
+		public boolean toggleIntakeLimitSwitch(){
 			return ignoreIntakeLimitSwitch;
 		}
 
@@ -469,7 +479,7 @@ public class IntakeSystemTest {
 		 */
 		@Override
 		public boolean manualIntakeControl() {
-			return manualIntake;
+			return toggleManualIntake;
 		}
 			
 	}

@@ -33,6 +33,10 @@ public class IntakeSystem implements RobotSystem, Runnable{
 	public static final long BACKWARDS_LEVER_TIME = 233;
 	private boolean disableSpeedMultiplier;
 	private boolean prevSpeedToggle;
+	private boolean prevIntakeLimitSwitchToggle;
+	private boolean ignoreIntakeArmLimitSwitch;
+	private boolean manualIntakeControl;
+	private boolean prevIntakeControlToggle;
 	private boolean shooting;
 	private Encoder encoder;
 	private long startTime;
@@ -45,26 +49,30 @@ public class IntakeSystem implements RobotSystem, Runnable{
 		input = environ.getInput();
 		wheels = new Talon(RobotMap.INTAKE_WHEEL);
 		leftArm = new Victor(RobotMap.INTAKE_LEFT_ARM);
-		rightArm = new Victor(RobotMap.INTAKE_RIGHT_ARM);
+		rightArm = new Talon(RobotMap.INTAKE_RIGHT_ARM);
 		rightArm.setInverted(true);
 		lever = new Victor(RobotMap.LEVER);
 		shootingLimitSwitch = new DigitalInput(RobotMap.SHOOTING_LIMIT_SWITCH);
 		leftLimitSwitch = new DigitalInput(RobotMap.LEFT_INTAKE_LIMIT_SWITCH);
 		rightLimitSwitch = new DigitalInput(RobotMap.RIGHT_INTAKE_LIMIT_SWITCH);
-		disableSpeedMultiplier = false;
+		disableSpeedMultiplier = true;
 		prevSpeedToggle = false;
 		isPIDEnabled = false;
 		armPID = new IntakePID(.3, .1, 0);
 		setEncoder(new Encoder(RobotMap.INTAKE_ARM_ENCODER_PORT_A, RobotMap.INTAKE_ARM_ENCODER_PORT_B));
+		prevIntakeLimitSwitchToggle = false;
+		ignoreIntakeArmLimitSwitch = true;
+		manualIntakeControl = false;
+		prevIntakeControlToggle = false;
 	}
-	
+
 	/**Sets the motors controlling the wheels on intake to speed
 	 * @param speed the speed to set the motors to
 	 */
 	public void spinWheels(double speed) {
 		wheels.set(speed);
 	}
-	
+
 	/**Rotates the intake arm 
 	 * @param count the encoder count that the arm should rotate until reached
 	 * @param moveTowardBot whether the intake arm should rotate toward the bot
@@ -80,7 +88,7 @@ public class IntakeSystem implements RobotSystem, Runnable{
 		}
 		return encoder.get() == count;
 	}
-	
+
 	/**Enables the intake arm PID controller
 	 * @param count the encoder count to reach
 	 */
@@ -89,7 +97,7 @@ public class IntakeSystem implements RobotSystem, Runnable{
 		armPID.getSetpoint();
 		isPIDEnabled = true;
 	}
-	
+
 	/**Sets the motors controlling the arms for the intake to speed
 	 * @param speed the speed to set the motors to
 	 */
@@ -97,56 +105,56 @@ public class IntakeSystem implements RobotSystem, Runnable{
 		leftArm.set(speed);
 		rightArm.set(speed);
 	}
-	
+
 	/**Sets the motor controlling the right arm for the intake to speed
 	 * @param speed the speed to set the motor to
 	 */
 	public void moveRightArm(double speed){
 		rightArm.set(speed);
 	}
-	
+
 	/**Sets the motor controlling the left arm for the intake to speed
 	 * @param speed the speed to set the motor to
 	 */
 	public void moveLeftArm(double speed){
 		leftArm.set(speed);
 	}
-	
+
 	/**Sets the motor controlling the lever for shooting to speed
 	 * @param speed the speed to set the motor to
 	 */
 	public void spinLever(double speed){
 		lever.set(speed);
 	}
-	
+
 	/**
 	 * @returns true if the left limit switch is pressed
 	 */
 	public boolean isLeftSwitchClosed() {
 		return leftLimitSwitch.get();
 	}
-	
+
 	/**
 	 * @returns true if the right limit switch is pressed
 	 */
 	public boolean isRightSwitchClosed() {
 		return rightLimitSwitch.get();
 	}
-	
+
 	/**
 	 * @returns true if the right or left limit switch is closed
 	 */
 	public boolean isSwitchClosed() {
 		return isRightSwitchClosed() || isLeftSwitchClosed();
 	}
-	
+
 	/**
 	 * @returns true if shooting limit switch is pressed 
 	 */
 	public boolean isShootingSwitchClosed(){
 		return shootingLimitSwitch.get();
 	}
-	
+
 	/**Sets the input of the system to newInput
 	 * @param newInput the new input to set to
 	 */
@@ -181,7 +189,7 @@ public class IntakeSystem implements RobotSystem, Runnable{
 	protected void setStartTime(long startTime) {
 		this.startTime = startTime;
 	}
-	
+
 	/**
 	 * @return the armPID
 	 */
@@ -202,6 +210,9 @@ public class IntakeSystem implements RobotSystem, Runnable{
 	public void accessSmartDashboard() {
 		SmartDashboard.putNumber("Intake Arm Rate: ", encoder.getRate());
 		SmartDashboard.putNumber("Intake Arm Distance: ", encoder.getDistance());
+		SmartDashboard.putBoolean("Ignore Arm Limit Switch: ", ignoreIntakeArmLimitSwitch);
+		SmartDashboard.putBoolean("Disable Speed Multiplier: ", disableSpeedMultiplier);
+		SmartDashboard.putBoolean("Manual Control of Intake Arms: ", manualIntakeControl);
 	}
 
 	/* (non-Javadoc)
@@ -209,6 +220,7 @@ public class IntakeSystem implements RobotSystem, Runnable{
 	 */
 	@Override
 	public void run() {
+		toggleIntakeArmLimitSwitch();
 		if(input.intake() && !input.outake()) {
 			spinWheels(1);
 		} else if(input.outake() && !input.intake()) {
@@ -217,17 +229,14 @@ public class IntakeSystem implements RobotSystem, Runnable{
 			spinWheels(0);
 		}
 
-		if (input.manualIntakeControl()){
-			moveRightArm(input.rightIntake());
-			moveLeftArm(input.leftIntake());
-		} else {
+		if(!manualIntakeArmControl()) {
 			double intakeArmSpeed = input.moveIntake();
 			if(input.toggleSpeed() && !prevSpeedToggle)
 				disableSpeedMultiplier = !disableSpeedMultiplier;
 			if(!disableSpeedMultiplier) {
 				intakeArmSpeed *= ARM_SPEED;
 			}
-			if(isSwitchClosed() && intakeArmSpeed < 0 && !input.ignoreIntakeLimitSwitch()) {
+			if(isSwitchClosed() && intakeArmSpeed < 0 && !ignoreIntakeArmLimitSwitch) {
 				intakeArmSpeed = 0;
 			}
 			moveArms(intakeArmSpeed);
@@ -249,20 +258,42 @@ public class IntakeSystem implements RobotSystem, Runnable{
 			shoot();
 		}
 		prevSpeedToggle = input.toggleSpeed();
+
 		accessSmartDashboard();
 	}
-	
+
+	/**
+	 * toggles the state of ignoring the intake arm limit switch
+	 */
+	public void toggleIntakeArmLimitSwitch() {
+		if(input.toggleIntakeLimitSwitch() && !prevIntakeLimitSwitchToggle) {
+			ignoreIntakeArmLimitSwitch = !ignoreIntakeArmLimitSwitch;
+		}
+		prevIntakeLimitSwitchToggle = input.toggleIntakeLimitSwitch();
+	}
+
+	/**Manually controls separate intake arms
+	 * @return true if the intake arms were controlled separately, false if otherwise
+	 */
+	public boolean manualIntakeArmControl() {
+		if(input.manualIntakeControl() && !prevIntakeControlToggle) {
+			manualIntakeControl = !manualIntakeControl;
+		}
+		prevIntakeControlToggle = input.manualIntakeControl();
+		if(manualIntakeControl) {
+			moveRightArm(input.leftIntake());
+			moveLeftArm(input.leftIntake());
+			return true;
+		}
+		return false;
+	}
 	/**
 	 * Moves the lever forward for 250 ms, back for 233 ms, and stops if it hits the limit switch
 	 */
 	public void shoot(){
-		if(!shooting){
-			shooting = true;
-			startTime = System.currentTimeMillis();
-		}
 		if(System.currentTimeMillis()-startTime < FORWARD_LEVER_TIME){ // if the time that has passed since the lever has started rotating is less than the constant
 			spinLever(1.0);
-		} else if(isShootingSwitchClosed()) {
+		} else if(isShootingSwitchClosed() && !ignoreIntakeArmLimitSwitch) {
 			shooting = false;
 			spinLever(0);
 		} else if(System.currentTimeMillis()-startTime >= FORWARD_LEVER_TIME && System.currentTimeMillis() - startTime < FORWARD_LEVER_TIME + BACKWARDS_LEVER_TIME){ // if the time that has passed since the lever has started rotating is more than or equal to the constant
@@ -272,21 +303,21 @@ public class IntakeSystem implements RobotSystem, Runnable{
 			shooting = false;
 		}
 	}
-	
+
 	/**Sets whether or not the intake system should undergo the timed shoot
 	 * @param shoot the boolean value to set shooting to
 	 */
 	public void setShoot(boolean shoot) {
 		shooting = shoot;
 	}
-	
+
 	/**
 	 * @return if the ioshooter is undergoing a timed shoot
 	 */
 	public boolean isShooting() {
 		return shooting;
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.impact2585.lib2585.Destroyable#destroy()
 	 */
@@ -296,17 +327,17 @@ public class IntakeSystem implements RobotSystem, Runnable{
 			SensorBase motor = (SensorBase) wheels;
 			motor.free();
 		}
-		
+
 		if(lever instanceof SensorBase) {
 			SensorBase motor = (SensorBase) lever;
 			motor.free();
 		}
-		
+
 		if(leftArm instanceof SensorBase) {
 			SensorBase motor = (SensorBase) leftArm;
 			motor.free();
 		}
-		
+
 		if(rightArm instanceof SensorBase) {
 			SensorBase motor = (SensorBase) rightArm;
 			motor.free();
@@ -317,13 +348,13 @@ public class IntakeSystem implements RobotSystem, Runnable{
 		encoder.free();
 		armPID.getPIDController().free();
 	}
-	
+
 	/**
 	 * allows methods inside abstract class PIDSubsystem to be used to move arms 
 	 *
 	 */
 	public class IntakePID extends PIDSubsystem{
-		
+
 		/**
 		 * @param p proportional constant
 		 * @param i integral constant
@@ -340,7 +371,7 @@ public class IntakeSystem implements RobotSystem, Runnable{
 		protected double returnPIDInput(){
 			return encoder.get();
 		}
-		
+
 		/* (non-Javadoc)
 		 * @see edu.wpi.first.wpilibj.command.PIDSubsystem#usePIDOutput(double)
 		 */
