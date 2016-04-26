@@ -102,8 +102,8 @@ public class IntakeSystem implements RobotSystem, Runnable{
 	 * @param speed the speed to set the motors to
 	 */
 	public void moveArms(double speed) {
-		leftArm.set(speed);
-		rightArm.set(speed);
+		moveLeftArm(speed);
+		moveRightArm(speed);
 	}
 
 	/**Sets the motor controlling the right arm for the intake to speed
