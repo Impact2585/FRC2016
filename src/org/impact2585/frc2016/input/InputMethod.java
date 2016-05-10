@@ -67,11 +67,11 @@ public abstract class InputMethod {
 	 * @returns the value to move the shoulder part of the arm system
 	 */
 	public double moveBottomArm() {
-		if(bottomArmBackwardValue() > 0 && bottomArmForwardValue() == 0 && reversibleBottomArmValue() == 0) {
-			return -bottomArmBackwardValue();
-		} else if(bottomArmBackwardValue() == 0 && bottomArmForwardValue() > 0 && reversibleBottomArmValue() == 0) {
-			return bottomArmForwardValue();
-		} else if(bottomArmBackwardValue() == 0 && bottomArmForwardValue() == 0 && reversibleBottomArmValue() != 0) {
+		if(bottomArmTowardBot() > 0 && bottomArmAwayFromBot() == 0 && reversibleBottomArmValue() == 0) {
+			return -bottomArmTowardBot();
+		} else if(bottomArmTowardBot() == 0 && bottomArmAwayFromBot() > 0 && reversibleBottomArmValue() == 0) {
+			return bottomArmAwayFromBot();
+		} else if(bottomArmTowardBot() == 0 && bottomArmAwayFromBot() == 0 && reversibleBottomArmValue() != 0) {
 			return reversibleBottomArmValue();
 		} else {
 			return 0;
@@ -81,14 +81,14 @@ public abstract class InputMethod {
 	/**
 	 * @returns how far the bottom arm should move forward
 	 */
-	public double bottomArmForwardValue() {
+	public double bottomArmAwayFromBot() {
 		return 0;
 	}
 
 	/**
 	 * @returns how far the back arm should move backwards
 	 */
-	public double bottomArmBackwardValue() {
+	public double bottomArmTowardBot() {
 		return 0;
 	}
 
