@@ -180,7 +180,7 @@ public class InputMethodTest {
 		 * @see org.impact2585.frc2016.input.InputMethod#bottomArmForwardValue()
 		 */
 		@Override
-		public double bottomArmForwardValue() {
+		public double bottomArmAwayFromBot() {
 			return bottomArmForward;
 		}
 
@@ -188,7 +188,7 @@ public class InputMethodTest {
 		 * @see org.impact2585.frc2016.input.InputMethod#bottomArmBackwardValue()
 		 */
 		@Override
-		public double bottomArmBackwardValue() {
+		public double bottomArmTowardBot() {
 			return bottomArmBackwards;
 		}
 

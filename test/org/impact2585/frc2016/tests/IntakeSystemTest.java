@@ -53,75 +53,75 @@ public class IntakeSystemTest {
 	@Test
 	public void test() {
 		ioshooter.run();
-		Assert.assertTrue(wheelSpeed == 0 && leftIntakeSpeed == 0);
+		Assert.assertTrue(wheelSpeed == 0 && sameIntakeSpeed(0));
 		
 		//tests if the shooter shoots
 		moveWheelsForward = true;
 		ioshooter.run();
-		Assert.assertTrue(wheelSpeed == 1 && leftIntakeSpeed == 0);
+		Assert.assertTrue(wheelSpeed == 1 && sameIntakeSpeed(0));
 		
 		//tests if the intake intakes
 		moveWheelsBackwards = true;
 		moveWheelsForward = false;
 		ioshooter.run();
-		Assert.assertTrue(wheelSpeed == -1 && leftIntakeSpeed == 0);
+		Assert.assertTrue(wheelSpeed == -1 && sameIntakeSpeed(0));
 		
 		//tests if the wheels don't move if the person pushes both buttons
 		moveWheelsForward = true;
 		ioshooter.run();
-		Assert.assertTrue(wheelSpeed == 0 && leftIntakeSpeed == 0);
+		Assert.assertTrue(wheelSpeed == 0 && sameIntakeSpeed(0));
 		
 		//tests if the arms move forward
 		moveWheelsForward = false;
 		moveWheelsBackwards = false;
 		digitalMoveArmAwayFromBot = true;
 		ioshooter.run();
-		Assert.assertTrue(wheelSpeed == 0 && leftIntakeSpeed == IntakeSystem.ARM_SPEED);
+		Assert.assertTrue(wheelSpeed == 0 && sameIntakeSpeed(IntakeSystem.ARM_SPEED));
 		
 		//tests if the arms move backwards
 		digitalMoveArmAwayFromBot = false;
 		digitalMoveArmTowardsBot = true;
 		ioshooter.run();
-		Assert.assertTrue(wheelSpeed == 0 && leftIntakeSpeed == -IntakeSystem.ARM_SPEED);
+		Assert.assertTrue(wheelSpeed == 0 && sameIntakeSpeed(-IntakeSystem.ARM_SPEED));
 		
 		//tests if the arms don't move if the users pushes both buttons
 		digitalMoveArmAwayFromBot = true;
 		ioshooter.run();
-		Assert.assertTrue(wheelSpeed == 0 && leftIntakeSpeed == 0);
+		Assert.assertTrue(wheelSpeed == 0 && sameIntakeSpeed(0));
 		
 		//tests if the arms and the wheels can both move simultaneously
 		digitalMoveArmTowardsBot = false;
 		moveWheelsForward = true;
 		ioshooter.run();
-		Assert.assertTrue(wheelSpeed == 1 && leftIntakeSpeed == IntakeSystem.ARM_SPEED);
+		Assert.assertTrue(wheelSpeed == 1 && sameIntakeSpeed(IntakeSystem.ARM_SPEED));
 		
 		//turn off the digital input
 		moveWheelsForward = false;
 		digitalMoveArmAwayFromBot = false;
 		ioshooter.run();
-		Assert.assertTrue(wheelSpeed == 0 && leftIntakeSpeed == 0);
+		Assert.assertTrue(wheelSpeed == 0 && sameIntakeSpeed(0));
 		
 		//tests if arms move away with the analog input
 		analogMoveArmAwayFromBot = 1;
 		ioshooter.run();
-		Assert.assertTrue(wheelSpeed == 0 && leftIntakeSpeed == IntakeSystem.ARM_SPEED);
+		Assert.assertTrue(wheelSpeed == 0 && sameIntakeSpeed(IntakeSystem.ARM_SPEED));
 		
 		//tests if the arms move towards the bot with analog input
 		analogMoveArmTowardsBot = 1;
 		analogMoveArmAwayFromBot = 0;
 		ioshooter.run();
-		Assert.assertTrue(wheelSpeed == 0 && leftIntakeSpeed == -IntakeSystem.ARM_SPEED);
+		Assert.assertTrue(wheelSpeed == 0 && sameIntakeSpeed(-IntakeSystem.ARM_SPEED));
 		
 		//tests if the arms don't move at all if Harris pushes both triggers
 		analogMoveArmAwayFromBot = 1;
 		ioshooter.run();
-		Assert.assertTrue(wheelSpeed == 0 && leftIntakeSpeed == 0);
+		Assert.assertTrue(wheelSpeed == 0 && sameIntakeSpeed(0));
 		
 		//tests if the input arms can move while the input runs
 		analogMoveArmAwayFromBot = 0;
 		moveWheelsForward = true;
 		ioshooter.run();
-		Assert.assertTrue(wheelSpeed == 1 && leftIntakeSpeed == -IntakeSystem.ARM_SPEED);
+		Assert.assertTrue(wheelSpeed == 1 && sameIntakeSpeed(-IntakeSystem.ARM_SPEED));
 		
 		//tests if the arm speed multiplier can be toggled off
 		toggleArmSpeed = true;
@@ -138,7 +138,7 @@ public class IntakeSystemTest {
 		ioshooter.run();
 		toggleArmSpeed = true;
 		ioshooter.run();
-		Assert.assertTrue(wheelSpeed == 0 && leftIntakeSpeed == -IntakeSystem.ARM_SPEED);
+		Assert.assertTrue(wheelSpeed == 0 && sameIntakeSpeed(-IntakeSystem.ARM_SPEED));
 		
 		//tests if the arm speed multiplier toggles off for digital input
 		toggleArmSpeed = false;
@@ -155,7 +155,7 @@ public class IntakeSystemTest {
 		digitalMoveArmTowardsBot = false;
 		analogMoveArmTowardsBot = 1;
 		ioshooter.run();
-		Assert.assertTrue(wheelSpeed == 0 && leftIntakeSpeed == 0);
+		Assert.assertTrue(wheelSpeed == 0 && sameIntakeSpeed(0));
 		
 		//tests if the intake arms do not move forward if only one limit switch is pressed and if the intake still works
 		moveWheelsForward = true;
@@ -163,7 +163,7 @@ public class IntakeSystemTest {
 		analogMoveArmAwayFromBot = 0;
 		analogMoveArmTowardsBot = 1;
 		ioshooter.run();
-		Assert.assertTrue(wheelSpeed == 1 && leftIntakeSpeed == 0);
+		Assert.assertTrue(wheelSpeed == 1 && sameIntakeSpeed(0));
 		
 		//tests if the arms can move back if the limit switch is pressed
 		analogMoveArmAwayFromBot = 1;
@@ -245,8 +245,7 @@ public class IntakeSystemTest {
 		rightArmSpeed = 0.5;
 		leftArmSpeed = 0.5;
 		ioshooter.run();
-		Assert.assertTrue(rightIntakeSpeed == 0.5);
-		Assert.assertTrue(leftIntakeSpeed == 0.5);
+		Assert.assertTrue(sameIntakeSpeed(0.5));
 		
 		//tests if manual intake stays on
 		toggleManualIntake = true;
@@ -255,17 +254,23 @@ public class IntakeSystemTest {
 		digitalMoveArmAwayFromBot = false;
 		digitalMoveArmTowardsBot = false;
 		ioshooter.run();
-		Assert.assertTrue(rightIntakeSpeed == 0.5);
-		Assert.assertTrue(leftIntakeSpeed == 0.5);
+		Assert.assertTrue(sameIntakeSpeed(0.5));
 		toggleManualIntake = false;
 		ioshooter.run();
-		Assert.assertTrue(rightIntakeSpeed == 0.5);
-		Assert.assertTrue(leftIntakeSpeed == 0.5);
+		Assert.assertTrue(sameIntakeSpeed(0.5));
 		
 		//tests if manual intake can be toggled off
 		toggleManualIntake = true;
 		ioshooter.run();
-		Assert.assertTrue(leftIntakeSpeed == 0);
+		Assert.assertTrue(sameIntakeSpeed(0));
+	}
+	
+	/**
+	 * @param should the speed that both intake arms should be at
+	 * @return true if both intake speeds equal should, false otherwise
+	 */
+	public boolean sameIntakeSpeed(double should){
+		return leftIntakeSpeed == should && rightIntakeSpeed == should;
 	}
 	
 	/**

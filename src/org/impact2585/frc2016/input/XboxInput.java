@@ -69,7 +69,7 @@ public class XboxInput extends InputMethod{
 	 * @see org.impact2585.frc2016.input.InputMethod#bottomArmForwardValue()
 	 */
 	@Override
-	public double bottomArmForwardValue() {
+	public double bottomArmAwayFromBot() {
 		return controller.getRawAxis(XboxConstants.RIGHT_TRIGGER);
 	}
 
@@ -77,7 +77,7 @@ public class XboxInput extends InputMethod{
 	 * @see org.impact2585.frc2016.input.InputMethod#bottomArmBackwardValue()
 	 */
 	@Override
-	public double bottomArmBackwardValue() {
+	public double bottomArmTowardBot() {
 		return controller.getRawAxis(XboxConstants.LEFT_TRIGGER);
 	}
 
