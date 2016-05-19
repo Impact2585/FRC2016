@@ -4,6 +4,7 @@ package org.impact2585.frc2016.tests;
 
 import org.impact2585.frc2016.input.InputMethod;
 import org.impact2585.frc2016.systems.IntakeSystem;
+import org.impact2585.lib2585.Toggler;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -45,6 +46,11 @@ public class IntakeSystemTest {
 		ioshooter = new TestIntakeSystem();
 		input = new InputTest();
 		ioshooter.setInput(input);
+		
+		// initialize togglers
+		ioshooter.setIntakeControlToggler(new Toggler(false));
+		ioshooter.setLimitSwitchToggler(new Toggler(false));
+		ioshooter.setSpeedToggler(new Toggler(false));
 	}
 
 	/**
@@ -301,8 +307,6 @@ public class IntakeSystemTest {
 		public boolean isRightSwitchClosed() {
 			return isRightLimitSwitchClosed;
 		}
-		
-		
 
 		/* (non-Javadoc)
 		 * @see org.impact2585.frc2016.systems.IntakeSystem#isShootingSwitchClosed()
@@ -358,6 +362,33 @@ public class IntakeSystemTest {
 		public void moveLeftArm(double speed) {
 			leftIntakeSpeed = speed;
 		}
+
+		/* (non-Javadoc)
+		 * @see org.impact2585.frc2016.systems.IntakeSystem#setSpeedToggler(org.impact2585.lib2585.Toggler)
+		 */
+		@Override
+		protected synchronized void setSpeedToggler(Toggler speedToggler) {
+			super.setSpeedToggler(speedToggler);
+		}
+
+		/* (non-Javadoc)
+		 * @see org.impact2585.frc2016.systems.IntakeSystem#setLimitSwitchToggler(org.impact2585.lib2585.Toggler)
+		 */
+		@Override
+		protected synchronized void setLimitSwitchToggler(
+				Toggler limitSwitchToggler) {
+			super.setLimitSwitchToggler(limitSwitchToggler);
+		}
+
+		/* (non-Javadoc)
+		 * @see org.impact2585.frc2016.systems.IntakeSystem#setIntakeControlToggler(org.impact2585.lib2585.Toggler)
+		 */
+		@Override
+		protected synchronized void setIntakeControlToggler(
+				Toggler intakeControlToggler) {
+			super.setIntakeControlToggler(intakeControlToggler);
+		}
+		
 		
 	}	
 	

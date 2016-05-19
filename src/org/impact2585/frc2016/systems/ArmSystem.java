@@ -3,6 +3,7 @@ package org.impact2585.frc2016.systems;
 import org.impact2585.frc2016.Environment;
 import org.impact2585.frc2016.RobotMap;
 import org.impact2585.frc2016.input.InputMethod;
+import org.impact2585.lib2585.Toggler;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
@@ -23,7 +24,7 @@ public class ArmSystem implements RobotSystem, Runnable{
 	public static final double BOTTOM_ARM_SPEED = 0.5;
 	public static final double TOP_ARM_SPEED = 0.7;
 	private boolean disableSpeedMultiplier;
-	private boolean prevSpeedToggle;
+	private Toggler toggler;
 	private DigitalInput limitswitch;
 	private Encoder topArmEncoder;
 	private Encoder bottomArmEncoder;
@@ -42,7 +43,7 @@ public class ArmSystem implements RobotSystem, Runnable{
 		topArmEncoder = new Encoder(RobotMap.TOP_ARM_ENCODER_PORT_A, RobotMap.TOP_ARM_ENCODER_PORT_B);
 		bottomArmEncoder = new Encoder(RobotMap.BOTTOM_ARM_ENCODER_PORT_A, RobotMap.BOTTOM_ARM_ENCODER_PORT_B);
 		disableSpeedMultiplier = false;
-		prevSpeedToggle = false;
+		toggler = new Toggler(disableSpeedMultiplier);
 	}
 	
 	
@@ -106,6 +107,22 @@ public class ArmSystem implements RobotSystem, Runnable{
 	}
 
 	/**
+	 * @return the toggler
+	 */
+	protected synchronized Toggler getToggler() {
+		return toggler;
+	}
+
+
+	/**
+	 * @param toggler the toggler to set
+	 */
+	protected synchronized void setToggler(Toggler toggler) {
+		this.toggler = toggler;
+	}
+
+
+	/**
 	 * Puts the encoders' rate and distance to the SmartDashboard
 	 */
 	public void accessSmartDasboard() {
@@ -122,8 +139,7 @@ public class ArmSystem implements RobotSystem, Runnable{
 	public void run() {
 		double toparmspeed = input.moveTopArm();
 		double bottomarmspeed = input.moveBottomArm();
-		if (input.toggleSpeed() && !prevSpeedToggle)
-			disableSpeedMultiplier = !disableSpeedMultiplier;
+		disableSpeedMultiplier = toggler.toggle(input.toggleSpeed());
 		
 		if(!disableSpeedMultiplier) {
 			toparmspeed *= TOP_ARM_SPEED;
@@ -136,7 +152,6 @@ public class ArmSystem implements RobotSystem, Runnable{
 		
 		setTopArmSpeed(toparmspeed);
 		setBottomArmSpeed(bottomarmspeed);
-		prevSpeedToggle = input.toggleSpeed();
 		accessSmartDasboard();
 	}
 	

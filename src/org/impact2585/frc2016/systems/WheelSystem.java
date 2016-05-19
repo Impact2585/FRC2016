@@ -3,6 +3,7 @@ package org.impact2585.frc2016.systems;
 import org.impact2585.frc2016.Environment;
 import org.impact2585.frc2016.RobotMap;
 import org.impact2585.frc2016.input.InputMethod;
+import org.impact2585.lib2585.Toggler;
 
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.Victor;
@@ -21,8 +22,8 @@ public class WheelSystem implements RobotSystem, Runnable{
 	public static final double RAMP = 0.6;
 	public static final double ROTATION_EXPONENT = 1;
 	private InputMethod input;
+	private Toggler toggler;
 	private boolean inverted;
-	private boolean prevInvert;
 	private double desiredRampForward;
 	private PIDSubsystem forwardPIDSystem;
 	private double timeDrivingForward;
@@ -38,8 +39,6 @@ public class WheelSystem implements RobotSystem, Runnable{
 		drivetrain = new RobotDrive(new Victor(RobotMap.FRONT_LEFT_DRIVE), new Victor(RobotMap.REAR_LEFT_DRIVE), new Victor(RobotMap.FRONT_RIGHT_DRIVE), new Victor(RobotMap.REAR_RIGHT_DRIVE));
 		input = environ.getInput();
 		accel = environ.getAccelerometerSystem();
-		inverted = false;
-		prevInvert = false;
 		forwardPIDSystem = new PIDSubsystem(0.45, 0.375, 0) {
 
 			/* (non-Javadoc)
@@ -65,6 +64,8 @@ public class WheelSystem implements RobotSystem, Runnable{
 			protected void initDefaultCommand() {
 				
 			}};
+			
+			toggler = new Toggler(inverted);
 	}
 	
 	/**Sets new input method
@@ -95,6 +96,20 @@ public class WheelSystem implements RobotSystem, Runnable{
 		return input;
 	}
 	
+
+	/**
+	 * @return the toggler
+	 */
+	protected synchronized Toggler getToggler() {
+		return toggler;
+	}
+
+	/**
+	 * @param toggler the toggler to set
+	 */
+	protected synchronized void setToggler(Toggler toggler) {
+		this.toggler = toggler;
+	}
 
 	/**drives forward for distance
 	 * @param distance the distance in meters to drive
@@ -158,12 +173,9 @@ public class WheelSystem implements RobotSystem, Runnable{
 	public void run() {
 		
 		//inverts if the input tells it to and the previous invert command was false
-		if(input.invert() && !prevInvert) {
-			inverted ^= true;
-		}
+		inverted = toggler.toggle(input.invert());
 		
-		//sets prevInvert, desiredRampForward, and rotationValue to the input values
-		prevInvert = input.invert();
+		//sets desiredRampForward, and rotationValue to the input values
 		desiredRampForward = input.forwardMovement();
 		rotationValue = input.rotationValue();
 		

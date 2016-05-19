@@ -2,6 +2,7 @@ package org.impact2585.frc2016.tests;
 
 import org.impact2585.frc2016.input.InputMethod;
 import org.impact2585.frc2016.systems.ArmSystem;
+import org.impact2585.lib2585.Toggler;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -42,6 +43,7 @@ public class ArmSystemTest {
 		toggleSpeed = false;
 		isSwitchClosed = false;
 		ignoreArmLimitSwitch = false;
+		arm.setToggler(new Toggler(false));
 	}
 
 	/**
@@ -239,6 +241,14 @@ public class ArmSystemTest {
 		 */
 		@Override
 		public void accessSmartDasboard() {
+		}
+
+		/* (non-Javadoc)
+		 * @see org.impact2585.frc2016.systems.ArmSystem#setToggler(org.impact2585.lib2585.Toggler)
+		 */
+		@Override
+		protected synchronized void setToggler(Toggler toggler) {
+			super.setToggler(toggler);
 		}
 
 	}
