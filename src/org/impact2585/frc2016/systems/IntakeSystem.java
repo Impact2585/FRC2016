@@ -3,6 +3,7 @@ package org.impact2585.frc2016.systems;
 import org.impact2585.frc2016.Environment;
 import org.impact2585.frc2016.RobotMap;
 import org.impact2585.frc2016.input.InputMethod;
+import org.impact2585.lib2585.Toggler;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
@@ -32,11 +33,11 @@ public class IntakeSystem implements RobotSystem, Runnable{
 	public static final long FORWARD_LEVER_TIME = 250;
 	public static final long BACKWARDS_LEVER_TIME = 233;
 	private boolean disableSpeedMultiplier;
-	private boolean prevSpeedToggle;
-	private boolean prevIntakeLimitSwitchToggle;
+	private Toggler speedToggler;
+	private Toggler limitSwitchToggler;
+	private Toggler intakeControlToggler;
 	private boolean ignoreIntakeArmLimitSwitch;
 	private boolean manualIntakeControl;
-	private boolean prevIntakeControlToggle;
 	private boolean shooting;
 	private Encoder encoder;
 	private long startTime;
@@ -56,14 +57,15 @@ public class IntakeSystem implements RobotSystem, Runnable{
 		leftLimitSwitch = new DigitalInput(RobotMap.LEFT_INTAKE_LIMIT_SWITCH);
 		rightLimitSwitch = new DigitalInput(RobotMap.RIGHT_INTAKE_LIMIT_SWITCH);
 		disableSpeedMultiplier = true;
-		prevSpeedToggle = false;
 		isPIDEnabled = false;
 		armPID = new IntakePID(.3, .1, 0);
 		setEncoder(new Encoder(RobotMap.INTAKE_ARM_ENCODER_PORT_A, RobotMap.INTAKE_ARM_ENCODER_PORT_B));
-		prevIntakeLimitSwitchToggle = false;
 		ignoreIntakeArmLimitSwitch = true;
 		manualIntakeControl = false;
-		prevIntakeControlToggle = false;
+		// initialize togglers
+		speedToggler = new Toggler(disableSpeedMultiplier);
+		limitSwitchToggler = new Toggler(ignoreIntakeArmLimitSwitch);
+		intakeControlToggler = new Toggler(manualIntakeControl);
 	}
 
 	/**Sets the motors controlling the wheels on intake to speed
@@ -205,6 +207,48 @@ public class IntakeSystem implements RobotSystem, Runnable{
 	}
 
 	/**
+	 * @return the speedToggler
+	 */
+	protected synchronized Toggler getSpeedToggler() {
+		return speedToggler;
+	}
+
+	/**
+	 * @param speedToggler the speedToggler to set
+	 */
+	protected synchronized void setSpeedToggler(Toggler speedToggler) {
+		this.speedToggler = speedToggler;
+	}
+
+	/**
+	 * @return the limitSwitchToggler
+	 */
+	protected synchronized Toggler getLimitSwitchToggler() {
+		return limitSwitchToggler;
+	}
+
+	/**
+	 * @param limitSwitchToggler the limitSwitchToggler to set
+	 */
+	protected synchronized void setLimitSwitchToggler(Toggler limitSwitchToggler) {
+		this.limitSwitchToggler = limitSwitchToggler;
+	}
+
+	/**
+	 * @return the intakeControlToggler
+	 */
+	protected synchronized Toggler getIntakeControlToggler() {
+		return intakeControlToggler;
+	}
+
+	/**
+	 * @param intakeControlToggler the intakeControlToggler to set
+	 */
+	protected synchronized void setIntakeControlToggler(Toggler intakeControlToggler) {
+		this.intakeControlToggler = intakeControlToggler;
+	}
+
+	/**
 	 * Puts the encoder's rate and distance to the SmartDashboard
 	 */
 	public void accessSmartDashboard() {
@@ -220,7 +264,8 @@ public class IntakeSystem implements RobotSystem, Runnable{
 	 */
 	@Override
 	public void run() {
-		toggleIntakeArmLimitSwitch();
+		ignoreIntakeArmLimitSwitch = limitSwitchToggler.toggle(input.toggleIntakeLimitSwitch());
+		
 		if(input.intake() && !input.outake()) {
 			spinWheels(1);
 		} else if(input.outake() && !input.intake()) {
@@ -231,8 +276,7 @@ public class IntakeSystem implements RobotSystem, Runnable{
 
 		if(!manualIntakeArmControl()) {
 			double intakeArmSpeed = input.moveIntake();
-			if(input.toggleSpeed() && !prevSpeedToggle)
-				disableSpeedMultiplier = !disableSpeedMultiplier;
+			disableSpeedMultiplier = speedToggler.toggle(input.toggleSpeed());
 			if(!disableSpeedMultiplier) {
 				intakeArmSpeed *= ARM_SPEED;
 			}
@@ -257,29 +301,15 @@ public class IntakeSystem implements RobotSystem, Runnable{
 		if(shooting) {
 			shoot();
 		}
-		prevSpeedToggle = input.toggleSpeed();
 
 		accessSmartDashboard();
-	}
-
-	/**
-	 * toggles the state of ignoring the intake arm limit switch
-	 */
-	public void toggleIntakeArmLimitSwitch() {
-		if(input.toggleIntakeLimitSwitch() && !prevIntakeLimitSwitchToggle) {
-			ignoreIntakeArmLimitSwitch = !ignoreIntakeArmLimitSwitch;
-		}
-		prevIntakeLimitSwitchToggle = input.toggleIntakeLimitSwitch();
 	}
 
 	/**Manually controls separate intake arms
 	 * @return true if the intake arms were controlled separately, false if otherwise
 	 */
 	public boolean manualIntakeArmControl() {
-		if(input.manualIntakeControl() && !prevIntakeControlToggle) {
-			manualIntakeControl = !manualIntakeControl;
-		}
-		prevIntakeControlToggle = input.manualIntakeControl();
+		manualIntakeControl = intakeControlToggler.toggle(input.manualIntakeControl());
 		if(manualIntakeControl) {
 			moveRightArm(input.leftIntake());
 			moveLeftArm(input.leftIntake());

@@ -2,6 +2,7 @@ package org.impact2585.frc2016.tests;
 
 import org.impact2585.frc2016.input.InputMethod;
 import org.impact2585.frc2016.systems.WheelSystem;
+import org.impact2585.lib2585.Toggler;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -40,6 +41,7 @@ public class WheelSystemTest {
 		driveForward = 0;
 		rotate = 0;
 		invert = false;
+		drivetrain.setToggler(new Toggler(invert));
 	}
 
 	/**
@@ -188,6 +190,14 @@ public class WheelSystemTest {
 		public void setCurrentRampForward(double rampForward) {
 			super.setCurrentRampForward(rampForward);
 			currentRampForward = rampForward;
+		}
+
+		/* (non-Javadoc)
+		 * @see org.impact2585.frc2016.systems.WheelSystem#setToggler(org.impact2585.lib2585.Toggler)
+		 */
+		@Override
+		protected synchronized void setToggler(Toggler toggler) {
+			super.setToggler(toggler);
 		}
 
 	}
