@@ -20,9 +20,12 @@ public class WheelSystem implements RobotSystem, Runnable{
 	private double rotationValue;
 	public static final double DEADZONE = 0.15;
 	public static final double RAMP = 0.6;
-	public static final double ROTATION_EXPONENT = 1;
+	public static final double PRIMARY_ROTATION_EXPONENT = 1;
+	public static final double SECONDARY_ROTATION_EXPONENT = 0.5;
+	private boolean usePrimaryRotationExponent = true;
 	private InputMethod input;
 	private Toggler toggler;
+	private Toggler rotationExponentToggler;
 	private boolean inverted;
 	private double desiredRampForward;
 	private PIDSubsystem forwardPIDSystem;
@@ -66,6 +69,7 @@ public class WheelSystem implements RobotSystem, Runnable{
 			}};
 			
 			toggler = new Toggler(inverted);
+			rotationExponentToggler = new Toggler(usePrimaryRotationExponent);
 	}
 	
 	/**Sets new input method
@@ -100,15 +104,29 @@ public class WheelSystem implements RobotSystem, Runnable{
 	/**
 	 * @return the toggler
 	 */
-	protected synchronized Toggler getToggler() {
+	protected synchronized Toggler getInverterToggler() {
 		return toggler;
 	}
 
 	/**
 	 * @param toggler the toggler to set
 	 */
-	protected synchronized void setToggler(Toggler toggler) {
+	protected synchronized void setInverterToggler(Toggler toggler) {
 		this.toggler = toggler;
+	}
+	
+	/**
+	 * @return the toggler
+	 */
+	protected synchronized Toggler getRotationExponentTogger() {
+		return rotationExponentToggler;
+	}
+
+	/**
+	 * @param toggler the toggler to set
+	 */
+	protected synchronized void setRotationExponentToggler(Toggler toggler) {
+		this.rotationExponentToggler = toggler;
 	}
 
 	/**drives forward for distance
@@ -175,6 +193,9 @@ public class WheelSystem implements RobotSystem, Runnable{
 		//inverts if the input tells it to and the previous invert command was false
 		inverted = toggler.toggle(input.invert());
 		
+		//toggles the rotation exponent if the input tells it to and the previous invert command was false
+		usePrimaryRotationExponent = rotationExponentToggler.toggle(input.toggleRotationExponent());
+		
 		//sets desiredRampForward, and rotationValue to the input values
 		desiredRampForward = input.forwardMovement();
 		rotationValue = input.rotationValue();
@@ -186,12 +207,7 @@ public class WheelSystem implements RobotSystem, Runnable{
 			rotationValue = 0;
 		
 		// adjusts sensitivity of the turns 
-		if(rotationValue > 0)
-			rotationValue = Math.pow(rotationValue, ROTATION_EXPONENT);
-		if(rotationValue < 0){
-			rotationValue = -1*Math.abs(Math.pow(rotationValue, ROTATION_EXPONENT));
-		}
-		
+		rotationValue = Math.signum(rotationValue) * Math.abs(Math.pow(rotationValue, usePrimaryRotationExponent ? PRIMARY_ROTATION_EXPONENT : SECONDARY_ROTATION_EXPONENT));
 		
 		if(desiredRampForward != 0) {
 			

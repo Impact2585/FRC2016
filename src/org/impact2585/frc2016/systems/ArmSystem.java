@@ -139,7 +139,7 @@ public class ArmSystem implements RobotSystem, Runnable{
 	public void run() {
 		double toparmspeed = input.moveTopArm();
 		double bottomarmspeed = input.moveBottomArm();
-		disableSpeedMultiplier = toggler.toggle(input.toggleSpeed());
+		disableSpeedMultiplier = toggler.toggle(input.toggleArmSpeed());
 		
 		if(!disableSpeedMultiplier) {
 			toparmspeed *= TOP_ARM_SPEED;

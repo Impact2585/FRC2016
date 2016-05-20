@@ -445,11 +445,12 @@ public class IntakeSystemTest {
 			return analogMoveArmAwayFromBot;
 		}
 
+		
 		/* (non-Javadoc)
-		 * @see org.impact2585.frc2016.input.InputMethod#toggleSpeed()
+		 * @see org.impact2585.frc2016.input.InputMethod#toggleIntakeArmSpeed()
 		 */
 		@Override
-		public boolean toggleSpeed() {
+		public boolean toggleIntakeArmSpeed() {
 			return toggleArmSpeed;
 		}
 		

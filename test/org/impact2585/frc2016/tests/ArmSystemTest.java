@@ -310,7 +310,7 @@ public class ArmSystemTest {
 		 * @see org.impact2585.frc2016.input.InputMethod#toggleSpeed()
 		 */
 		@Override
-		public boolean toggleSpeed() {
+		public boolean toggleArmSpeed() {
 			return toggleSpeed;
 		}
 		
