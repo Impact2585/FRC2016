@@ -117,7 +117,7 @@ public class PartnerXboxInput extends InputMethod {
 	 * @see org.impact2585.frc2016.input.InputMethod#toggleSpeed()
 	 */
 	@Override
-	public boolean toggleSpeed() {
+	public boolean toggleArmSpeed() {
 		return controller2.getRawButton(XboxConstants.START_BUTTON);
 	}
 
@@ -193,6 +193,22 @@ public class PartnerXboxInput extends InputMethod {
 	@Override
 	public double leftIntake() {
 		return controller2.getRawAxis(XboxConstants.LEFT_TRIGGER);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.impact2585.frc2016.input.InputMethod#toggleIntakeArmSpeed()
+	 */
+	@Override
+	public boolean toggleIntakeArmSpeed() {
+		return controller2.getRawButton(XboxConstants.LEFT_JOYSTICK_BUTTON);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.impact2585.frc2016.input.InputMethod#toggleRotationExponent()
+	 */
+	@Override
+	public boolean toggleRotationExponent() {
+		return controller1.getRawButton(XboxConstants.X_BUTTON);
 	}
 
 

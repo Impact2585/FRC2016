@@ -276,7 +276,7 @@ public class IntakeSystem implements RobotSystem, Runnable{
 
 		if(!manualIntakeArmControl()) {
 			double intakeArmSpeed = input.moveIntake();
-			disableSpeedMultiplier = speedToggler.toggle(input.toggleSpeed());
+			disableSpeedMultiplier = speedToggler.toggle(input.toggleIntakeArmSpeed());
 			if(!disableSpeedMultiplier) {
 				intakeArmSpeed *= ARM_SPEED;
 			}

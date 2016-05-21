@@ -117,8 +117,16 @@ public class XboxInput extends InputMethod{
 	 * @see org.impact2585.frc2016.input.InputMethod#toggleSpeed()
 	 */
 	@Override
-	public boolean toggleSpeed() {
+	public boolean toggleArmSpeed() {
 		return controller.getRawButton(XboxConstants.RIGHT_JOYSTICK_BUTTON);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.impact2585.frc2016.input.InputMethod#toggleRotationExponent()
+	 */
+	@Override
+	public boolean toggleRotationExponent() {
+		return controller.getRawButton(XboxConstants.BACK_BUTTON);
 	}
 	
 }

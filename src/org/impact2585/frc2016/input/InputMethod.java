@@ -116,7 +116,14 @@ public abstract class InputMethod {
 	/**
 	 * @returns true if the speed multiplier of the arms should be toggled on or off
 	 */
-	public boolean toggleSpeed() {
+	public boolean toggleArmSpeed() {
+		return false;
+	}
+	
+	/**
+	 * @return true if the speed multiplier for the intake arms should be toggled  on or off
+	 */
+	public boolean toggleIntakeArmSpeed() {
 		return false;
 	}
 
@@ -219,5 +226,12 @@ public abstract class InputMethod {
 	 */
 	public double leftIntake(){
 		return 0;
+	}
+	
+	/**
+	 * @return true if the rotation exponent for the drivetrain should be toggled
+	 */
+	public boolean toggleRotationExponent() {
+		return false;
 	}
 }
