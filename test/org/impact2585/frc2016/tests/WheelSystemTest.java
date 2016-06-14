@@ -2,6 +2,7 @@ package org.impact2585.frc2016.tests;
 
 import org.impact2585.frc2016.input.InputMethod;
 import org.impact2585.frc2016.systems.WheelSystem;
+import org.impact2585.lib2585.Drivetrain;
 import org.impact2585.lib2585.Toggler;
 import org.junit.Assert;
 import org.junit.Before;
@@ -28,6 +29,8 @@ public class WheelSystemTest {
 		double realRampForward = (currentRampForward - driveForward) * WheelSystem.RAMP + currentRampForward;
 		if (driveForward < WheelSystem.DEADZONE && driveForward > -WheelSystem.DEADZONE)
 			realRampForward = 0;
+		else if(Math.abs(currentRampForward - driveForward) <= 0.01)
+			realRampForward = driveForward;
 		return -realRampForward;
 	}
 
@@ -37,6 +40,19 @@ public class WheelSystemTest {
 	@Before
 	public void setUp() {
 		drivetrain = new TestWheelSystem();
+		//invert the rotate value, since the motors are inverted on the actual drivetrain
+		drivetrain.setDrivetrain(new Drivetrain(WheelSystem.DEADZONE, WheelSystem.RAMP, WheelSystem.PRIMARY_ROTATION_EXPONENT, WheelSystem.SECONDARY_ROTATION_EXPONENT, true, null) {
+
+			/* (non-Javadoc)
+			 * @see org.impact2585.lib2585.Drivetrain#arcadeDrive(double, double)
+			 */
+			@Override
+			public void arcadeDrive(double moveValue, double rotationValue) {
+				currentRampForward = moveValue;
+				rotate = rotationValue;
+			}
+			
+		});
 		input = new InputTest();
 		drivetrain.setInput(input);
 		currentRampForward = 0;
@@ -45,8 +61,8 @@ public class WheelSystemTest {
 		invert = false;
 		toggleRotationExponent = false;
 		usePrimaryRotationExponent = true;
-		drivetrain.setInverterToggler(new Toggler(invert));
-		drivetrain.setRotationExponentToggler(new Toggler(usePrimaryRotationExponent));
+		drivetrain.getDrivetrain().setInvertToggler(new Toggler(invert));
+		drivetrain.getDrivetrain().setRotationExponentToggler(new Toggler(usePrimaryRotationExponent));
 	}
 
 	/**
@@ -57,7 +73,6 @@ public class WheelSystemTest {
 
 		// tests if the robot isn't moving at the start
 		double ramp = rampForward();
-		ramp = rampForward();
 		drivetrain.run();
 		Assert.assertTrue(currentRampForward == 0 && rotate == 0);
 
@@ -72,7 +87,7 @@ public class WheelSystemTest {
 		rotate = .19;
 		ramp = rampForward();
 		drivetrain.run();
-		Assert.assertTrue(rotate == Math.pow(0.19, WheelSystem.PRIMARY_ROTATION_EXPONENT) && currentRampForward == 0);
+		Assert.assertTrue(rotate == -Math.pow(0.19, WheelSystem.PRIMARY_ROTATION_EXPONENT) && currentRampForward == 0);
 
 		// tests forward driving
 		rotate = .14;
@@ -87,7 +102,7 @@ public class WheelSystemTest {
 		driveForward = 0;
 		ramp = rampForward();
 		drivetrain.run();
-		Assert.assertTrue(currentRampForward == 0 && rotate == 1);
+		Assert.assertTrue(currentRampForward == 0 && rotate == -1);
 
 
 		// tests turning and driving simultaneously
@@ -96,7 +111,7 @@ public class WheelSystemTest {
 		drivetrain.setCurrentRampForward(0);
 		ramp = rampForward();
 		drivetrain.run();
-		Assert.assertTrue(currentRampForward == ramp && rotate == 1);
+		Assert.assertTrue(currentRampForward == ramp && rotate == -1);
 
 		// tests invert
 		invert = true;
@@ -104,7 +119,7 @@ public class WheelSystemTest {
 		driveForward = 0.5;
 		ramp = rampForward();
 		drivetrain.run();
-		Assert.assertTrue(currentRampForward == ramp && rotate == -1*Math.abs(Math.pow(-0.5, WheelSystem.PRIMARY_ROTATION_EXPONENT)));
+		Assert.assertTrue(currentRampForward == ramp && rotate == Math.abs(Math.pow(-0.5, WheelSystem.PRIMARY_ROTATION_EXPONENT)));
 			
 
 		// tests if it does not invert if the button is still pressed
@@ -115,7 +130,7 @@ public class WheelSystemTest {
 		ramp = rampForward();
 		drivetrain.setCurrentRampForward(-0.5);
 		drivetrain.run();
-		Assert.assertTrue(currentRampForward == ramp && rotate == -1*Math.abs(Math.pow(-0.5, WheelSystem.PRIMARY_ROTATION_EXPONENT)));
+		Assert.assertTrue(currentRampForward == ramp && rotate == Math.abs(Math.pow(-0.5, WheelSystem.PRIMARY_ROTATION_EXPONENT)));
 		
 		// tests if drivetrain continues to be inverted
 		invert = false;
@@ -125,7 +140,7 @@ public class WheelSystemTest {
 		ramp = rampForward();
 		drivetrain.setCurrentRampForward(-0.5);
 		drivetrain.run();
-		Assert.assertTrue(currentRampForward == ramp && rotate == -1*Math.abs(Math.pow(-0.5, WheelSystem.PRIMARY_ROTATION_EXPONENT)));
+		Assert.assertTrue(currentRampForward == ramp && rotate == Math.abs(Math.pow(-0.5, WheelSystem.PRIMARY_ROTATION_EXPONENT)));
 		
 		// tests if it inverts to the original position
 		invert = true;
@@ -135,7 +150,7 @@ public class WheelSystemTest {
 		ramp = rampForward();
 		drivetrain.setCurrentRampForward(0.5);
 		drivetrain.run();
-		Assert.assertTrue(currentRampForward == -ramp && rotate == Math.pow(0.7, WheelSystem.PRIMARY_ROTATION_EXPONENT));
+		Assert.assertTrue(currentRampForward == -ramp && rotate == -Math.pow(0.7, WheelSystem.PRIMARY_ROTATION_EXPONENT));
 
 		// see if movement and rotation go back to 0 again
 		rotate = driveForward = 0;
@@ -149,23 +164,23 @@ public class WheelSystemTest {
 		toggleRotationExponent = true;
 		rotate = 0.4;
 		drivetrain.run();
-		Assert.assertTrue(currentRampForward == ramp && rotate == Math.pow(0.4, WheelSystem.SECONDARY_ROTATION_EXPONENT));
+		Assert.assertTrue(currentRampForward == ramp && rotate == -Math.pow(0.4, WheelSystem.SECONDARY_ROTATION_EXPONENT));
 		
 		//test if the rotation exponent doesn't toggle if the toggle is pressed
 		toggleRotationExponent = true;
 		rotate = 0.4;
 		drivetrain.run();
-		Assert.assertTrue(currentRampForward == ramp && rotate == Math.pow(0.4, WheelSystem.SECONDARY_ROTATION_EXPONENT));
+		Assert.assertTrue(currentRampForward == ramp && rotate == -Math.pow(0.4, WheelSystem.SECONDARY_ROTATION_EXPONENT));
 		
 		//tests if the rotation exponent can be toggled off
 		toggleRotationExponent = false;
 		rotate = 0.5;
 		drivetrain.run();
-		Assert.assertTrue(currentRampForward == ramp && rotate == Math.pow(0.5, WheelSystem.SECONDARY_ROTATION_EXPONENT));
+		Assert.assertTrue(currentRampForward == ramp && rotate == -Math.pow(0.5, WheelSystem.SECONDARY_ROTATION_EXPONENT));
 		rotate = 0.3;
 		toggleRotationExponent = true;
 		drivetrain.run();
-		Assert.assertTrue(currentRampForward == ramp && rotate == Math.pow(0.3, WheelSystem.PRIMARY_ROTATION_EXPONENT));
+		Assert.assertTrue(currentRampForward == ramp && rotate == -Math.pow(0.3, WheelSystem.PRIMARY_ROTATION_EXPONENT));
 	}
 
 	/**
@@ -218,23 +233,6 @@ public class WheelSystemTest {
 			super.setCurrentRampForward(rampForward);
 			currentRampForward = rampForward;
 		}
-
-		/* (non-Javadoc)
-		 * @see org.impact2585.frc2016.systems.WheelSystem#setToggler(org.impact2585.lib2585.Toggler)
-		 */
-		@Override
-		protected synchronized void setInverterToggler(Toggler toggler) {
-			super.setInverterToggler(toggler);
-		}
-
-		/* (non-Javadoc)
-		 * @see org.impact2585.frc2016.systems.WheelSystem#setRotationExponentToggler(org.impact2585.lib2585.Toggler)
-		 */
-		@Override
-		protected synchronized void setRotationExponentToggler(Toggler toggler) {
-			super.setRotationExponentToggler(toggler);
-		}
-
 	}
 
 	/**

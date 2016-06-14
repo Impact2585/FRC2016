@@ -1,6 +1,7 @@
 package org.impact2585.frc2016.tests;
 
 import org.impact2585.frc2016.systems.AccelerometerSystem;
+import org.impact2585.lib2585.MPU6050;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,8 +23,7 @@ public class AccelerometerTest {
 		xAccel = 0;
 		yAccel = 0;
 		zAccel = 0;
-		accel = new TestAccelerometer();
-		accel.setSuccessfulConnection(true);
+		accel = new TestAccelerometer();		
 	}
 
 	/**
@@ -79,22 +79,6 @@ public class AccelerometerTest {
 	 */
 	private class TestAccelerometer extends AccelerometerSystem {
 
-		
-		/* (non-Javadoc)
-		 * @see org.impact2585.frc2016.systems.AccelerometerSystem#getRawValues()
-		 */
-		@Override
-		public void readRawValues() {
-		}
-
-		/* (non-Javadoc)
-		 * @see org.impact2585.frc2016.systems.AccelerometerSystem#getFIFOcount()
-		 */
-		@Override
-		public void updateFIFOcount() {
-			setCurrentFIFOCount(AccelerometerSystem.DMP_PACKET_SIZE);
-		}
-
 		/*
 		 * (non-Javadoc)
 		 * 
@@ -105,14 +89,6 @@ public class AccelerometerTest {
 		public void accessSmartDashboard() {
 		}
 
-		/* (non-Javadoc)
-		 * @see org.impact2585.frc2016.systems.AccelerometerSystem#setSuccessfulConnection(boolean)
-		 */
-		@Override
-		public void setSuccessfulConnection(boolean connect) {
-			super.setSuccessfulConnection(connect);
-		}
-
 		/*
 		 * (non-Javadoc)
 		 * 
@@ -121,6 +97,14 @@ public class AccelerometerTest {
 		@Override
 		public double getXAccel() {
 			return xAccel;
+		}
+
+		/* (non-Javadoc)
+		 * @see org.impact2585.frc2016.systems.AccelerometerSystem#update()
+		 */
+		@Override
+		public boolean update() {
+			return true;
 		}
 
 		/*

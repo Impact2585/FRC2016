@@ -3,6 +3,7 @@ package org.impact2585.frc2016.systems;
 import org.impact2585.frc2016.Environment;
 import org.impact2585.frc2016.RobotMap;
 import org.impact2585.frc2016.input.InputMethod;
+import org.impact2585.lib2585.Drivetrain;
 import org.impact2585.lib2585.Toggler;
 
 import edu.wpi.first.wpilibj.RobotDrive;
@@ -15,23 +16,17 @@ import edu.wpi.first.wpilibj.command.PIDSubsystem;
  */
 public class WheelSystem implements RobotSystem, Runnable{
 	
-	private RobotDrive drivetrain;
-	private double currentRampForward;
-	private double rotationValue;
+	private RobotDrive drivebase;
 	public static final double DEADZONE = 0.15;
 	public static final double RAMP = 0.6;
 	public static final double PRIMARY_ROTATION_EXPONENT = 1;
 	public static final double SECONDARY_ROTATION_EXPONENT = 0.5;
-	private boolean usePrimaryRotationExponent = true;
 	private InputMethod input;
-	private Toggler toggler;
-	private Toggler rotationExponentToggler;
-	private boolean inverted;
-	private double desiredRampForward;
 	private PIDSubsystem forwardPIDSystem;
 	private double timeDrivingForward;
 	private double distanceDrivenForward;
 	private AccelerometerSystem accel;
+	private Drivetrain drivetrain;
 	
 
 	/* (non-Javadoc)
@@ -39,7 +34,8 @@ public class WheelSystem implements RobotSystem, Runnable{
 	 */
 	@Override
 	public void init(Environment environ) {
-		drivetrain = new RobotDrive(new Victor(RobotMap.FRONT_LEFT_DRIVE), new Victor(RobotMap.REAR_LEFT_DRIVE), new Victor(RobotMap.FRONT_RIGHT_DRIVE), new Victor(RobotMap.REAR_RIGHT_DRIVE));
+		drivebase = new RobotDrive(new Victor(RobotMap.FRONT_LEFT_DRIVE), new Victor(RobotMap.REAR_LEFT_DRIVE), new Victor(RobotMap.FRONT_RIGHT_DRIVE), new Victor(RobotMap.REAR_RIGHT_DRIVE));
+		drivetrain = new Drivetrain(DEADZONE, RAMP, PRIMARY_ROTATION_EXPONENT, SECONDARY_ROTATION_EXPONENT, true, drivebase);
 		input = environ.getInput();
 		accel = environ.getAccelerometerSystem();
 		forwardPIDSystem = new PIDSubsystem(0.45, 0.375, 0) {
@@ -67,9 +63,6 @@ public class WheelSystem implements RobotSystem, Runnable{
 			protected void initDefaultCommand() {
 				
 			}};
-			
-			toggler = new Toggler(inverted);
-			rotationExponentToggler = new Toggler(usePrimaryRotationExponent);
 	}
 	
 	/**Sets new input method
@@ -99,35 +92,6 @@ public class WheelSystem implements RobotSystem, Runnable{
 	public InputMethod getInput() {
 		return input;
 	}
-	
-
-	/**
-	 * @return the toggler
-	 */
-	protected synchronized Toggler getInverterToggler() {
-		return toggler;
-	}
-
-	/**
-	 * @param toggler the toggler to set
-	 */
-	protected synchronized void setInverterToggler(Toggler toggler) {
-		this.toggler = toggler;
-	}
-	
-	/**
-	 * @return the toggler
-	 */
-	protected synchronized Toggler getRotationExponentTogger() {
-		return rotationExponentToggler;
-	}
-
-	/**
-	 * @param toggler the toggler to set
-	 */
-	protected synchronized void setRotationExponentToggler(Toggler toggler) {
-		this.rotationExponentToggler = toggler;
-	}
 
 	/**drives forward for distance
 	 * @param distance the distance in meters to drive
@@ -148,7 +112,7 @@ public class WheelSystem implements RobotSystem, Runnable{
 			distanceDrivenForward = 0;
 			forwardPIDSystem.getPIDController().reset();
 			forwardPIDSystem.disable();
-			return true;
+			return true; 
 		}
 		
 	}
@@ -181,7 +145,21 @@ public class WheelSystem implements RobotSystem, Runnable{
 	 * @param rotate how much the robot will turn
 	 */
 	public void drive(double driveForward, double rotate) {
-		drivetrain.arcadeDrive(driveForward, -rotate);
+		drivebase.arcadeDrive(driveForward, -rotate);
+	}
+	
+	/**
+	 * @return the drivetrain
+	 */
+	public Drivetrain getDrivetrain() {
+		return drivetrain;
+	}
+
+	/**
+	 * @param drivetrain the drivetrain to set
+	 */
+	public void setDrivetrain(Drivetrain drivetrain) {
+		this.drivetrain = drivetrain;
 	}
 
 	/* (non-Javadoc)
@@ -189,70 +167,21 @@ public class WheelSystem implements RobotSystem, Runnable{
 	 */
 	@Override
 	public void run() {
-		
-		//inverts if the input tells it to and the previous invert command was false
-		inverted = toggler.toggle(input.invert());
-		
-		//toggles the rotation exponent if the input tells it to and the previous invert command was false
-		usePrimaryRotationExponent = rotationExponentToggler.toggle(input.toggleRotationExponent());
-		
-		//sets desiredRampForward, and rotationValue to the input values
-		desiredRampForward = input.forwardMovement();
-		rotationValue = input.rotationValue();
-		
-		//sets desiredRampForward and rotationValue to zero if they are below deadzone
-		if(desiredRampForward < DEADZONE && desiredRampForward > -DEADZONE)
-			desiredRampForward = 0;
-		if(rotationValue < DEADZONE && rotationValue > -DEADZONE)
-			rotationValue = 0;
-		
-		// adjusts sensitivity of the turns 
-		rotationValue = Math.signum(rotationValue) * Math.abs(Math.pow(rotationValue, usePrimaryRotationExponent ? PRIMARY_ROTATION_EXPONENT : SECONDARY_ROTATION_EXPONENT));
-		
-		if(desiredRampForward != 0) {
-			
-		
-			//inverts the desiredRampForward if the wheel system should be inverted
-			if(inverted) {
-				desiredRampForward *= -1;
-			}
-		
-			//ramps up or down depending on the difference between the desired ramp and the current ramp multiplied by the RAMP constant
-			if(currentRampForward < desiredRampForward) {
-				double inc = desiredRampForward - currentRampForward;
-			
-				if(inc <= 0.01)
-					currentRampForward = desiredRampForward;
-				else
-					currentRampForward += (inc*RAMP);
-			} else if (currentRampForward > desiredRampForward) {
-				double decr = currentRampForward - desiredRampForward;
-			
-				if(decr > 0.01)
-					currentRampForward -= (decr*RAMP);
-				else
-					currentRampForward = desiredRampForward;
-			}
-		}else
-			//sets currentRampForward immediately to 0 if the input is 0
-			currentRampForward = 0;
-		
-		drive(currentRampForward, rotationValue);
-
+		drivetrain.arcadeControl(input.forwardMovement(), input.rotationValue(), input.invert(), input.toggleRotationExponent());
 	}
 	
 	/**
 	 * @returns the current ramp forward
 	 */
 	public double getCurrentRampForward() {
-		return currentRampForward;
+		return drivetrain.getCurrentRampForward();
 	}
 	
 	/**sets the current ramp forward to rampForward
 	 * @param rampForward the distance the robot is moving forward
 	 */
 	public void setCurrentRampForward(double rampForward) {
-		currentRampForward = rampForward;
+		drivetrain.setCurrentRampForward(rampForward);
 	}
 	
 	/* (non-Javadoc)
@@ -260,7 +189,7 @@ public class WheelSystem implements RobotSystem, Runnable{
 	 */
 	@Override
 	public void destroy() {
-		drivetrain.free();
+		drivebase.free();
 		forwardPIDSystem.disable();
 		forwardPIDSystem.getPIDController().free();
 	}
