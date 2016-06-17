@@ -1,7 +1,6 @@
 package org.impact2585.frc2016.tests;
 
 import org.impact2585.frc2016.systems.AccelerometerSystem;
-import org.impact2585.lib2585.MPU6050;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

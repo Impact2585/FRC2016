@@ -4,7 +4,6 @@ import org.impact2585.frc2016.Environment;
 import org.impact2585.frc2016.RobotMap;
 import org.impact2585.frc2016.input.InputMethod;
 import org.impact2585.lib2585.Drivetrain;
-import org.impact2585.lib2585.Toggler;
 
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.Victor;

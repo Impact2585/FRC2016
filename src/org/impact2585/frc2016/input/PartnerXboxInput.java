@@ -46,7 +46,7 @@ public class PartnerXboxInput extends InputMethod {
 	 */
 	@Override
 	public boolean invert() {
-		return controller1.getRawButton(XboxConstants.Y_BUTTON);
+		return controller1.getRawButton(XboxConstants.RIGHT_JOYSTICK_BUTTON);
 	}
 
 	/*
@@ -89,26 +89,6 @@ public class PartnerXboxInput extends InputMethod {
 	@Override
 	public double analogMoveIntakeAwayFromBot() {
 		return controller2.getRawAxis(XboxConstants.LEFT_TRIGGER);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.impact2585.frc2016.input.InputMethod#analogTopArm()
-	 */
-	@Override
-	public double analogTopArm() {
-		return -controller2.getRawAxis(XboxConstants.RIGHT_Y_AXIS);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.impact2585.frc2016.input.InputMethod#reversibleBottomArmValue()
-	 */
-	@Override
-	public double reversibleBottomArmValue() {
-		return -controller2.getRawAxis(XboxConstants.LEFT_Y_AXIS);
 	}
 
 	/*
@@ -208,6 +188,38 @@ public class PartnerXboxInput extends InputMethod {
 	 */
 	@Override
 	public boolean toggleRotationExponent() {
+		return controller1.getRawButton(XboxConstants.START_BUTTON);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.impact2585.frc2016.input.InputMethod#unwindWinch()
+	 */
+	@Override
+	public boolean unwindWinch() {
+		return controller1.getRawButton(XboxConstants.Y_BUTTON);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.impact2585.frc2016.input.InputMethod#windWinch()
+	 */
+	@Override
+	public boolean windWinch() {
+		return controller1.getRawButton(XboxConstants.BACK_BUTTON);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.impact2585.frc2016.input.InputMethod#liftUp()
+	 */
+	@Override
+	public boolean liftUp() {
+		return controller1.getRawButton(XboxConstants.A_BUTTON);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.impact2585.frc2016.input.InputMethod#liftDown()
+	 */
+	@Override
+	public boolean liftDown() {
 		return controller1.getRawButton(XboxConstants.X_BUTTON);
 	}
 

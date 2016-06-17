@@ -18,7 +18,10 @@ public interface RobotMap {
 	public static final int INTAKE_RIGHT_ARM = 0;
 	
 	public static final int LEVER = 8;
-
+	
+	public static final int WINCH = 5;
+	public static final int LIFT = 7;
+	
 	public static final int SHOOTING_LIMIT_SWITCH = 0;
 	public static final int ARM_LIMIT_SWITCH = 1;
 	public static final int LEFT_INTAKE_LIMIT_SWITCH = 2;
