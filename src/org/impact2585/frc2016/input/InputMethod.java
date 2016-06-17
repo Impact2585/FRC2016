@@ -234,4 +234,32 @@ public abstract class InputMethod {
 	public boolean toggleRotationExponent() {
 		return false;
 	}
+	
+	/**
+	 * @return true if the winch should unwind
+	 */
+	public boolean unwindWinch() {
+		return false;
+	}
+	
+	/**
+	 * @return true if the winch should wind up
+	 */
+	public boolean windWinch() {
+		return false;
+	}
+	
+	/**
+	 * @return true if the lift should move up
+	 */
+	public boolean liftUp() {
+		return false;
+	}
+	
+	/**
+	 * @return true if the lift should move down
+	 */
+	public boolean liftDown() {
+		return false;
+	}
 }

@@ -3,9 +3,9 @@ package org.impact2585.frc2016;
 import org.impact2585.frc2016.input.InputMethod;
 import org.impact2585.frc2016.input.PartnerXboxInput;
 import org.impact2585.frc2016.systems.AccelerometerSystem;
-import org.impact2585.frc2016.systems.ArmSystem;
 import org.impact2585.frc2016.systems.ElectricalSystem;
 import org.impact2585.frc2016.systems.IntakeSystem;
+import org.impact2585.frc2016.systems.LiftSystem;
 import org.impact2585.frc2016.systems.WheelSystem;
 import org.impact2585.lib2585.RobotEnvironment;
 
@@ -17,10 +17,10 @@ public class Environment extends RobotEnvironment{
 	private static final long serialVersionUID = -8268997098529757749L;
 	private InputMethod input;
 	private WheelSystem wheels;
-	private ArmSystem arm;
 	private IntakeSystem intake;
 	private ElectricalSystem panel;
 	private AccelerometerSystem accelerometer;
+	private LiftSystem lift;
 	
 	/**
 	 * Just a default constructor
@@ -37,14 +37,14 @@ public class Environment extends RobotEnvironment{
 		wheels = new WheelSystem();
 		input = new PartnerXboxInput();
 		wheels.init(this);
-		arm = new ArmSystem();
-		arm.init(this);
 		intake = new IntakeSystem();
 		intake.init(this);
 		panel = new ElectricalSystem();
 		panel.init(this);
 		accelerometer = new AccelerometerSystem();
 		accelerometer.init(this);
+		lift = new LiftSystem();
+		lift.init(this);
 	}
 	
 	/**
@@ -67,21 +67,7 @@ public class Environment extends RobotEnvironment{
 	public void setWheelSystem(WheelSystem wheelsystem) {
 		wheels = wheelsystem;
 	}
-	
-	/**
-	 * @returns the arm system
-	 */
-	public ArmSystem getArmSystem() {
-		return arm;
-	}
-	
-	/**Sets arm system
-	 * @param armsystem the arm
-	 */
-	public void setArmSystem(ArmSystem armsystem) {
-		arm = armsystem;
-	}
-	
+		
 	/**
 	 * @returns the intake system
 	 */
@@ -124,16 +110,30 @@ public class Environment extends RobotEnvironment{
 		accelerometer = accel;
 	}
 
+	/**
+	 * @return the lift system
+	 */
+	public LiftSystem getLiftSystem() {
+		return lift;
+	}
+
+	/**
+	 * @param lift the lift system to set
+	 */
+	public void setLiftSystem(LiftSystem lift) {
+		this.lift = lift;
+	}
+
 	/* (non-Javadoc)
 	 * @see org.impact2585.lib2585.Destroyable#destroy()
 	 */
 	@Override
 	public void destroy() {
 		wheels.destroy();
-		arm.destroy();
 		intake.destroy();
 		panel.destroy();
 		accelerometer.destroy();
+		lift.destroy();
 	}
 	
 }

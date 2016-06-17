@@ -50,38 +50,6 @@ public class XboxInput extends InputMethod{
 	}
 
 	/* (non-Javadoc)
-	 * @see org.impact2585.frc2016.input.InputMethod#topArmForward()
-	 */
-	@Override
-	public boolean digitalTopArmForward() {
-		return controller.getRawButton(XboxConstants.RIGHT_BUMPER);
-	}
-
-	/* (non-Javadoc)
-	 * @see org.impact2585.frc2016.input.InputMethod#digitalTopArmBackward()
-	 */
-	@Override
-	public boolean digitalTopArmBackward() {
-		return controller.getRawButton(XboxConstants.LEFT_BUMPER);
-	}
-
-	/* (non-Javadoc)
-	 * @see org.impact2585.frc2016.input.InputMethod#bottomArmForwardValue()
-	 */
-	@Override
-	public double bottomArmAwayFromBot() {
-		return controller.getRawAxis(XboxConstants.RIGHT_TRIGGER);
-	}
-
-	/* (non-Javadoc)
-	 * @see org.impact2585.frc2016.input.InputMethod#bottomArmBackwardValue()
-	 */
-	@Override
-	public double bottomArmTowardBot() {
-		return controller.getRawAxis(XboxConstants.LEFT_TRIGGER);
-	}
-
-	/* (non-Javadoc)
 	 * @see org.impact2585.frc2016.input.InputMethod#outake()
 	 */
 	@Override
@@ -98,19 +66,19 @@ public class XboxInput extends InputMethod{
 	}
 
 	/* (non-Javadoc)
-	 * @see org.impact2585.frc2016.input.InputMethod#digitalMoveIntakeTowardsBot()
+	 * @see org.impact2585.frc2016.input.InputMethod#analogMoveIntakeTowardsBot()
 	 */
 	@Override
-	public boolean digitalMoveIntakeTowardsBot() {
-		return controller.getRawButton(XboxConstants.Y_BUTTON);
+	public double analogMoveIntakeTowardsBot() {
+		return controller.getRawAxis(XboxConstants.RIGHT_TRIGGER);
 	}
 
 	/* (non-Javadoc)
-	 * @see org.impact2585.frc2016.input.InputMethod#digitalMoveIntakeAwayFromBot()
+	 * @see org.impact2585.frc2016.input.InputMethod#analogMoveIntakeAwayFromBot()
 	 */
 	@Override
-	public boolean digitalMoveIntakeAwayFromBot() {
-		return controller.getRawButton(XboxConstants.B_BUTTON);
+	public double analogMoveIntakeAwayFromBot() {
+		return controller.getRawAxis(XboxConstants.LEFT_TRIGGER);
 	}
 
 	/* (non-Javadoc)
@@ -128,5 +96,36 @@ public class XboxInput extends InputMethod{
 	public boolean toggleRotationExponent() {
 		return controller.getRawButton(XboxConstants.BACK_BUTTON);
 	}
-	
+
+	/* (non-Javadoc)
+	 * @see org.impact2585.frc2016.input.InputMethod#unwindWinch()
+	 */
+	@Override
+	public boolean unwindWinch() {
+		return controller.getRawButton(XboxConstants.RIGHT_BUMPER);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.impact2585.frc2016.input.InputMethod#windWinch()
+	 */
+	@Override
+	public boolean windWinch() {
+		return controller.getRawButton(XboxConstants.LEFT_BUMPER);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.impact2585.frc2016.input.InputMethod#liftUp()
+	 */
+	@Override
+	public boolean liftUp() {
+		return controller.getRawButton(XboxConstants.Y_BUTTON);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.impact2585.frc2016.input.InputMethod#liftDown()
+	 */
+	@Override
+	public boolean liftDown() {
+		return controller.getRawButton(XboxConstants.B_BUTTON);
+	}
 }

@@ -42,11 +42,7 @@
 		<junit fork="yes" haltonfailure="yes" printsummary="withOutAndErr">
 			<batchtest>
 				<fileset dir="test/">
-					<include name="org/impact2585/frc2016/tests/WheelSystemTest.java"/>
-					<include name="org/impact2585/frc2016/tests/ArmSystemTest.java"/>
-					<include name="org/impact2585/frc2016/tests/IntakeSystemTest.java"/>
-					<include name="org/impact2585/frc2016/tests/InputMethodTest.java"/>
-					<include name="org/impact2585/frc2016/tests/AccelerometerTest.java"/>
+					<include name="**/*.java"/>
 				</fileset>
 			</batchtest>
 			<classpath refid="FRC2016.classpath"/>
