@@ -156,7 +156,7 @@ public class InputMethodTest {
 		 * @see org.impact2585.frc2016.input.InputMethod#analogTopArm()
 		 */
 		@Override
-		public double analogTopArm() {
+		protected double analogTopArm() {
 			return analogTopArm;
 		}
 
@@ -164,7 +164,7 @@ public class InputMethodTest {
 		 * @see org.impact2585.frc2016.input.InputMethod#digitalTopArmForward()
 		 */
 		@Override
-		public boolean digitalTopArmForward() {
+		protected boolean digitalTopArmForward() {
 			return digitalTopArmForward;
 		}
 
@@ -172,7 +172,7 @@ public class InputMethodTest {
 		 * @see org.impact2585.frc2016.input.InputMethod#digitalTopArmBackward()
 		 */
 		@Override
-		public boolean digitalTopArmBackward() {
+		protected boolean digitalTopArmBackward() {
 			return digitalTopArmBackward;
 		}
 
@@ -180,7 +180,7 @@ public class InputMethodTest {
 		 * @see org.impact2585.frc2016.input.InputMethod#bottomArmForwardValue()
 		 */
 		@Override
-		public double bottomArmAwayFromBot() {
+		protected double bottomArmAwayFromBot() {
 			return bottomArmForward;
 		}
 
@@ -188,7 +188,7 @@ public class InputMethodTest {
 		 * @see org.impact2585.frc2016.input.InputMethod#bottomArmBackwardValue()
 		 */
 		@Override
-		public double bottomArmTowardBot() {
+		protected double bottomArmTowardBot() {
 			return bottomArmBackwards;
 		}
 
@@ -196,7 +196,7 @@ public class InputMethodTest {
 		 * @see org.impact2585.frc2016.input.InputMethod#reversibleBottomArmValue()
 		 */
 		@Override
-		public double reversibleBottomArmValue() {
+		protected double reversibleBottomArmValue() {
 			return reversibleBottomArmValue;
 		}
 
@@ -220,7 +220,7 @@ public class InputMethodTest {
 		 * @see org.impact2585.frc2016.input.InputMethod#analogMoveIntakeTowardsBot()
 		 */
 		@Override
-		public double analogMoveIntakeTowardsBot() {
+		protected double analogMoveIntakeTowardsBot() {
 			return analogMoveIntakeTowardsBot;
 		}
 
@@ -228,7 +228,7 @@ public class InputMethodTest {
 		 * @see org.impact2585.frc2016.input.InputMethod#analogMoveIntakeAwayFromBot()
 		 */
 		@Override
-		public double analogMoveIntakeAwayFromBot() {
+		protected double analogMoveIntakeAwayFromBot() {
 			return analogMoveIntakeAwayFromBot;
 		}
 
@@ -236,7 +236,7 @@ public class InputMethodTest {
 		 * @see org.impact2585.frc2016.input.InputMethod#digitalMoveIntakeTowardsBot()
 		 */
 		@Override
-		public boolean digitalMoveIntakeTowardsBot() {
+		protected boolean digitalMoveIntakeTowardsBot() {
 			return digitalMoveIntakeTowardsBot;
 		}
 
@@ -244,7 +244,7 @@ public class InputMethodTest {
 		 * @see org.impact2585.frc2016.input.InputMethod#digitalMoveIntakeAwayFromBot()
 		 */
 		@Override
-		public boolean digitalMoveIntakeAwayFromBot() {
+		protected boolean digitalMoveIntakeAwayFromBot() {
 			return digitalMoveIntakeAwayFromBot;
 		}
 			

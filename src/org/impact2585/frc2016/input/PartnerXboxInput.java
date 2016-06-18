@@ -76,7 +76,7 @@ public class PartnerXboxInput extends InputMethod {
 	 * org.impact2585.frc2016.input.InputMethod#analogMoveIntakeTowardsBot()
 	 */
 	@Override
-	public double analogMoveIntakeTowardsBot() {
+	protected double analogMoveIntakeTowardsBot() {
 		return controller2.getRawAxis(XboxConstants.RIGHT_TRIGGER);
 	}
 
@@ -87,7 +87,7 @@ public class PartnerXboxInput extends InputMethod {
 	 * org.impact2585.frc2016.input.InputMethod#analogMoveIntakeAwayFromBot()
 	 */
 	@Override
-	public double analogMoveIntakeAwayFromBot() {
+	protected double analogMoveIntakeAwayFromBot() {
 		return controller2.getRawAxis(XboxConstants.LEFT_TRIGGER);
 	}
 
