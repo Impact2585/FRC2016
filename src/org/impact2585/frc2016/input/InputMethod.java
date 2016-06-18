@@ -31,35 +31,27 @@ public abstract class InputMethod {
 	 * @returns the value to move the wrist part of the arm system
 	 */
 	public double moveTopArm() {
-		if(digitalTopArmForward() && !digitalTopArmBackward() && analogTopArm() == 0) {
-			return 1;
-		} else if (!digitalTopArmForward() && digitalTopArmBackward() && analogTopArm() == 0) {
-			return -1; 
-		} else if (analogTopArm() != 0 && !digitalTopArmForward() && !digitalTopArmBackward()) {
-			return analogTopArm();
-		} else {
-			return 0;
-		}
+		return AnalogDigitalInputProcessor.processAnalogJoyStick(digitalTopArmForward(), digitalTopArmBackward(), analogTopArm());
 	}
 
 	/**
 	 * @returns the analog input for moving the top arm
 	 */
-	public double analogTopArm() {
+	protected double analogTopArm() {
 		return 0;
 	}
 
 	/**
 	 * @returns true if the top arm should rotate forward
 	 */
-	public boolean digitalTopArmForward() {
+	protected boolean digitalTopArmForward() {
 		return false;
 	}
 
 	/**
 	 * @returns true if the top arm should rotate backwards
 	 */
-	public boolean digitalTopArmBackward() {
+	protected boolean digitalTopArmBackward() {
 		return false;
 	}
 
@@ -67,35 +59,27 @@ public abstract class InputMethod {
 	 * @returns the value to move the shoulder part of the arm system
 	 */
 	public double moveBottomArm() {
-		if(bottomArmTowardBot() > 0 && bottomArmAwayFromBot() == 0 && reversibleBottomArmValue() == 0) {
-			return -bottomArmTowardBot();
-		} else if(bottomArmTowardBot() == 0 && bottomArmAwayFromBot() > 0 && reversibleBottomArmValue() == 0) {
-			return bottomArmAwayFromBot();
-		} else if(bottomArmTowardBot() == 0 && bottomArmAwayFromBot() == 0 && reversibleBottomArmValue() != 0) {
-			return reversibleBottomArmValue();
-		} else {
-			return 0;
-		}
+		return AnalogDigitalInputProcessor.processDoubleAnalog(bottomArmTowardBot(), bottomArmAwayFromBot(), reversibleBottomArmValue());
 	}
 
 	/**
 	 * @returns how far the bottom arm should move forward
 	 */
-	public double bottomArmAwayFromBot() {
+	protected double bottomArmAwayFromBot() {
 		return 0;
 	}
 
 	/**
 	 * @returns how far the back arm should move backwards
 	 */
-	public double bottomArmTowardBot() {
+	protected double bottomArmTowardBot() {
 		return 0;
 	}
 
 	/**
 	 * @returns the analog input for the back arm if we are using two controllers
 	 */
-	public double reversibleBottomArmValue() {
+	protected double reversibleBottomArmValue() {
 		return 0;
 	}
 
@@ -131,44 +115,34 @@ public abstract class InputMethod {
 	 * @returns 1 or -1 if the input is digital or returns the analog input if the input is analog
 	 */
 	public double moveIntake() {
-		if(digitalMoveIntakeAwayFromBot() && !digitalMoveIntakeTowardsBot()) {
-			return 1;
-		} else if (digitalMoveIntakeTowardsBot() && !digitalMoveIntakeAwayFromBot()) {
-			return -1; 
-		} else if((analogMoveIntakeAwayFromBot() > 0 && analogMoveIntakeTowardsBot() == 0)) {
-			return analogMoveIntakeAwayFromBot();
-		} else if (analogMoveIntakeTowardsBot() > 0 && analogMoveIntakeAwayFromBot() == 0) {
-			return -analogMoveIntakeTowardsBot();
-		} else {
-			return 0;
-		}
+		return AnalogDigitalInputProcessor.processAnalogTriggers(digitalMoveIntakeAwayFromBot(), digitalMoveIntakeTowardsBot(), analogMoveIntakeAwayFromBot(), analogMoveIntakeTowardsBot());
 	}
 
 	/**
 	 * @returns the distance to move the intake towards the bot if user is using analog input
 	 */
-	public double analogMoveIntakeTowardsBot() {
+	protected double analogMoveIntakeTowardsBot() {
 		return 0;
 	}
 
 	/**
 	 * @returns the distance to move intake's away from the bot if user is using analog input
 	 */
-	public double analogMoveIntakeAwayFromBot() {
+	protected double analogMoveIntakeAwayFromBot() {
 		return 0;
 	}
 
 	/**
 	 * @returns true if the intake's arms should move towards the bot
 	 */
-	public boolean digitalMoveIntakeTowardsBot() {
+	protected boolean digitalMoveIntakeTowardsBot() {
 		return false;
 	}
 
 	/**
 	 * @returns true if the intake's arms should move away from the bot
 	 */
-	public boolean digitalMoveIntakeAwayFromBot() {
+	protected boolean digitalMoveIntakeAwayFromBot() {
 		return false;
 	}
 	

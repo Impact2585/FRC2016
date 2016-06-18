@@ -262,7 +262,7 @@ public class ArmSystemTest {
 		 * @see org.impact2585.frc2016.input.InputMethod#digitalTopArmForward()
 		 */
 		@Override
-		public boolean digitalTopArmForward() {
+		protected boolean digitalTopArmForward() {
 			return digitalTopArmForward;
 		}
 
@@ -270,7 +270,7 @@ public class ArmSystemTest {
 		 * @see org.impact2585.frc2016.input.InputMethod#digitalTopArmBackward()
 		 */
 		@Override
-		public boolean digitalTopArmBackward() {
+		protected boolean digitalTopArmBackward() {
 			return digitalTopArmBackward;
 		}
 
@@ -278,7 +278,7 @@ public class ArmSystemTest {
 		 * @see org.impact2585.frc2016.input.InputMethod#backArmForwardValue()
 		 */
 		@Override
-		public double bottomArmAwayFromBot() {
+		protected double bottomArmAwayFromBot() {
 			return bottomArmForwardValue;
 		}
 
@@ -286,7 +286,7 @@ public class ArmSystemTest {
 		 * @see org.impact2585.frc2016.input.InputMethod#bottomArmBackwardValue()
 		 */
 		@Override
-		public double bottomArmTowardBot() {
+		protected double bottomArmTowardBot() {
 			return bottomArmBackwardValue;
 		}
 
@@ -294,7 +294,7 @@ public class ArmSystemTest {
 		 * @see org.impact2585.frc2016.input.InputMethod#analogTopArm()
 		 */
 		@Override
-		public double analogTopArm() {
+		protected double analogTopArm() {
 			return analogTopArmForward;
 		}
 
@@ -302,7 +302,7 @@ public class ArmSystemTest {
 		 * @see org.impact2585.frc2016.input.InputMethod#reversibleBottomArmValue()
 		 */
 		@Override
-		public double reversibleBottomArmValue() {
+		protected double reversibleBottomArmValue() {
 			return reversibleBottomArm;
 		}
 
@@ -314,6 +314,9 @@ public class ArmSystemTest {
 			return toggleSpeed;
 		}
 		
+		/* (non-Javadoc)
+		 * @see org.impact2585.frc2016.input.InputMethod#ignoreArmLimitSwitch()
+		 */
 		public boolean ignoreArmLimitSwitch(){
 			return ignoreArmLimitSwitch;
 		}
