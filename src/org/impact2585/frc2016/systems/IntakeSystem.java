@@ -50,9 +50,10 @@ public class IntakeSystem implements RobotSystem, Runnable{
 		input = environ.getInput();
 		wheels = new Talon(RobotMap.INTAKE_WHEEL);
 		leftArm = new Victor(RobotMap.INTAKE_LEFT_ARM);
-		rightArm = new Talon(RobotMap.INTAKE_RIGHT_ARM);
+		rightArm = new Victor(RobotMap.INTAKE_RIGHT_ARM);
 		rightArm.setInverted(true);
 		lever = new Victor(RobotMap.LEVER);
+		lever.setInverted(true);
 		shootingLimitSwitch = new DigitalInput(RobotMap.SHOOTING_LIMIT_SWITCH);
 		leftLimitSwitch = new DigitalInput(RobotMap.LEFT_INTAKE_LIMIT_SWITCH);
 		rightLimitSwitch = new DigitalInput(RobotMap.RIGHT_INTAKE_LIMIT_SWITCH);

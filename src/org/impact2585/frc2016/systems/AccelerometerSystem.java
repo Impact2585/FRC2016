@@ -22,14 +22,14 @@ public class AccelerometerSystem implements RobotSystem, Runnable{
 	private double xVelocity;
 	private double yVelocity;
 	private double zVelocity;
-
 	/* (non-Javadoc)
 	 * @see org.impact2585.frc2016.Initializable#init(org.impact2585.frc2016.Environment)
 	 */
 	@Override
 	public void init(Environment environ) {
+		
 		accelerometer = new MPU6050();
-		SmartDashboard.putBoolean("Connection Successful: ", false);
+		SmartDashboard.putBoolean("Connection Successful: ", accelerometer.isConnectionSuccessfull());
 		
 		prevTime = System.currentTimeMillis();
 

@@ -13,10 +13,7 @@ import org.junit.Test;
 public class LiftSystemTest {
 	private boolean windWinch;
 	private boolean unwindWinch;
-	private boolean liftUp;
-	private boolean liftDown;
 	private double winchSpeed;
-	private double liftSpeed;
 	private TestLiftSystem liftsystem;
 	private InputMethod input;
 	
@@ -36,29 +33,25 @@ public class LiftSystemTest {
 	@Test
 	public void test() {
 		
-		//tests to see if the winch winds and the system can lift
+		//tests to see if the winch winds
 		windWinch = true;
-		liftUp = true;
 		liftsystem.run();
-		Assert.assertTrue(winchSpeed == LiftSystem.SPEED_MULTIPLIER && liftSpeed == LiftSystem.SPEED_MULTIPLIER);
+		Assert.assertTrue(winchSpeed == LiftSystem.SPEED_MULTIPLIER);
 		
-		//test to see if the winch and lift motor won't run if Harris presses both input buttons
+		//test to see if the winch motor won't run if Harris presses both input buttons
 		unwindWinch = true;
-		liftDown = true;
 		liftsystem.run();
-		Assert.assertTrue(winchSpeed == 0 && liftSpeed == 0);
+		Assert.assertTrue(winchSpeed == 0);
 		
-		//test to see if the winch and lift motor can unwind and move down
+		//test to see if the winch motor can unwind and move down
 		windWinch = false;
-		liftUp = false;
 		liftsystem.run();
-		Assert.assertTrue(winchSpeed == -LiftSystem.SPEED_MULTIPLIER && liftSpeed == -LiftSystem.SPEED_MULTIPLIER);
+		Assert.assertTrue(winchSpeed == -LiftSystem.SPEED_MULTIPLIER);
 		
-		//test to see if the winch and lift motor can be set back to 0
+		//test to see if the winch can be set back to 0
 		unwindWinch = false;
-		liftDown = false;
 		liftsystem.run();
-		Assert.assertTrue(winchSpeed == 0 && liftSpeed == 0);
+		Assert.assertTrue(winchSpeed == 0);
 	}
 	
 	/**
@@ -73,14 +66,6 @@ public class LiftSystemTest {
 		public void setWinchMotorSpeed(double speed) {
 			winchSpeed = speed;
 		}
-
-		/* (non-Javadoc)
-		 * @see org.impact2585.frc2016.systems.LiftSystem#setLiftMotorSpeed(double)
-		 */
-		@Override
-		public void setLiftMotorSpeed(double speed) {
-			liftSpeed = speed;
-		}
 		
 	}
 	
@@ -88,22 +73,6 @@ public class LiftSystemTest {
 	 * testable input for the lift system
 	 */
 	private class InputTest extends InputMethod {
-
-		/* (non-Javadoc)
-		 * @see org.impact2585.frc2016.input.InputMethod#liftUp()
-		 */
-		@Override
-		public boolean liftUp() {
-			return liftUp;
-		}
-
-		/* (non-Javadoc)
-		 * @see org.impact2585.frc2016.input.InputMethod#liftDown()
-		 */
-		@Override
-		public boolean liftDown() {
-			return liftDown;
-		}
 
 		/* (non-Javadoc)
 		 * @see org.impact2585.frc2016.input.InputMethod#unwindWinch()
