@@ -222,18 +222,4 @@ public abstract class InputMethod {
 	public boolean windWinch() {
 		return false;
 	}
-	
-	/**
-	 * @return true if the lift should move up
-	 */
-	public boolean liftUp() {
-		return false;
-	}
-	
-	/**
-	 * @return true if the lift should move down
-	 */
-	public boolean liftDown() {
-		return false;
-	}
 }

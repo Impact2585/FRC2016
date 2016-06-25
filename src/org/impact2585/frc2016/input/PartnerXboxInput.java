@@ -69,11 +69,10 @@ public class PartnerXboxInput extends InputMethod {
 		return controller2.getRawButton(XboxConstants.RIGHT_BUMPER);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.impact2585.frc2016.input.InputMethod#analogMoveIntakeTowardsBot()
+
+	
+	/* (non-Javadoc)
+	 * @see org.impact2585.frc2016.input.InputMethod#analogMoveIntakeTowardsBot()
 	 */
 	@Override
 	protected double analogMoveIntakeTowardsBot() {
@@ -206,22 +205,5 @@ public class PartnerXboxInput extends InputMethod {
 	public boolean windWinch() {
 		return controller1.getRawButton(XboxConstants.BACK_BUTTON);
 	}
-
-	/* (non-Javadoc)
-	 * @see org.impact2585.frc2016.input.InputMethod#liftUp()
-	 */
-	@Override
-	public boolean liftUp() {
-		return controller1.getRawButton(XboxConstants.A_BUTTON);
-	}
-
-	/* (non-Javadoc)
-	 * @see org.impact2585.frc2016.input.InputMethod#liftDown()
-	 */
-	@Override
-	public boolean liftDown() {
-		return controller1.getRawButton(XboxConstants.X_BUTTON);
-	}
-
 
 }
