@@ -35,7 +35,7 @@ public class WheelSystem implements RobotSystem, Runnable{
 	@Override
 	public void init(Environment environ) {
 		drivebase = new RobotDrive(new Victor(RobotMap.FRONT_LEFT_DRIVE), new Spark(RobotMap.REAR_LEFT_DRIVE), new Victor(RobotMap.FRONT_RIGHT_DRIVE), new Spark(RobotMap.REAR_RIGHT_DRIVE));
-		drivetrain = new Drivetrain(DEADZONE, RAMP, PRIMARY_ROTATION_EXPONENT, SECONDARY_ROTATION_EXPONENT, false, drivebase);
+		drivetrain = new Drivetrain(DEADZONE, RAMP, PRIMARY_ROTATION_EXPONENT, SECONDARY_ROTATION_EXPONENT, true, drivebase);
 		input = environ.getInput();
 		accel = environ.getAccelerometerSystem();
 		forwardPIDSystem = new PIDSubsystem(0.45, 0.375, 0) {
