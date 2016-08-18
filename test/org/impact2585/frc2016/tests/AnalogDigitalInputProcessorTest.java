@@ -23,15 +23,21 @@ public class AnalogDigitalInputProcessorTest {
 		
 		//test basic digital input for digitalAndJoystickInput and digitalAndAnalogJoystickInput
 		button1 = true;
-		Assert.assertTrue(digitalAndJoystickInput() == 1 && digitalAndAnalogTriggerInput() == 1 && analogJoystickAndTriggerInput() == 0);
+		Assert.assertTrue(digitalAndJoystickInput() == 1);
+		Assert.assertTrue(digitalAndAnalogTriggerInput() == 1);
+		Assert.assertTrue(analogJoystickAndTriggerInput() == 0);
 		
 		//test to see if the the processor returns 0 if both digital inputs are true
 		button2 = true;
-		Assert.assertTrue(digitalAndAnalogTriggerInput() == 0 && digitalAndJoystickInput() == 0 && analogJoystickAndTriggerInput() == 0);
+		Assert.assertTrue(digitalAndAnalogTriggerInput() == 0);
+		Assert.assertTrue(digitalAndJoystickInput() == 0);
+		Assert.assertTrue(analogJoystickAndTriggerInput() == 0);
 		
 		//test to see if the processor returns -1 if only the second button is pressed
 		button1 = false;
-		Assert.assertTrue(digitalAndAnalogTriggerInput() == -1 && digitalAndJoystickInput() == -1 && analogJoystickAndTriggerInput() == 0);
+		Assert.assertTrue(digitalAndAnalogTriggerInput() == -1);
+		Assert.assertTrue(digitalAndJoystickInput() == -1);
+		Assert.assertTrue(analogJoystickAndTriggerInput() == 0);
 		
 		//test to see if the processor returns 0 if it gets digital and analog input(which it shouldn't)
 		joystick = 1;
@@ -63,13 +69,16 @@ public class AnalogDigitalInputProcessorTest {
 		//test deadzone
 		clear();
 		trigger1 = 0.14;
-		Assert.assertTrue(digitalAndAnalogTriggerInput() == 0 && analogJoystickAndTriggerInput() == 0);
+		Assert.assertTrue(digitalAndAnalogTriggerInput() == 0);
+		Assert.assertTrue(analogJoystickAndTriggerInput() == 0);
 		trigger1 = 0;
 		trigger2 = 0.14;
-		Assert.assertTrue(digitalAndAnalogTriggerInput() == 0 && analogJoystickAndTriggerInput() == 0);
+		Assert.assertTrue(digitalAndAnalogTriggerInput() == 0);
+		Assert.assertTrue(analogJoystickAndTriggerInput() == 0);
 		trigger2 = 0;
 		joystick = -0.14;
-		Assert.assertTrue(digitalAndJoystickInput() == 0 && analogJoystickAndTriggerInput() == 0);
+		Assert.assertTrue(digitalAndJoystickInput() == 0);
+		Assert.assertTrue(analogJoystickAndTriggerInput() == 0);
 	}
 	
 	/**

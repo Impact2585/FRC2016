@@ -33,7 +33,9 @@ public class AccelerometerTest {
 		accel.setPrevTime(System.currentTimeMillis());
 		// tests that velocities are zero
 		accel.run();
-		Assert.assertTrue(accel.getXSpeed() == 0 && accel.getYSpeed() == 0 && accel.getZSpeed() == 0);
+		Assert.assertTrue(accel.getXSpeed() == 0);
+		Assert.assertTrue(accel.getYSpeed() == 0);
+		Assert.assertTrue(accel.getZSpeed() == 0);
 		
 		//tests that the velocities increase if the accelerometer detects positive acceleration
 		xAccel = 1;
@@ -41,7 +43,9 @@ public class AccelerometerTest {
 		zAccel = 1;
 		accel.setPrevTime(System.currentTimeMillis() - 20);
 		accel.run();
-		Assert.assertTrue(accel.getXSpeed() == accel.getChangedTime() && accel.getYSpeed() == accel.getChangedTime() && accel.getZSpeed() == accel.getChangedTime());
+		Assert.assertTrue(accel.getXSpeed() == accel.getChangedTime());
+		Assert.assertTrue(accel.getYSpeed() == accel.getChangedTime());
+		Assert.assertTrue(accel.getZSpeed() == accel.getChangedTime());
 		Assert.assertTrue(accel.getChangedTime() == 0.02);
 		
 		//tests that the velocities decrease
@@ -51,7 +55,9 @@ public class AccelerometerTest {
 		yAccel = -1;
 		zAccel = -1;
 		accel.run();
-		Assert.assertTrue(accel.getXSpeed() == -accel.getChangedTime() && accel.getYSpeed() == -accel.getChangedTime() && accel.getZSpeed() == -accel.getChangedTime());
+		Assert.assertTrue(accel.getXSpeed() == -accel.getChangedTime());
+		Assert.assertTrue(accel.getYSpeed() == -accel.getChangedTime());
+		Assert.assertTrue(accel.getZSpeed() == -accel.getChangedTime());
 		Assert.assertTrue(accel.getChangedTime() == 0.02);
 		
 		//tests that the velocities can change with differing acceleration
@@ -60,7 +66,9 @@ public class AccelerometerTest {
 		yAccel = 0.5;
 		zAccel = 2;
 		accel.run();
-		Assert.assertTrue(accel.getXSpeed() == calculateVelocity(-0.02, 1, 0.05) && accel.getYSpeed() == calculateVelocity(-0.02, 0.5, 0.05) && accel.getZSpeed() == calculateVelocity(-0.02, 2, 0.05));
+		Assert.assertTrue(accel.getXSpeed() == calculateVelocity(-0.02, 1, 0.05));
+		Assert.assertTrue(accel.getYSpeed() == calculateVelocity(-0.02, 0.5, 0.05));
+		Assert.assertTrue(accel.getZSpeed() == calculateVelocity(-0.02, 2, 0.05));
 	}
 	
 	/**
