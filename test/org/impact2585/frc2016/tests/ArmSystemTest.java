@@ -56,78 +56,92 @@ public class ArmSystemTest {
 		digitalTopArmForward = false;
 		digitalTopArmBackward = false;
 		arm.run();
-		Assert.assertTrue(topArmSpeed == 0 && bottomArmSpeed == 0);
+		Assert.assertTrue(topArmSpeed == 0);
+		Assert.assertTrue(bottomArmSpeed == 0);
 
 		//tests if the top arm moves
 		digitalTopArmForward = true;
 		arm.run();
-		Assert.assertTrue(topArmSpeed == ArmSystem.TOP_ARM_SPEED && bottomArmSpeed == 0);
+		Assert.assertTrue(topArmSpeed == ArmSystem.TOP_ARM_SPEED);
+		Assert.assertTrue(bottomArmSpeed == 0);
 
 		//tests if the top arm moves backwards
 		digitalTopArmForward = false;
 		digitalTopArmBackward = true;
 		arm.run();
-		Assert.assertTrue(topArmSpeed == -ArmSystem.TOP_ARM_SPEED && bottomArmSpeed == 0);
+		Assert.assertTrue(topArmSpeed == -ArmSystem.TOP_ARM_SPEED);
+		Assert.assertTrue(bottomArmSpeed == 0);
 
 		//tests if the top arm does not move if both top arm input buttons are pressed
 		digitalTopArmForward = true;
 		arm.run();
-		Assert.assertTrue(topArmSpeed == 0 && bottomArmSpeed == 0);
+		Assert.assertTrue(topArmSpeed == 0);
+		Assert.assertTrue(bottomArmSpeed == 0);
 
 		//tests if the bottom arm moves forward
 		bottomArmForwardValue = 1;
 		arm.run();
-		Assert.assertTrue(topArmSpeed == 0 && bottomArmSpeed == ArmSystem.BOTTOM_ARM_SPEED);
-
+		Assert.assertTrue(topArmSpeed == 0);
+		Assert.assertTrue(bottomArmSpeed == ArmSystem.BOTTOM_ARM_SPEED);
+		
 		//tests if the bottom arm moves backwards
 		bottomArmForwardValue = 0;
 		bottomArmBackwardValue = 1;
 		arm.run();
-		Assert.assertTrue(topArmSpeed == 0 && bottomArmSpeed == -ArmSystem.BOTTOM_ARM_SPEED);
+		Assert.assertTrue(topArmSpeed == 0);
+		Assert.assertTrue(bottomArmSpeed == -ArmSystem.BOTTOM_ARM_SPEED);
 
 		//tests if the bottom arm doesn't move if the both of the buttons for the bottom arm are pressed
 		bottomArmForwardValue = 1;
 		arm.run();
-		Assert.assertTrue(topArmSpeed == 0 && bottomArmSpeed == 0);
+		Assert.assertTrue(topArmSpeed == 0);
+		Assert.assertTrue(bottomArmSpeed == 0);
 
 		//tests if the bottom and top arm can move simultaneously
 		bottomArmBackwardValue = 0;
 		digitalTopArmBackward = false;
 		arm.run();
-		Assert.assertTrue(topArmSpeed == ArmSystem.TOP_ARM_SPEED && bottomArmSpeed == ArmSystem.BOTTOM_ARM_SPEED);
+		Assert.assertTrue(topArmSpeed == ArmSystem.TOP_ARM_SPEED);
+		Assert.assertTrue(bottomArmSpeed == ArmSystem.BOTTOM_ARM_SPEED);
 		
 		//turns off the digital input
 		bottomArmForwardValue = 0;
 		digitalTopArmForward = false;
 		arm.run();
-		Assert.assertTrue(topArmSpeed == 0 && bottomArmSpeed == 0);
+		Assert.assertTrue(topArmSpeed == 0);
+		Assert.assertTrue(bottomArmSpeed == 0);
 		
 		//tests the analog input moving the top arm
 		analogTopArmForward = 1;
 		arm.run();
-		Assert.assertTrue(topArmSpeed == analogTopArmForward * ArmSystem.TOP_ARM_SPEED && bottomArmSpeed == 0);
+		Assert.assertTrue(topArmSpeed == analogTopArmForward * ArmSystem.TOP_ARM_SPEED);
+		Assert.assertTrue(bottomArmSpeed == 0);
 		
 		//tests if the input returns 0 if analog input and digital input are both used
 		digitalTopArmForward = true;
 		arm.run();
-		Assert.assertTrue(topArmSpeed == 0 && bottomArmSpeed == 0);
+		Assert.assertTrue(topArmSpeed == 0);
+		Assert.assertTrue(bottomArmSpeed == 0);
 		
 		//tests if the analog input moves the bottom arm
 		digitalTopArmForward = false;
 		analogTopArmForward = 0;
 		reversibleBottomArm = 1;
 		arm.run();
-		Assert.assertTrue(topArmSpeed == 0 && bottomArmSpeed == reversibleBottomArm * ArmSystem.BOTTOM_ARM_SPEED);
+		Assert.assertTrue(topArmSpeed == 0);
+		Assert.assertTrue(bottomArmSpeed == reversibleBottomArm * ArmSystem.BOTTOM_ARM_SPEED);
 		
 		//tests if the bottom arm can move backwards with analog input
 		reversibleBottomArm = -0.5;
 		arm.run();
-		Assert.assertTrue(topArmSpeed == 0 && bottomArmSpeed == reversibleBottomArm * ArmSystem.BOTTOM_ARM_SPEED);
+		Assert.assertTrue(topArmSpeed == 0);
+		Assert.assertTrue(bottomArmSpeed == reversibleBottomArm * ArmSystem.BOTTOM_ARM_SPEED);
 		
 		//tests if the top arm can move backwards with analog input while the bottom arm is moving
 		analogTopArmForward = -1;
 		arm.run();
-		Assert.assertTrue(topArmSpeed == analogTopArmForward * ArmSystem.TOP_ARM_SPEED && bottomArmSpeed == reversibleBottomArm * ArmSystem.BOTTOM_ARM_SPEED);
+		Assert.assertTrue(topArmSpeed == analogTopArmForward * ArmSystem.TOP_ARM_SPEED);
+		Assert.assertTrue(bottomArmSpeed == reversibleBottomArm * ArmSystem.BOTTOM_ARM_SPEED);
 		
 		//tests if the the speed multiplier is turned off
 		reversibleBottomArm = 0;
@@ -135,24 +149,28 @@ public class ArmSystemTest {
 		digitalTopArmForward = true;
 		toggleSpeed = true;
 		arm.run();
-		Assert.assertTrue(topArmSpeed == 1 && bottomArmBackwardValue == 0);
+		Assert.assertTrue(topArmSpeed == 1);
+		Assert.assertTrue(bottomArmBackwardValue == 0);
 		
 		//tests if the speed does not toggle if Harris keeps holding down the button
 		arm.run();
-		Assert.assertTrue(topArmSpeed == 1 && bottomArmBackwardValue == 0);
+		Assert.assertTrue(topArmSpeed == 1);
+		Assert.assertTrue(bottomArmBackwardValue == 0);
 		
 		//tests if the speed multiplier is not toggled and if it works for analog input
 		toggleSpeed = false;
 		digitalTopArmForward = false;
 		analogTopArmForward = 1;
 		arm.run();
-		Assert.assertTrue(topArmSpeed == analogTopArmForward && bottomArmBackwardValue == 0);
+		Assert.assertTrue(topArmSpeed == analogTopArmForward);
+		Assert.assertTrue(bottomArmBackwardValue == 0);
 		
 		//tests if the speed multiplier can be toggled on and if it works for the bottom arm 
 		toggleSpeed = true;
 		bottomArmForwardValue = 1;
 		arm.run();
-		Assert.assertTrue(topArmSpeed == analogTopArmForward * ArmSystem.TOP_ARM_SPEED && bottomArmSpeed == bottomArmForwardValue * ArmSystem.BOTTOM_ARM_SPEED);
+		Assert.assertTrue(topArmSpeed == analogTopArmForward * ArmSystem.TOP_ARM_SPEED);
+		Assert.assertTrue(bottomArmSpeed == bottomArmForwardValue * ArmSystem.BOTTOM_ARM_SPEED);
 		
 		//tests if the speed multiplier can be toggled off for the bottom and top arm
 		toggleSpeed = false;
@@ -161,27 +179,31 @@ public class ArmSystemTest {
 		reversibleBottomArm = -1;
 		toggleSpeed = true;
 		arm.run();
-		Assert.assertTrue(topArmSpeed == analogTopArmForward && bottomArmSpeed == reversibleBottomArm);
+		Assert.assertTrue(topArmSpeed == analogTopArmForward);
+		Assert.assertTrue(bottomArmSpeed == reversibleBottomArm);
 		
 		//tests if the bottom arm cannot move forward if the limit switch is pressed
 		reversibleBottomArm = 1;
 		isSwitchClosed = true;
 		analogTopArmForward = 0;
 		arm.run();
-		Assert.assertTrue(topArmSpeed == 0 && bottomArmSpeed == 0);
+		Assert.assertTrue(topArmSpeed == 0);
+		Assert.assertTrue(bottomArmSpeed == 0);
 		
 		//tests if the bottom arm cannot move forward for the non reversible analog values(the triggers) and if the top arm can still move forward
 		reversibleBottomArm = 0;
 		bottomArmForwardValue = 1;
 		analogTopArmForward = 1;
 		arm.run();
-		Assert.assertTrue(topArmSpeed == analogTopArmForward && bottomArmSpeed == 0);
+		Assert.assertTrue(topArmSpeed == analogTopArmForward);
+		Assert.assertTrue(bottomArmSpeed == 0);
 		
 		//tests if the bottom arm can move back if the limit switch is pressed
 		bottomArmForwardValue = 0;
 		bottomArmBackwardValue = 1;
 		arm.run();
-		Assert.assertTrue(topArmSpeed == analogTopArmForward && bottomArmSpeed == -bottomArmBackwardValue);
+		Assert.assertTrue(topArmSpeed == analogTopArmForward);
+		Assert.assertTrue(bottomArmSpeed == -bottomArmBackwardValue);
 		
 		//tests if the bottom arm can move forward if the limit switch is not pressed
 		isSwitchClosed = false;
@@ -189,13 +211,15 @@ public class ArmSystemTest {
 		bottomArmForwardValue = 1;
 		analogTopArmForward = 0;
 		arm.run();
-		Assert.assertTrue(topArmSpeed == 0 && bottomArmSpeed == bottomArmForwardValue);
+		Assert.assertTrue(topArmSpeed == 0);
+		Assert.assertTrue(bottomArmSpeed == bottomArmForwardValue);
 		
 		//tests of the bottom arm can move forward if the limit switch and the a button are pressed
 		isSwitchClosed = true;
 		ignoreArmLimitSwitch = true;
 		arm.run();
-		Assert.assertTrue(topArmSpeed == 0 && bottomArmSpeed == bottomArmForwardValue);
+		Assert.assertTrue(topArmSpeed == 0);
+		Assert.assertTrue(bottomArmSpeed == bottomArmForwardValue);
 	}
 	
 
