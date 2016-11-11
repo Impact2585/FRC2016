@@ -6,7 +6,6 @@ import org.impact2585.frc2016.input.InputMethod;
 import org.impact2585.lib2585.Drivetrain;
 
 import edu.wpi.first.wpilibj.RobotDrive;
-import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
 
@@ -34,7 +33,7 @@ public class WheelSystem implements RobotSystem, Runnable{
 	 */
 	@Override
 	public void init(Environment environ) {
-		drivebase = new RobotDrive(new Victor(RobotMap.FRONT_LEFT_DRIVE), new Spark(RobotMap.REAR_LEFT_DRIVE), new Victor(RobotMap.FRONT_RIGHT_DRIVE), new Spark(RobotMap.REAR_RIGHT_DRIVE));
+		drivebase = new RobotDrive(new Victor(RobotMap.FRONT_LEFT_DRIVE), new Victor(RobotMap.REAR_LEFT_DRIVE), new Victor(RobotMap.FRONT_RIGHT_DRIVE), new Victor(RobotMap.REAR_RIGHT_DRIVE));
 		drivetrain = new Drivetrain(DEADZONE, RAMP, PRIMARY_ROTATION_EXPONENT, SECONDARY_ROTATION_EXPONENT, true, drivebase);
 		input = environ.getInput();
 		accel = environ.getAccelerometerSystem();
@@ -61,7 +60,7 @@ public class WheelSystem implements RobotSystem, Runnable{
 			 */
 			@Override
 			protected void initDefaultCommand() {
-				
+			
 			}};
 	}
 	
